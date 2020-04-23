@@ -1,0 +1,129 @@
+@import "../../../components/buttons/styles/paneBottomButtons";
+
+.pane {
+  max-height: 100%;
+
+  .middle {
+    max-height: available;
+    margin-bottom: calc(#{$bottom-pane-button-height} - 1px);
+    overflow: auto;
+  }
+
+  .pane-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .header-title {
+      margin-top: 15px;
+      margin-bottom: 0;
+      font-weight: 700;
+    }
+
+    .search-bar {
+      width: 80%;
+      margin: 15px;
+
+
+      .form-control {
+        margin: 0;
+      }
+
+      .search-input {
+        width: 100%;
+      }
+
+      .search-sort {
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        img {
+          cursor: pointer;
+          margin-left: 10px;
+          width: 20px;
+          opacity: 0.4;
+        }
+
+        img:hover {
+          opacity: 0.7;
+        }
+
+        img.active {
+          opacity: 1;
+        }
+
+        input {
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  .pane-border-top {
+    border-top: 1px solid black;
+  }
+}
+
+
+.right-pane {
+  .selected {
+    border: 1px solid #0ebe00;
+  }
+
+  .right-pane-tabs {
+    button, select {
+      border-radius: 0;
+      align-items: center;
+      bottom: 0;
+      justify-content: center;
+      border: 0;
+      border-top: 1px solid black;
+      border-right: 1px solid black;
+      background-color: white;
+      color: black;
+      width: 25%;
+      margin: 0;
+      height: 35px;
+      text-align-last: center;
+      text-align: center;
+      display: flex;
+      cursor: pointer;
+    }
+
+    select:focus {
+      outline: none;
+    }
+
+    .active {
+      background-color: #0062cc;
+      border-color: #005cbf;
+      color: white;
+    }
+  }
+
+  .instrument-list {
+    height: 90%;
+    overflow: auto;
+    margin-bottom: calc(#{$bottom-pane-button-height} - 1px);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #cdcdcd;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #afafaf;
+  border-radius: 10px;
+}

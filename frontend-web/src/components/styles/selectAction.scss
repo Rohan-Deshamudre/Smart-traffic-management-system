@@ -1,0 +1,15 @@
+.select-action {
+  .instrument-name {
+    font-style: italic;
+    font-weight: normal;
+  }
+
+  .select-input {
+    margin-left: 5%;
+  }
+
+  .select-option {
+    width: 90%;
+    text-overflow: ellipsis;
+  }
+}

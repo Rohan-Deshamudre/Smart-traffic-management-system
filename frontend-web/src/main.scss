@@ -1,0 +1,24 @@
+$pane-width: 350px;
+$navbar-height: 70px;
+
+html {
+  height: 100%;
+}
+
+#app {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.view {
+  height: 100%;
+}
+
+select {
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+}

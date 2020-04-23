@@ -1,0 +1,362 @@
+$node-width: 100px;
+$node-height: $node-width / 3 * 2;
+
+.tree {
+  .slider {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    cursor: pointer;
+
+    .slider-info {
+      display: none;
+      width: 100%;
+      position: relative;
+
+      span {
+        position: absolute;
+        top: -20px;
+        right: 0;
+      }
+    }
+
+    .zoom-slider {
+      cursor: pointer;
+    }
+  }
+
+  .slider:hover {
+    .slider-info {
+      display: block;
+    }
+  }
+
+  .treeLayout {
+  }
+
+  .deactivated {
+    opacity: 0.5 !important;
+  }
+
+  .node {
+	cursor: pointer;
+	.rect {
+	  fill: #737373;
+	  width: $node-width;
+	  height: $node-height;
+	}
+
+	.highlight {
+	  rect {
+		stroke: #00dfff;
+		stroke-width: 3;
+	  }
+	}
+
+	.name-rect {
+	  width: $node-width;
+	  height: 25px;
+	  transform: translateY(-30px);
+	}
+
+
+	.name-text {
+	  fill: black;
+	  overflow: hidden;
+	  font-size: 0.8em;
+	  transform: translate(5px, -15px);
+	}
+
+	image {
+	  transform: translate(20px, 5px);
+	  max-width: calc(#{$node-width} - 10px);
+	  height: calc(#{$node-width} / 3 * 2 - 10px);
+	}
+
+	.button {
+	  .button-rect {
+		stroke: black;
+		width: calc(#{$node-width} / 3);
+		height: calc(#{$node-width} / 3);
+	  }
+
+	  text {
+		transform: translate(10px, 15px);
+		text-anchor: middle;
+		fill: #fff;
+	  }
+
+	  .add-button-rect-0-1, .add-button-rect-0-2, .add-button-rect-1-2 {
+		height: calc(#{$node-width} / 3);
+		width: calc(#{$node-width} + 50px);
+		opacity: 0.8;
+	  }
+
+	  .add-button-rect-0-1 {
+		height: $node-height;
+	  }
+
+	  .add-button-text-0, .add-button-text-1 {
+		color: white;
+		text-anchor: start;
+	  }
+
+	  .add-button-rect-0-1, .add-button-rect-0-2 {
+		transform: translate(calc(#{$node-width} / 3), 0);
+	  }
+
+	  .add-button-text-0 {
+		transform: translate(50px, 20px);
+	  }
+
+	  .add-button-rect-1-2 {
+		transform: translate(calc(#{$node-width} / 3), calc(#{$node-width} / 3));
+	  }
+
+	  .add-button-text-1 {
+		transform: translate(50px, 50px);
+	  }
+
+	  .add-button-0:hover {
+		.add-button-rect-0-1, .add-button-rect-0-2 {
+		  opacity: 1
+		}
+	  }
+
+	  .add-button-1:hover {
+		.add-button-rect-1-2 {
+		  opacity: 1
+		}
+	  }
+
+	}
+
+	.button:hover {
+	  .button-rect {
+		opacity: 0.5;
+	  }
+	  cursor: pointer;
+	}
+
+	.delete-button {
+	  transform: translate($node-width, 0);
+
+	  rect {
+		fill: red;
+	  }
+	}
+
+	.add-button {
+	  transform: translateX($node-width);
+
+	  rect {
+		fill: green;
+	  }
+	}
+
+	.hide-button {
+	  transform: translate($node-width, calc(#{$node-width} / 3));
+
+	  rect {
+		fill: orange;
+	  }
+	}
+  }
+
+  .roadsegment {
+	.rect {
+	  fill: #afafaf;
+	}
+  }
+
+  .roadsegment:hover {
+	.rect {
+	  stroke: #00ff59;
+	}
+  }
+
+  .condition {
+	.rect {
+	  fill: #cbcbcb;
+	}
+	.road-condition-hover {
+	  transform: translateX(-($node-width  + $node-width / 3 + 5));
+	  dominant-baseline: hanging;
+	  .road-condition-hover-rect {
+		width: $node-width + $node-width / 3;
+		height: 65px;
+		fill: #b9b9b9;
+		stroke: #00d1ff;
+	  }
+	  .road-condition-hover-time-box {
+		width: 70px;
+		height: 18px;
+		fill: white;
+	  }
+	  .level-box {
+		width: 22px;
+	  }
+	}
+  }
+
+  .condition:hover {
+	.rect {
+	  stroke: #00d1ff;
+	}
+  }
+
+  .action {
+	$action-fill: #ebebeb;
+	.rect {
+	  fill: $action-fill;
+	}
+
+	.instrument-system {
+	  #instrumentSystemHover {
+		.description-box {
+		  fill: $action-fill;
+		  width: 125px;
+		  height: $node-height;
+		  stroke: #ff6b00;
+		}
+		.description-text {
+		  dominant-baseline: hanging;
+		}
+	  }
+	}
+
+	$instrument-action-width: $node-width + $node-width / 2;
+	.instrument-actions {
+	  .instrument-actions-rect, .instrument-actions-name-rect {
+		width: $instrument-action-width;
+	  }
+
+	  .instrument-background {
+		height: 10px;
+		width: $node-width;
+		fill: white;
+	  }
+
+	  .instrument-action-background {
+		height: 22px;
+		width: $instrument-action-width;
+		fill: none;
+		stroke: #b4b4b4;
+	  }
+
+	  .action-text, .instrument-title {
+		dominant-baseline: hanging;
+		font-size: 0.5em;
+	  }
+
+	  .button-up {
+		transform: translate($instrument-action-width - 11, 0);
+	  }
+
+	  .button-down {
+		transform: translate($instrument-action-width - 11, $node-height - 11);
+	  }
+
+	  .button-up, .button-down {
+		.button-background {
+		  stroke: #b4b4b4;
+		}
+		text {
+		  dominant-baseline: hanging;
+		  font-size: 0.5em;
+		}
+	  }
+
+	  .button-up:hover, .button-down:hover {
+		.button-background {
+		  fill: grey;
+		}
+		text {
+		  fill: white;
+		}
+	  }
+
+	  .button-up:active, .button-down:active {
+		.button-background {
+		  fill: #000000;
+		}
+		text {
+		  fill: white;
+		}
+	  }
+
+	  .button-background {
+		width: 10px;
+		height: 10px;
+		fill: #ebebeb;
+	  }
+
+	  #instrumentSystemHover {
+		.description-box {
+		  width: 100px;
+		  height: $node-height;
+		  fill: $action-fill;
+		  stroke: #ff6b00;
+		}
+
+		.description-instrument-name:hover {
+		  .description-text {
+			fill: #ff6b00;
+		  }
+		}
+
+		.description-instrument-name:active {
+		  .description-text {
+			fill: #a54000;
+		  }
+		}
+
+		.description-text {
+		  dominant-baseline: hanging;
+		  font-size: 0.5em;
+		}
+	  }
+
+	  .constraint {
+		.constraint-title-bar {
+		  opacity: 0;
+		}
+	  }
+	  .constraint:hover {
+		.constraint-title-bar {
+		  opacity: 1;
+		}
+	  }
+	}
+  }
+
+  .action:hover {
+	.rect {
+	  stroke: #ff6b00;
+	}
+	.instrument-background {
+	  stroke: none;
+	}
+	.name-rect-green {
+	  fill: #00d200;
+	}
+	.name-rect-blue {
+	  fill: #00dae9;
+	}
+	.name-rect-yellow {
+	  fill: #f2f200;
+	}
+  }
+
+  .node:hover {
+	rect {
+	  stroke: black;
+	}
+  }
+
+  .link {
+	fill: none;
+	stroke: #000;
+	transform: translate(calc(1 / 2 * (#{$node-width} + 1 / 3 * #{$node-width})), calc(1 / 2 * #{$node-width}));
+  }
+}

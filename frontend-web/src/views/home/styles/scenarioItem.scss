@@ -1,0 +1,32 @@
+.item {
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+  width: 80%;
+  .only-on-hover {
+    opacity: 0;
+  }
+  .filename {
+    opacity: 0.5;
+  }
+  .filename:hover {
+    opacity: 1;
+  }
+  .opacity-1 {
+    opacity: 1;
+  }
+  .edit-icon {
+    opacity: 0;
+  }
+}
+
+.scenario:hover {
+  .only-on-hover, .edit-icon{
+    opacity: 0.5;
+  }
+  .only-on-hover:hover {
+    opacity: 1;
+  }
+  .edit-icon:hover {
+    opacity: 1;
+  }
+}

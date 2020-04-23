@@ -1,0 +1,16 @@
+.left-pane-simulator {
+  border-right: 1px solid black;
+  .title-left-pane {
+	background-color: white;
+	position: sticky;
+	top: 0;
+	padding: 20px 0;
+	text-align: center;
+	border-bottom: 1px solid black;
+  }
+  .time {
+	margin: 10px 0 0 5%;
+	border: 1px solid black;
+  }
+
+}

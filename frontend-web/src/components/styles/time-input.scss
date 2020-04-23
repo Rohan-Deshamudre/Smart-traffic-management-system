@@ -1,0 +1,42 @@
+.time-input {
+  background-color: lightgrey;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 10px;
+
+  select {
+	width: 90%;
+	background-color: #007BFF;
+	color: white;
+	height: 35px;
+	border: none;
+	border-radius: 5px;
+	padding-left: 5px;
+	margin: 5px 0;
+  }
+
+  input {
+	border: none;
+	border-radius: 5px;
+	padding: 5px;
+	max-width: 60%;
+	margin: 5px 10px;
+  }
+
+  .custom-box {
+	margin: 5px 0;
+
+	.table-cell {
+	  padding: 3px;
+	  background-color: linen;
+	  border: 1px solid black;
+	  cursor: pointer;
+	  text-align: center;
+	}
+
+	.active {
+	  background-color: #cdc4ba;
+	  text-decoration: underline;
+	}
+  }
+}
