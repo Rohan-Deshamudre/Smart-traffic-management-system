@@ -103,7 +103,7 @@ class Map extends React.PureComponent<Props, State> {
 	setupMap(lng: number, lat: number, zoom: number): void {
 		this.map = new mb.Map({
 			container: this.mapContainer,
-			style: 'mapbox://styles/fbredius/ck42lh95u031z1cpa0l5y3kq4',
+			style: 'mapbox://styles/arashkazemi/ck9cvuk4p0y2g1ilg8edfnv0g',
 			center: [lng, lat],
 			zoom: zoom
 		});
