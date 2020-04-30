@@ -41,9 +41,23 @@ deploy frontend-web:
   before_script:
     - apt-get update -qq && apt-get install -y -qq sshpass
   script:
-    - cd frontend-web
-    - npm install
-    - npm run-script build
-  artifacts:
-    paths:
-      - frontend-web/build
+    - sshpass -V
+    - export SSHPASS=$USER_PASS
+    - sshpass -e scp -o stricthostkeychecking=no -r frontend-web tudectree@172.104.250.55:/home/tudectree/stm
+    - sshpass -e ssh -o StrictHostKeyChecking=no tudectree@172.104.250.55 bash /home/tudectree/stm/start_frontend.sh
+
+deploy backend:
+  image: python:3.6
+  stage: production
+  only:
+    refs:
+      - master
+    changes:
+      - backend/**/*
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq sshpass
+  script:
+    - sshpass -V
+    - export SSHPASS=$USER_PASS
+    - sshpass -e scp -o stricthostkeychecking=no -r backend tudectree@172.104.250.55:/home/tudectree/stm
+    - sshpass -e ssh -o StrictHostKeyChecking=no tudectree@172.104.250.55 bash /home/tudectree/stm/start_backend.sh
