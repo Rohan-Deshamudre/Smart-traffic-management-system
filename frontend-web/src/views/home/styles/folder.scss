@@ -1,0 +1,101 @@
+.folder {
+  border-top: 1px solid black;
+  cursor: pointer;
+  img {
+    width:16px;
+    max-width: 16px;
+    margin: 2px 0;
+  }
+  .open {
+    transform: rotate(90deg);
+  }
+  .hidden {
+    opacity: 0;
+  }
+  .filename {
+    overflow: hidden;
+    text-wrap: none;
+  }
+  .active {
+    color: green;
+  }
+  span {
+    opacity: 0.7;
+    font-size: 0.8em;
+    line-height: 1;
+  }
+
+}
+
+.add-folder {
+  border-top: 1px solid black;
+  text-align: center;
+  padding: 5px;
+  color: grey;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-folder:hover {
+  color: black;
+}
+
+.folder, .add-folder {
+
+  .span-button {
+    background-color: orange;
+    border-radius: 100px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.7em;
+    opacity: 0.8;
+    cursor: pointer;
+  }
+  .span-button:hover {
+    opacity: 1;
+  }
+
+  .form {
+    text-align: left;
+    background-color: #e8e8e8;
+    border-radius: 5px;
+    padding: 10px;
+    color: black;
+    h3 {
+      font-size: 1em;
+      text-decoration: underline;
+    }
+
+    input, textarea {
+      border: 1px solid black;
+      border-radius: 3px;
+      margin: 5px 0;
+      padding: 2px 5px;
+    }
+  }
+
+  .edit-icon, .folder-edit-icon {
+    opacity: 0
+  }
+}
+
+.folder-title:hover {
+  .folder-edit-icon {
+    opacity: 0.5;
+  }
+  .folder-edit-icon:hover {
+    opacity: 1;
+  }
+}
+
+.item:hover {
+  .edit-icon {
+    opacity: 0.5;
+  }
+  .edit-icon:hover {
+    opacity: 1;
+  }
+}

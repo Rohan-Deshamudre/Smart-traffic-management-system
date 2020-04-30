@@ -1,0 +1,60 @@
+.simulator-button {
+  width: 90%;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 10px 10px 5px -10px rgba(0,0,0,0.25);
+  padding: 5px;
+  margin-bottom: 15px;
+
+  .simulation-duration-info {
+    color: grey;
+    font-style: italic;
+    font-size: 10px;
+    display: flex;
+    flex-direction: row;
+    margin-left: 25px;
+  }
+
+  .timestamp {
+    font-style: normal;
+    color: #3C3C3C;
+    margin-left: 4px;
+  }
+
+  .simulation-time {
+    margin: 5px;
+  }
+}
+
+.live-button {
+  background-color: #0069D9;
+  color: white;
+  display: flex;
+  align-items: center;
+  img {
+    filter: invert(100%);
+    opacity: 1;
+  }
+}
+
+.play-button-icon {
+  margin-right: 15px;
+  margin-left: 4px;
+  opacity: 0.7;
+}
+
+.delete-button-icon {
+  float: right;
+  margin: 5px;
+  position: relative;
+}
+
+.sim-button-icon {
+  max-width: 15px;
+  cursor: pointer;
+}
+
+.sim-button-icon:hover {
+  opacity: 0.55;
+  transition-duration: 150ms;
+}

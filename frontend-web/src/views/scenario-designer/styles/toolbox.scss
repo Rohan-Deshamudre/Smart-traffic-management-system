@@ -1,0 +1,74 @@
+.toolbox {
+  p {
+	margin: 3px 0;
+	padding-left: 10px;
+	font-weight: bold;
+  }
+
+  .route-item {
+	border-radius: 5px;
+	margin: 5px 5%;
+	background-color: #f4f4f4;
+	display: flex;
+	align-items: center;
+
+	.route-item-body {
+	  padding: 5px;
+	  display: flex;
+	  align-items: center;
+	  width: 90%;
+
+	  .text {
+		text-transform: uppercase;
+		width: 15%;
+	  }
+	  .number {
+		width: 33%;
+		margin-right: 2%;
+		background-color: #d5d5d5;
+		padding: 3px 5px;
+		overflow: auto;
+		border-radius: 3px;
+	  }
+	}
+
+	.close-button {
+	  width: 20px;
+	  height: 20px;
+	  border-radius: 100px;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  background-color: #d49c74;
+	  color: white;
+	  margin-right: 5px;
+	  cursor: pointer;
+	}
+  }
+
+  .add-new {
+	height: 50px;
+	width: 90%;
+	margin: 10px 5% 5% 5%;
+	background-color: #f9f9f9;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	div {
+	  background-color: #007BFF;
+	  border-radius: 3px;
+	  color: white;
+	  width: 90%;
+	  margin: 2px 5%;
+	  text-align: center;
+	  height: fit-content;
+	  padding: 5px;
+	  cursor: pointer;
+	}
+  }
+
+  .opslaan-button {
+	width: 90%;
+	margin: 0 5% 2% 5%;
+  }
+}

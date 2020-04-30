@@ -1,0 +1,23 @@
+.specific-congestion {
+  width: 90%;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 10px 10px 5px -10px rgba(0,0,0,0.25);
+
+  .van-tot {
+	padding: 10px 5px;
+	border-bottom: 1px solid black;
+	input {
+	  width: 30%;
+	}
+  }
+
+  .border-bottom-black {
+	border-bottom: 1px solid black;
+  }
+
+  .add-button {
+	background-color: grey;
+	border: none;
+  }
+}

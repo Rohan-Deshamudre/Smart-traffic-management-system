@@ -1,0 +1,19 @@
+.condition-type {
+  cursor: pointer;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 10px 10px 5px -10px rgba(0,0,0,0.25);
+  padding: 10px;
+  width: 90%;
+  margin-bottom: 15px;
+  span {
+    margin: 0 auto;
+  }
+  img {
+    max-width: 15px;
+  }
+}
+
+.condition-type:hover {
+  background-color: #f7f7f7;
+}
