@@ -1,0 +1,39 @@
+@import "./../../../main";
+$bottom-pane-button-height: 40px;
+
+.pane-bottom-buttons {
+  position: absolute;
+  width: $pane-width;
+  bottom: 0;
+  div {
+    width: 33.333333%;
+  }
+
+  button {
+    height: $bottom-pane-button-height;
+    background-color: white;
+    border-radius: 0;
+    width: 100%;
+    color: black;
+    border: 1px solid black;
+
+    img {
+      max-width: 15px;
+    }
+  }
+
+  button:hover, button:focus {
+    img {
+      filter: invert(100%);
+    }
+  }
+
+  .remove-borders {
+    border-right: 0;
+    border-left: 0;
+  }
+
+  .remove-border-left {
+    border-left: 0;
+  }
+}

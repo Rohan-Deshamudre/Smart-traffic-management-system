@@ -1,0 +1,58 @@
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.react-list-select {
+  display: inline-block;
+  height: 400px;
+  width: 100%;
+  overflow: auto;
+  outline: none;
+  position: relative;
+  background: #f8f8f8;
+  border: 1px solid black;
+}
+
+.react-list-select--item {
+  padding-left: 7px;
+  cursor: pointer;
+  position: relative;
+}
+
+.react-list-select--item.is-selected {
+  background-color: #afe5ff;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.react-list-select--item.is-disabled {
+  cursor: default;
+}
+
+.react-list-select--item.is-focused::before,
+.react-list-select--item.is-focused::after {
+  position: absolute;
+  content: '';
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width:5px;
+  background: grey;
+}
+
+.react-list-select--item.is-focused::before {
+  left: 0;
+}
+
+.react-list-select--item.is-focused::after {
+  left: 0;
+}
+
+.react-list-select--item.is-disabled {
+  color: white;
+}

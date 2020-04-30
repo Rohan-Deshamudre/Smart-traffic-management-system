@@ -1,0 +1,31 @@
+@import "../../../../node_modules/mapbox-gl/dist/mapbox-gl.css";
+
+.map-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  height: 100%;
+  width: 100%;
+}
+
+.map {
+  height: 100%;
+  width: 100%;
+
+  .mapboxgl-control-container {
+    display: none;
+  }
+
+  .mapboxgl-canvas-container {
+    .mapboxgl-canvas {
+      cursor: default !important;
+    }
+  }
+
+  .mapboxgl-touch-drag-pan {
+    .mapboxgl-canvas {
+      cursor: pointer !important;
+    }
+  }
+}

@@ -1,0 +1,36 @@
+.location-selector {
+  width: 90%;
+  margin: 0 5%;
+  background-color: #ededed;
+  border-radius: 3px 3px 0 0;
+
+  .wrap {
+	padding: 10px 10px 0 10px;
+	.title {
+	  font-weight: bold;
+	}
+	div {
+	  width: 50%;
+	  span {
+		font-size: 0.7em;
+		color: dimgrey;
+		font-style: italic;
+	  }
+	  div {
+		background-color: white;
+		border: 1px solid black;
+		border-radius: 3px;
+		width: 95%;
+		text-align: end;
+		overflow: auto;
+		padding: 5px 3px;
+		cursor: initial;
+	  }
+	}
+  }
+
+  button {
+	margin: 5% 5%;
+	width: 90%;
+  }
+}

@@ -1,0 +1,33 @@
+.env
+.idea/
+node_modules/
+.vscode/
+
+opendata/
+
+#Pyton
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+docs/_build/
+
+# Test coverage:
+htmlcov/
+.coverage

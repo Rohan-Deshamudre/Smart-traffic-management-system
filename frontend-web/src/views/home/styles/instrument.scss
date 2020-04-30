@@ -1,0 +1,95 @@
+.instrument {
+  border-top: 1px solid black;
+  cursor: pointer;
+  img {
+	max-height: 15px;
+	margin: 2px 0;
+  }
+  .open {
+	transition: all 0.3s;
+	transform: rotate(90deg);
+  }
+  .hidden {
+	opacity: 0;
+  }
+  .filename {
+	overflow: hidden;
+	text-wrap: none;
+  }
+  .active {
+	color: green;
+  }
+  span {
+	opacity: 0.7;
+	font-size: 0.8em;
+	line-height: 1;
+  }
+  .folder-edit-icon {
+	opacity: 0;
+  }
+}
+
+.instrument-title:hover {
+  .folder-edit-icon {
+	opacity: 0.4;
+  }
+  .folder-edit-icon:hover {
+	opacity: 1;
+  }
+}
+
+
+.create-instrument, .mutate-instrument-action {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  width: 90%;
+  .submit-button {
+	width: 90%;
+	margin: 5%;
+  }
+}
+
+.mutate-instrument-action {
+  margin: 5%;
+  background-color: white;
+
+  .drip-wrapper {
+	position: relative;
+	height: 150px;
+
+	.drip-image {
+	  position: absolute;
+	  top: 5%;
+	  height: 130px;
+	  min-width: 90%;
+	  left: 5%;
+	  max-height: 100%;
+	}
+	.drip-text {
+	  position: absolute;
+	  z-index: 2;
+	  color: white;
+	  left: 10%;
+	  top: 15%;
+	  font-size: 1.3em;
+	  margin-right: 10%;
+	  opacity: 1;
+	}
+  }
+}
+
+.routes {
+  width: 90%;
+  margin: 2% 5%;
+  padding: 3px 10px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 3px;
+  .delete {
+	opacity: 0.5
+  }
+  .delete:hover {
+	opacity: 1;
+  }
+}
