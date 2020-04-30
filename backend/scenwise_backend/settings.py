@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -99,37 +100,59 @@ ASGI_APPLICATION = 'scenwise_backend.routing.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    # Standard django database
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django_users',
-        'USER': 'tudb',
-        'PASSWORD': '1234',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'TEST': {'DEPENDENCIES': ['scenarios', 'ndw']}
-    },
-    # Scenarios database
-    'scenarios': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'scenroads',
-        'USER': 'tudb',
-        'PASSWORD': '1234',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'TEST': {'DEPENDENCIES': []}
-    },
-    'ndw': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ndw',
-        'USER': 'tudb',
-        'PASSWORD': '1234',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'TEST': {'DEPENDENCIES': [], 'NAME': 'test_ndw'}
+# Use SQLite only for tests and MySQL for production
+if 'test' in sys.argv or 'test_coverage' in sys.argv:
+    DATABASES = {
+        # Standard django database
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'django_users',
+            'TEST': {'DEPENDENCIES': ['scenarios', 'ndw']}
+        },
+        # Scenarios database
+        'scenarios': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'scenroads',
+            'TEST': {'DEPENDENCIES': []}
+        },
+        'ndw': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'ndw',
+            'TEST': {'DEPENDENCIES': [], 'NAME': 'test_ndw'}
+        }
     }
-}
+else:
+    DATABASES = {
+        # Standard django database
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'django_users',
+            'USER': 'tudb',
+            'PASSWORD': '1234',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+            'TEST': {'DEPENDENCIES': ['scenarios', 'ndw']}
+        },
+        # Scenarios database
+        'scenarios': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'scenroads',
+            'USER': 'tudb',
+            'PASSWORD': '1234',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+            'TEST': {'DEPENDENCIES': []}
+        },
+        'ndw': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'ndw',
+            'USER': 'tudb',
+            'PASSWORD': '1234',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+            'TEST': {'DEPENDENCIES': [], 'NAME': 'test_ndw'}
+        }
+    }
 
 # Router to redirect queries to scenarios database
 DATABASE_ROUTERS = ['scenwise_backend.dbrouter.DBRouter']
