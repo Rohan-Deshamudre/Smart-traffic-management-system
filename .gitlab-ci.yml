@@ -29,3 +29,21 @@ test backend:
   artifacts:
     paths:
       - backend/htmlcov
+
+deploy frontend-web:
+  image: node:latest
+  stage: production
+  only:
+    refs:
+      - master
+    changes:
+      - frontend-web/**/*
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq sshpass
+  script:
+    - cd frontend-web
+    - npm install
+    - npm run-script build
+  artifacts:
+    paths:
+      - frontend-web/build
