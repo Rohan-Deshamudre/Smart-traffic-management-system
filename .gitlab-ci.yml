@@ -1,0 +1,31 @@
+stages:
+  - build
+  - test
+  - production
+
+build frontend-web:
+  image: node:latest
+  stage: build
+  only:
+    changes:
+      - frontend-web/**/*
+  script:
+    - cd frontend-web
+    - npm i
+    
+test backend:
+  image: python:3.6
+  stage: test
+  only:
+    changes:
+      - backend/**/*
+  before_script:
+    - pip3 install django graphene-django django-cors-headers django-channels django-graphql-jwt mysqlclient mapbox coverage
+  script:
+    - cd backend
+    - python3 manage.py test
+    - coverage run manage.py test
+    - coverage html
+  artifacts:
+    paths:
+      - backend/htmlcov

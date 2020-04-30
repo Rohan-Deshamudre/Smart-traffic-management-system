@@ -1,9 +1,9 @@
-FROM python:3
+FROM python:3.6
 
 WORKDIR /usr/src/app
 
-RUN pip3 install django graphene-django django-cors-headers django-channels django-graphql-jwt mysqlclient mapbox
+RUN pip3 install django django-cors-headers django-channels django-graphql-jwt graphene-django mysqlclient mapbox coverage
 
 COPY . .
 
-CMD [ "python", "./manage.py", "runserver" ]
+CMD [ "python3", "./manage.py", "runserver" ]
