@@ -49,7 +49,7 @@ class ScenarioSimulator extends React.Component<Props, State> {
 	componentDidMount() {
 		this.ws.onopen = () => {
 			this.setState({
-				simulationLog: [{time: 'Systeem', text: "Verbinding gemaakt"}]
+				simulationLog: [{time: 'Systeem', text: "Connectie gemaakt"}]
 			})
 		};
 
@@ -73,7 +73,7 @@ class ScenarioSimulator extends React.Component<Props, State> {
 
 		this.ws.onclose = () => {
 			this.setState({
-				simulationLog: [...this.state.simulationLog, {time: 'Systeem', text: "Verbinding verbroken"}]
+				simulationLog: [...this.state.simulationLog, {time: 'Systeem', text: "Connectie verbroken"}]
 			});
 		};
 	}
@@ -109,40 +109,55 @@ class ScenarioSimulator extends React.Component<Props, State> {
 		return message;
 	}
 
+	/** This is similar to ScenarioDesigner but takes the simulation status, log into account */
 	render() {
 		return (
 			<div className="view scenario-simulator-view">
 				<NavBar mode="ScenarioSimulator" />
+
 				<div className="home-container structure-container">
 					<Query query={GET_DESIGNER_DATA}>
-						{({data}) => (
-							<LeftPane paneName="Designer"
-									  readOnly
-									  icon={editorIcon}
-									  toggle={this.toggleLeftPane} data={data}
-									  active={this.state.leftPaneActive}/>
-						)}
+						{
+							({data}) => (
+								<LeftPane paneName="Designer"
+										readOnly
+										icon={editorIcon}
+										toggle={this.toggleLeftPane} 
+										data={data}
+										active={this.state.leftPaneActive}
+								/>
+							)
+						}
 					</Query>
 
 					<ApolloConsumer>
 						{client =>
 							<Workspace rightPaneActive={this.state.rightPaneActive}
-									   simulationStatus={this.state.simulationStatus} client={client}/>
+									   simulationStatus={this.state.simulationStatus} 
+									   client={client}
+							/>
 						}
 					</ApolloConsumer>
-					<Query query={GET_WORKSPACE_DATA}>
-						{({loading, error, data, client}) => {
-							if (loading) return <div>Fetching</div>;
-							if (error) return <div>Error</div>;
 
-							const id = data.currentTreeId;
-							return <RightPane paneName="Simulaties"
-											  icon={simulationIcon}
-											  toggle={this.toggleRightPane}
-											  active={this.state.rightPaneActive}
-											  simulationLog={this.state.simulationLog} messageSocket={this.sendMessage}
-											  scenarioId={id}/>
-						}}
+					<Query query={GET_WORKSPACE_DATA}>
+						{
+							({loading, error, data}) => {
+								if (loading) return <div>Fetching</div>;
+								if (error) return <div>Error</div>;
+
+								const id = data.currentTreeId;
+								return (
+									<RightPane paneName="Simulaties"
+											icon={simulationIcon}
+											toggle={this.toggleRightPane}
+											active={this.state.rightPaneActive}
+											simulationLog={this.state.simulationLog} 
+											messageSocket={this.sendMessage}
+											scenarioId={id}
+									/>
+								);
+							}
+						}
 					</Query>
 
 				</div>
