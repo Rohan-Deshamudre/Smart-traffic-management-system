@@ -23,8 +23,8 @@ test backend:
     - python3 manage.py test
     - coverage run manage.py test
     - coverage html
-    - "coverage report | grep 'TOTAL' | awk '{print $NF, \"covered\"}'"
-  coverage: /\d+.\d+\% covered/
+    - "coverage report | grep 'TOTAL' | awk '{print substr($NF, 0, 2), "% coverage"}'"
+  coverage: /\d+.\d+ \% covered/
   artifacts:
     paths:
       - backend/htmlcov
