@@ -6,9 +6,6 @@ stages:
 build frontend-web:
   image: node:latest
   stage: build
-  only:
-    changes:
-      - frontend-web/**/*
   script:
     - cd frontend-web
     - npm i
@@ -16,9 +13,6 @@ build frontend-web:
 test backend:
   image: python:3.6
   stage: test
-  only:
-    changes:
-      - backend/**/*
   before_script:
     - pip3 install django graphene-django django-cors-headers django-channels django-graphql-jwt mysqlclient mapbox coverage
   script:
@@ -26,6 +20,8 @@ test backend:
     - python3 manage.py test
     - coverage run manage.py test
     - coverage html
+    - "coverage report | grep 'TOTAL' | awk '{print substr($NF, 1, 2), \"% covered\"}'"
+  coverage: /\d+ \% covered/
   artifacts:
     paths:
       - backend/htmlcov
@@ -36,6 +32,7 @@ deploy frontend-web:
   only:
     refs:
       - master
+      - development
     changes:
       - frontend-web/**/*
   before_script:
@@ -43,6 +40,7 @@ deploy frontend-web:
   script:
     - sshpass -V
     - export SSHPASS=$USER_PASS
+    - sshpass -e ssh -o StrictHostKeyChecking=no tudectree@172.104.250.55 bash /home/tudectree/stm/stop_frontend.sh
     - sshpass -e scp -o stricthostkeychecking=no -r frontend-web tudectree@172.104.250.55:/home/tudectree/stm
     - sshpass -e ssh -o StrictHostKeyChecking=no tudectree@172.104.250.55 bash /home/tudectree/stm/start_frontend.sh
 
@@ -52,6 +50,7 @@ deploy backend:
   only:
     refs:
       - master
+      - development
     changes:
       - backend/**/*
   before_script:
@@ -59,5 +58,6 @@ deploy backend:
   script:
     - sshpass -V
     - export SSHPASS=$USER_PASS
+    - sshpass -e ssh -o StrictHostKeyChecking=no tudectree@172.104.250.55 bash /home/tudectree/stm/stop_backend.sh
     - sshpass -e scp -o stricthostkeychecking=no -r backend tudectree@172.104.250.55:/home/tudectree/stm
     - sshpass -e ssh -o StrictHostKeyChecking=no tudectree@172.104.250.55 bash /home/tudectree/stm/start_backend.sh

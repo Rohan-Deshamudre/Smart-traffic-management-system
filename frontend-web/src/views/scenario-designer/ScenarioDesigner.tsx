@@ -58,30 +58,50 @@ class ScenarioDesigner extends React.Component<Props, State> {
 		return (
 			<div className="view scenario-designer-view">
 				<NavBar mode="ScenarioDesigner" />
+
 				<div className="home-container structure-container">
 					<Query query={GET_DESIGNER_DATA}>
-						{({data}) => (
-							<LeftPane paneName="Designer"
-									  readOnly={false}
-									  icon={editorIcon}
-									  toggle={this.toggleLeftPane} data={data}
-									  active={this.state.leftPaneActive}/>
-						)}
+						{
+							/** Illustrate the data, such as road segment type, on
+							 *  the designer pane
+							 */
+							({data}) => (
+								<LeftPane paneName="Designer"
+										readOnly={false}
+										icon={editorIcon}
+										toggle={this.toggleLeftPane} 
+										data={data}
+										active={this.state.leftPaneActive}
+								/>
+							)
+						}
 					</Query>
 
-					<Workspace rightPaneActive={this.state.rightPaneActive}/>
+					<Workspace 
+						smallWorkspaceDeactivated={false}
+						rightPaneActive={this.state.rightPaneActive}
+					/>
+
 					<Query query={READ_FOLDERS}>
-						{({loading, error, data}) => {
-							if (loading) return <div>Fetching</div>;
-							if (error) return <div>Error</div>;
-							return (
-								<RightPane paneName="Instrumenten"
-										   icon={instrumentsIcon}
-										   toggle={this.toggleRightPane} active={this.state.rightPaneActive}
-										   instruments={data.instruments} instrumentTypes={data.instrumentTypes}
-										   currDrip={data.currDripId} boundingBox={data.boundingBox}/>
-							);
-						}}
+						{
+							({loading, error, data}) => {
+								if (loading) return <div>Fetching</div>;
+								if (error) return <div>Error</div>;
+								
+								/** The instruments menu stays the same */
+								return (
+									<RightPane paneName="Instrumenten"
+											icon={instrumentsIcon}
+											toggle={this.toggleRightPane} 
+											active={this.state.rightPaneActive}
+											instruments={data.instruments} 
+											instrumentTypes={data.instrumentTypes}
+											currDrip={data.currDripId} 
+											boundingBox={data.boundingBox}
+									/>
+								);
+							}
+						}
 					</Query>
 				</div>
 			</div>

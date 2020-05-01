@@ -30,7 +30,7 @@ const client = new ApolloClient({
 });
 
 // Set default local state
-cache.writeData({data: defaultStore });
+cache.writeData({data: defaultStore});
 client.onResetStore(() => cache.writeData({ data })); // If client.resetStore is called
 
 // Render the app
