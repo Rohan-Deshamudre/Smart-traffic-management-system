@@ -6,9 +6,6 @@ stages:
 build frontend-web:
   image: node:latest
   stage: build
-  only:
-    changes:
-      - frontend-web/**/*
   script:
     - cd frontend-web
     - npm i
@@ -35,6 +32,7 @@ deploy frontend-web:
   only:
     refs:
       - master
+      - development
     changes:
       - frontend-web/**/*
   before_script:
@@ -51,6 +49,7 @@ deploy backend:
   only:
     refs:
       - master
+      - development
     changes:
       - backend/**/*
   before_script:
