@@ -40,6 +40,7 @@ deploy frontend-web:
   script:
     - sshpass -V
     - export SSHPASS=$USER_PASS
+    - sshpass -e ssh -o StrictHostKeyChecking=no tudectree@172.104.250.55 bash /home/tudectree/stm/stop_frontend.sh
     - sshpass -e scp -o stricthostkeychecking=no -r frontend-web tudectree@172.104.250.55:/home/tudectree/stm
     - sshpass -e ssh -o StrictHostKeyChecking=no tudectree@172.104.250.55 bash /home/tudectree/stm/start_frontend.sh
 
@@ -57,5 +58,6 @@ deploy backend:
   script:
     - sshpass -V
     - export SSHPASS=$USER_PASS
+    - sshpass -e ssh -o StrictHostKeyChecking=no tudectree@172.104.250.55 bash /home/tudectree/stm/stop_backend.sh
     - sshpass -e scp -o stricthostkeychecking=no -r backend tudectree@172.104.250.55:/home/tudectree/stm
     - sshpass -e ssh -o StrictHostKeyChecking=no tudectree@172.104.250.55 bash /home/tudectree/stm/start_backend.sh
