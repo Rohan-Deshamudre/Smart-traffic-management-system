@@ -16,9 +16,6 @@ build frontend-web:
 test backend:
   image: python:3.6
   stage: test
-  only:
-    changes:
-      - backend/**/*
   before_script:
     - pip3 install django graphene-django django-cors-headers django-channels django-graphql-jwt mysqlclient mapbox coverage
   script:
@@ -26,6 +23,8 @@ test backend:
     - python3 manage.py test
     - coverage run manage.py test
     - coverage html
+    - "coverage report | grep 'TOTAL' | awk '{print $NF, \"covered\"}'"
+  coverage: /\d+.\d+\% covered/
   artifacts:
     paths:
       - backend/htmlcov
