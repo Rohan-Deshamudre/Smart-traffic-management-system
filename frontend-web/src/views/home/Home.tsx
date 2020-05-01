@@ -50,53 +50,61 @@ class Home extends React.Component<Props, State> {
     render() {
         return (
             <div className="view home-view">
-                <NavBar />
-
+                <NavBar mode="Home mode" />
+                
                 <Query query={READ_FOLDERS}>
-                    {({loading, error, data, client}) => {
-                        client.writeData({
-                            data: {
-                                currentTreeId: null,
-                                curNodeId: -1,
-                                curNodeType: null,
-                                workspaceSwapped: true
-                            }
-                        });
+                    {
+                        ({loading, error, data, client}) => {
+                            client.writeData({
+                                data: {
+                                    currentTreeId: null,
+                                    curNodeId: -1,
+                                    curNodeType: null,
+                                    workspaceSwapped: true
+                                }
+                            });
 
-                        if (loading) return <div>Fetching</div>;
-                        if (error) return <div>Error ${error.message}</div>;
+                            if (loading) return <div>Fetching</div>;
+                            if (error) return <div>Error</div>;
+                            
+                            /** Obtain the scenarios and folders */
+                            const scenarioFolders = data.folders
+                                .filter((folder: any) => folder.folderType.id === '1');
+                            const scenariosWithoutFolders = data.scenarios
+                                .filter((scenario: any) => scenario.folder === null);
 
-                        const scenarioFolders = data.folders.filter((folder: any) => folder.folderType.id === '1');
-                        const scenariosWithoutFolders = data.scenarios
-                            .filter((scenario: any) => scenario.folder === null);
+                            /**
+                             * Setting the left (designer) and right (intruments) toggle menus
+                             */
+                            return (
+                                <div className="home-container structure-container">
+                                    <LeftPane icon={scenarioIcon}
+                                            paneName="Scenario's"
+                                            toggle={this.toggleLeftPane}
+                                            active={this.state.leftPaneActive}
+                                            folders={scenarioFolders}
+                                            scenarios={scenariosWithoutFolders}
+                                            boundingBox={data.boundingBox}
+                                    />
 
-                        return (
-                            <div className="home-container structure-container">
-                                <LeftPane icon={scenarioIcon}
-                                          paneName="Scenario's"
-                                          toggle={this.toggleLeftPane}
-                                          active={this.state.leftPaneActive}
-                                          folders={scenarioFolders}
-                                          scenarios={scenariosWithoutFolders}
-                                          boundingBox={data.boundingBox}
-                                />
-                                <Workspace
-                                    smallWorkspaceDeactivated={true}
-                                    rightPaneActive={this.state.rightPaneActive}
-                                />
-                                <RightPane
-                                    icon={instrumentsIcon}
-                                    paneName="Instrumenten"
-                                    toggle={this.toggleRightPane}
-                                    active={this.state.rightPaneActive}
-                                    instruments={data.instruments}
-                                    instrumentTypes={data.instrumentTypes}
-                                    currDrip={data.currDripId}
-									boundingBox={data.boundingBox}
-                                />
-                            </div>
-                        );
-                    }}
+                                    <Workspace
+                                        smallWorkspaceDeactivated={true}
+                                        rightPaneActive={this.state.rightPaneActive}
+                                    />
+                                    
+                                    <RightPane icon={instrumentsIcon}
+                                            paneName="Instrumenten"
+                                            toggle={this.toggleRightPane}
+                                            active={this.state.rightPaneActive}
+                                            instruments={data.instruments}
+                                            instrumentTypes={data.instrumentTypes}
+                                            currDrip={data.currDripId}
+                                            boundingBox={data.boundingBox}
+                                    />
+                                </div>
+                            );
+                        }
+                    }
                 </Query>
             </div>
         );
