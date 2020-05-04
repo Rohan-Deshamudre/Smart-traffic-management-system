@@ -37,3 +37,16 @@ pycodestyle --exclude='venv/*','requirements.txt','README.md','docs/*','opendata
 - To install test coverage: `pip install coverage`
     - To run test coverage: `coverage run manage.py test -v`
     - To print test coverage: `coverage html`
+
+##### How to create new user:
+1. python3 manage.py shell
+2. >>> from django.contrib.auth.models import User
+3. >>> user = User.object.create_user('name', 'email', 'password')
+4. >>> user.save()
+
+Edit permissions:
+5. >>> from django.contrib.auth.models import Permission
+6. >>> permission = Permission.object.get(codename='permission')
+7. >>> user.user_permissions.add(permission)
+
+All permissions are listed in the db: django_users.auth_permission.
