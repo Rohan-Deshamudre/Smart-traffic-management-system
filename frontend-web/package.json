@@ -19,7 +19,6 @@
   "homepage": "https://gitlab.ewi.tudelft.nl/cse2000-software-project/2019-2020-q4/cluster-4/big-data-analytics/stm-system/-/blob/master/README.md",
   "keywords": [],
   "dependencies": {
-    "@apollo/react-hooks": "^3.1.5",
     "@mapbox/mapbox-gl-directions": "^4.0.2",
     "@types/d3": "^5.7.2",
     "@types/mapbox-gl": "^1.5.2",

@@ -9,6 +9,7 @@ import ScenarioSimulator from "./views/scenario-simulator/ScenarioSimulator";
 import Home from "./views/home/Home";
 import gql from "graphql-tag";
 import {Query} from "react-apollo";
+import Login from "./views/login/Login";
 
 
 class App extends Component {
@@ -17,14 +18,19 @@ class App extends Component {
             <Router history={history}>
                 <Query query={gql`{currentTreeId @client}`}>
                     {({data}) => {
+                        if (document.cookie.includes('token')) {
+                            return <Login/>
+                        }
+
                         if (data.currentTreeId === null) {
-                            return <Home />
+                            return <Home/>
                         } else {
                             return (
                                 <Switch>
                                     <Route path="/designer" component={ScenarioDesigner}/>
                                     <Route path="/simulator" component={ScenarioSimulator}/>
                                     <Route path="/" component={Home}/>
+                                    <Route path="/login" component={Login}/>
                                 </Switch>
                             )
                         }
