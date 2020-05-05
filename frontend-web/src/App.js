@@ -18,7 +18,7 @@ class App extends Component {
             <Router history={history}>
                 <Query query={gql`{currentTreeId @client}`}>
                     {({data}) => {
-                        if (document.cookie.includes('token')) {
+                        if (!document.cookie.includes('token')) {
                             return <Login/>
                         }
 
