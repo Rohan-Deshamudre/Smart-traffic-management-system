@@ -4,6 +4,7 @@ import NavBar from "./modules/NavBar";
 import Workspace from "./modules/Workspace";
 import LeftPane from "./modules/LeftPane";
 import RightPane from "./../home/modules/RightPane";
+import InsightsPane from "./modules/InsightsPane";
 import {Query} from 'react-apollo';
 import {READ_FOLDERS} from "../../components/CRUDFolders";
 import gql from "graphql-tag";
@@ -16,9 +17,11 @@ import editorIcon from "./../../assets/node_icons/designer.svg";
 interface State {
 	leftPaneActive: boolean;
 	rightPaneActive: boolean;
+	insightsPaneActive: boolean;
 }
 
 interface Props {
+
 }
 
 export const GET_DESIGNER_DATA = gql`
@@ -36,10 +39,12 @@ class ScenarioDesigner extends React.Component<Props, State> {
 		this.state = {
 			leftPaneActive: false,
 			rightPaneActive: false,
+			insightsPaneActive: false,
 		};
 
 		this.toggleLeftPane = this.toggleLeftPane.bind(this);
 		this.toggleRightPane = this.toggleRightPane.bind(this);
+		this.toggleInsightsPane = this.toggleInsightsPane.bind(this);
 	}
 
 	toggleLeftPane() {
@@ -51,6 +56,12 @@ class ScenarioDesigner extends React.Component<Props, State> {
 	toggleRightPane() {
 		this.setState({
 			rightPaneActive: !this.state.rightPaneActive
+		})
+	}
+
+	toggleInsightsPane() {
+		this.setState({
+			insightsPaneActive: !this.state.insightsPaneActive
 		})
 	}
 
@@ -72,6 +83,20 @@ class ScenarioDesigner extends React.Component<Props, State> {
 										toggle={this.toggleLeftPane} 
 										data={data}
 										active={this.state.leftPaneActive}
+								/>
+							)
+						}
+					</Query>
+
+					<Query query={GET_ROAD_CONDITION_INFO}>
+						{
+							({data}) => (
+								<InsightsPane paneName="Insights"
+											readOnly={false}
+											icon={editorIcon}
+											toggle={this.toggleInsightsPane}
+											data={data}
+											active={this.state.insightsPaneActive}
 								/>
 							)
 						}
