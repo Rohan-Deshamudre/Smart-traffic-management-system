@@ -24,11 +24,13 @@ class Login extends React.Component {
                             floatingLabelText={"Username"}
                             onChange = {(click,newVal) => this.setState({username:newVal})}
                         />
+                        <br/>
                         <TextField
                             type={"password"}
                             floatingLabelText={"Password"}
                             onChange= {(click,newVal) => this.setState({password:newVal})}
                         />
+                        <br/>
                         <RaisedButton
                             label = {"Login"}
                             onClick={(click) => this.handleClick(click)} //handleClick function needs to be written to send authentication info to backend
@@ -40,3 +42,6 @@ class Login extends React.Component {
     }
 }
 
+
+
+export default Login;
