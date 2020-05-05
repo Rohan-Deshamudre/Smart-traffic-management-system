@@ -50,3 +50,11 @@ Edit permissions:
 7. >>> user.user_permissions.add(permission)
 
 All permissions are listed in the db: django_users.auth_permission.
+
+To avoid having to add all permissions to all new users over and over again, just add them to the correct group.
+Add user to group:
+8. >>> from django.contrib.auth.models import Group
+9. >>> group, x = Group.objects.get(name='group_name')
+10. >>> group.user_set.add(user)
+
+Groups are found in the db: django_users.auth_group.

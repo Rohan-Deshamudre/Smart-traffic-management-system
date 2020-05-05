@@ -4,6 +4,8 @@ from graphene_django import DjangoObjectType
 
 from api.labels.models import Label
 
+from utils.auth import has_perms
+
 
 class LabelObjectType(DjangoObjectType):
     class Meta:
@@ -29,6 +31,8 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) folders
         """
+        has_perms(info.context.user, ['labels.view_label'])
+
         res = Label.objects.all()
         if label_id:
             res = res.filter(Q(id__exact=label_id))
