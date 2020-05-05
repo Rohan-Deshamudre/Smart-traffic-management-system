@@ -1,6 +1,6 @@
 import * as React from "react";
 import gql from "graphql-tag";
-import {Query} from "react-apollo";
+import ApolloClient from 'apollo-boost';
 
 const LOGIN = gql`
     mutation tokenAuth($username: String!, $password: String!) {
@@ -47,24 +47,39 @@ class Login extends React.Component<Props, State> {
         return this.state.password;
     }
 
-    login(username: String, password: String) {
-        return (
-            <Query query={LOGIN} variables={{username, password}}>
-                {({loading, error, data, client}) => {
-                    if (loading) return <div>Fetching</div>;
-                    if (error) return <div>Error</div>;
+    login(event, username: String, password: String) {
+        event.preventDefault();
 
-                    document.cookie = 'token=' + data.token;
-                }}
-            </Query>
-        );
+        const client = new ApolloClient({
+            uri: 'https://48p1r2roz4.sse.codesandbox.io',
+        });
+
+        client.query({
+            query: LOGIN,
+            variables: {username, password}
+        }).then((result) => console.log(result))
+
+        // return (
+        //     <Query query={LOGIN} variables={{username, password}}>
+        //         {({loading, error, data, client}) => {
+        //
+        //             console.log('henk');
+        //             console.log(password);
+        //
+        //             if (loading) return <div>Fetching</div>;
+        //             if (error) return <div>Error</div>;
+        //
+        //             document.cookie = 'token=' + data.token;
+        //         }}
+        //     </Query>
+        // );
     }
 
     render() {
         return (
             <div className="view login-view">
 
-                <form onSubmit={() => this.login(this.getUsername(), this.getPassword())}>
+                <form onSubmit={(event) => this.login(event, this.getUsername(), this.getPassword())}>
                     <p>Username: <input type="text" onChange={(event) => this.setUsername(event.target.value)} /></p>
                     <p>Password: <input type="password" onChange={(event) => this.setPassword(event.target.value)} /></p>
                     <p><button type="submit">Login</button></p>
