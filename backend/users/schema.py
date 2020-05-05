@@ -4,6 +4,8 @@ from django.contrib.auth.models import Permission
 import graphene
 from graphene_django import DjangoObjectType
 
+from utils.auth import has_perms
+
 
 class UserType(DjangoObjectType):
     class Meta:
@@ -26,10 +28,9 @@ class Query(graphene.ObjectType):
 
     def resolve_test(self, info):
         user = info.context.user
-        if user.is_anonymous:
-            raise Exception('Not logged in!')
 
-        if not user.has_perm('simulations.change_simulation'):
-            raise Exception('Sike, thats the wrong number.')
+        has_perms(user, ['simulations.change_simulation',
+                         'simulations.view_simulation'
+                         ])
 
         return user

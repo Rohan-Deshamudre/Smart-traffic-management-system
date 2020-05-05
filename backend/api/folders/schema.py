@@ -33,6 +33,8 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) folders
         """
+        
+
         res = methods.get_all_folders()
         if folder_id:
             res = res.filter(Q(id__exact=folder_id))
