@@ -1,7 +1,7 @@
 import * as React from "react";
 import gql from "graphql-tag";
 import ApolloClient from 'apollo-boost';
-import {CREATE_FOLDER} from "../../components/CRUDFolders";
+import { CREATE_FOLDER } from "../../components/CRUDFolders";
 
 const LOGIN = gql`
     mutation tokenAuth($username: String!, $password: String!) {
@@ -21,7 +21,7 @@ class Login extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        this.state = {username: '', password: ''};
+        this.state = { username: '', password: '' };
 
         this.setUsername = this.setUsername.bind(this);
         this.setPassword = this.setPassword.bind(this);
@@ -32,12 +32,12 @@ class Login extends React.Component<Props, State> {
 
     setUsername(username: String): void {
         const password = this.state.password;
-        this.setState({username, password})
+        this.setState({ username, password })
     }
 
     setPassword(password: String): void {
         const username = this.state.username;
-        this.setState({username, password})
+        this.setState({ username, password })
     }
 
     getUsername() {
@@ -52,19 +52,12 @@ class Login extends React.Component<Props, State> {
         event.preventDefault();
 
         const client = new ApolloClient({
-            uri: 'https://48p1r2roz4.sse.codesandbox.io',
+            uri: 'http://127.0.0.1o:8000/graphql/',
         });
 
-        client.query({
-            query: gql`
-                {
-                    rates(currency: "USD") {
-                        currency
-                    }
-                }
-            `
-        })
-        .then(result => console.log(result));
+        client
+            .mutate({ mutation: LOGIN, variables: { username, password } })
+            .then(result => console.log(result));
 
         // return (
         //     <Query query={LOGIN} variables={{username, password}}>
