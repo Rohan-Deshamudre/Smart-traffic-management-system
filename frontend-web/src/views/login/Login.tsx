@@ -1,5 +1,6 @@
 import * as React from "react";
 import gql from "graphql-tag";
+import {Query} from "react-apollo";
 
 const LOGIN = gql`
     mutation tokenAuth($username: String!, $password: String!) {
@@ -15,10 +16,17 @@ interface State {
 interface Props { }
 
 class Login extends React.Component<Props, State> {
+
     constructor(props: Props) {
         super(props);
 
-        this.setState({username: '', password: ''})
+        this.setState({username: '', password: ''});
+
+        this.setUsername = this.setUsername.bind(this);
+        this.setPassword = this.setPassword.bind(this);
+        this.getUsername = this.getUsername.bind(this);
+        this.getPassword = this.getPassword.bind(this);
+        this.login = this.login.bind(this);
     }
 
     setUsername(username: String): void {
@@ -31,13 +39,34 @@ class Login extends React.Component<Props, State> {
         this.setState({username, password})
     }
 
+    getUsername() {
+        return this.state.username;
+    }
+
+    getPassword() {
+        return this.state.password;
+    }
+
+    login(username: String, password: String) {
+        return (
+            <Query query={LOGIN} variables={{username, password}}>
+                {({loading, error, data, client}) => {
+                    if (loading) return <div>Fetching</div>;
+                    if (error) return <div>Error</div>;
+
+                    document.cookie = 'token=' + data.token;
+                }}
+            </Query>
+        );
+    }
+
     render() {
         return (
             <div className="view login-view">
 
-                <form>
-                    <p>Username: <input type="text" onChange={event => this.setUsername(event.target.value)} /></p>
-                    <p>Password: <input type="password" onChange={event => this.setPassword(event.target.value)} /></p>
+                <form onSubmit={() => this.login(this.getUsername(), this.getPassword())}>
+                    <p>Username: <input type="text" onChange={(event) => this.setUsername(event.target.value)} /></p>
+                    <p>Password: <input type="password" onChange={(event) => this.setPassword(event.target.value)} /></p>
                     <p><button type="submit">Login</button></p>
                 </form>
 
