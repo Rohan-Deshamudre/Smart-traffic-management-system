@@ -52,7 +52,7 @@ class Login extends React.Component<Props, State> {
         event.preventDefault();
 
         const client = new ApolloClient({
-            uri: 'http://127.0.0.1o:8000/graphql/',
+            uri: 'http://127.0.0.1:8000/graphql/',
         });
 
         client
