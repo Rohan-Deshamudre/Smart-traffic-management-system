@@ -17,6 +17,7 @@ from ..road_conditions.models import RoadCondition
 from ..road_conditions.road_condition_actions.models import RoadConditionAction
 from ..road_segments.models import RoadSegment
 
+from utils.auth import has_perms
 
 class InstrumentObjectType(DjangoObjectType):
     class Meta:
@@ -74,6 +75,7 @@ class Query(action_schema.Query, graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) instruments
         """
+        has_perms(info.context.user, ['instruments.view_instrument'])
         res = Instrument.objects.all()
         if scenario_id:
             rs = RoadSegment.objects.filter(scenario__id=scenario_id).all()
@@ -112,6 +114,7 @@ class Query(action_schema.Query, graphene.ObjectType):
         :param kwargs:
         :return: ALl (filtered) instrument_types
         """
+        has_perms(info.context.user, ['instruments.view_instrumenttype'])
         res = InstrumentType.objects.all()
         if instrument_type_id:
             res = res.filter(Q(id__exact=instrument_type_id))
@@ -132,6 +135,7 @@ class Query(action_schema.Query, graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) instrument_systems
         """
+        has_perms(info.context.user, ['instruments.view_instrumentsystem'])
         res = InstrumentSystem.objects.all()
         if instrument_system_id:
             res = res.filter(Q(id__exact=instrument_system_id))
@@ -161,6 +165,7 @@ class CreateInstrument(graphene.Mutation):
 
     def mutate(self, info, name, instrument_type_id, lat, lng,
                instrument_system_id, description="", labels=[]):
+        has_perms(info.context.user, ['instruments.add_instrument'])
         try:
             instrument = create_instrument(name, instrument_type_id, lat, lng,
                                            instrument_system_id, description,
@@ -201,7 +206,9 @@ class UpdateInstrument(graphene.Mutation):
     def mutate(self, info, id, name=None, lat=None, lng=None, description=None,
                instrument_system_id=None, instrument_type_id=None,
                labels=None):
+        has_perms(info.context.user, ['instruments.change_instrument'])
         try:
+
             instrument = update_instrument(id, name, lat, lng, description,
                                            instrument_system_id,
                                            instrument_type_id, labels)
@@ -232,6 +239,7 @@ class DeleteInstrument(graphene.Mutation):
         :param id: The ID of the instrument
         :return:
         """
+        has_perms(info.context.user, ['instruments.delete_instrument'])
         try:
             delete_instrument(id)
         except ApiException as exc:

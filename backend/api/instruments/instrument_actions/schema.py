@@ -22,6 +22,8 @@ from .models import *
 from ...road_conditions.models import RoadCondition
 from ...road_segments.models import RoadSegment
 
+from utils.auth import has_perms
+
 
 class InstrumentActionObjectType(DjangoObjectType):
     class Meta:
@@ -53,6 +55,7 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) instrument_actions
         """
+        has_perms(info.context.user, ['instruments.view_instrumentaction'])
         res = get_all_instrument_actions()
         if condition_id:
             rca = RoadConditionAction.objects.filter(
@@ -95,6 +98,7 @@ class CreateInstrumentAction(graphene.Mutation):
         routes = graphene.List(RouteInputObject)
 
     def mutate(self, info, instrument_id, text, description="", routes=None):
+        has_perms(info.context.user, ['instruments.add_instrumentaction'])
         try:
             instrument_action = create_instrument_action(instrument_id, text,
                                                          description, routes)
@@ -123,6 +127,7 @@ class UpdateInstrumentAction(graphene.Mutation):
 
     def mutate(self, info, id, instrument_id=None, text=None, description=None,
                routes=None):
+        has_perms(info.context.user, ['instruments.change_instrumentaction'])
         try:
             instrument_action = update_instrument_action(id, instrument_id,
                                                          text, description,
@@ -153,6 +158,7 @@ class DeleteInstrumentAction(graphene.Mutation):
         :param kwargs:
         :return:
         """
+        has_perms(info.context.user, ['instruments.delete_instrumentaction'])
         try:
             delete_instrument_action(id)
         except ApiException as exc:
