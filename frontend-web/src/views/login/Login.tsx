@@ -1,17 +1,22 @@
+import { Component } from 'react'
 import * as React from "react";
+import { Mutation } from 'react-apollo'
 import gql from "graphql-tag";
 import ApolloClient from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks'
 import { CREATE_FOLDER } from "../../components/CRUDFolders";
 
 const LOGIN = gql`
-    mutation tokenAuth($username: String!, $password: String!) {
+    mutation PostMutation($username: String!, $password: String!) {
+        tokenAuth(username: $username, password: $password) {
             token
+        }
     }
 `;
 
 interface State {
-    username: String,
-    password: String
+    password: string,
+    username: string
 }
 
 interface Props { }
@@ -22,70 +27,38 @@ class Login extends React.Component<Props, State> {
         super(props);
 
         this.state = { username: '', password: '' };
-
-        this.setUsername = this.setUsername.bind(this);
-        this.setPassword = this.setPassword.bind(this);
-        this.getUsername = this.getUsername.bind(this);
-        this.getPassword = this.getPassword.bind(this);
-        this.login = this.login.bind(this);
-    }
-
-    setUsername(username: String): void {
-        const password = this.state.password;
-        this.setState({ username, password })
-    }
-
-    setPassword(password: String): void {
-        const username = this.state.username;
-        this.setState({ username, password })
-    }
-
-    getUsername() {
-        return this.state.username;
-    }
-
-    getPassword() {
-        return this.state.password;
-    }
-
-    login(event, username: String, password: String) {
-        event.preventDefault();
-
-        const client = new ApolloClient({
-            uri: 'http://127.0.0.1:8000/graphql/',
-        });
-
-        client
-            .mutate({ mutation: LOGIN, variables: { username, password } })
-            .then(result => console.log(result));
-
-        // return (
-        //     <Query query={LOGIN} variables={{username, password}}>
-        //         {({loading, error, data, client}) => {
-        //
-        //             console.log('henk');
-        //             console.log(password);
-        //
-        //             if (loading) return <div>Fetching</div>;
-        //             if (error) return <div>Error</div>;
-        //
-        //             document.cookie = 'token=' + data.token;
-        //         }}
-        //     </Query>
-        // );
     }
 
     render() {
+        const { username, password } = this.state;
+        var rest;
         return (
             <div className="view login-view">
 
-                <form onSubmit={(event) => this.login(event, this.getUsername(), this.getPassword())}>
-                    <p>Username: <input type="text" onChange={(event) => this.setUsername(event.target.value)} /></p>
-                    <p>Password: <input type="password" onChange={(event) => this.setPassword(event.target.value)} /></p>
-                    <p><button type="submit">Login</button></p>
-                </form>
+                <Mutation mutation={LOGIN} >
+                    {(login) => (
+                        <div>
+                            <p>Username: <input type="text" value={username} onChange={e => this.setState({ username: e.target.value })} /></p>
+                            <p>Password: <input type="password" value={password} onChange={e => this.setState({ password: e.target.value })} /></p>
+                            <button onClick={() => {
+                                login({
+                                    variables: {
+                                        username,
+                                        password
+                                    }
+                                })
+                                    .then((res) => {
+                                        console.log(res)
+                                    })
+                                this.setState({ username: '', password: '' })
+                            }}
+                                title="login"
+                            />
+                        </div>
+                    )}
+                </Mutation>
 
-            </div>
+            </div >
         );
     }
 }
