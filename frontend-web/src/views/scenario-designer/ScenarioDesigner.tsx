@@ -7,6 +7,7 @@ import RightPane from "./../home/modules/RightPane";
 import InsightsPane from "./modules/InsightsPane";
 import {Query} from 'react-apollo';
 import {READ_FOLDERS} from "../../components/CRUDFolders";
+import {schema} from "../../local_store/schema";
 import gql from "graphql-tag";
 
 // @ts-ignore
@@ -88,7 +89,7 @@ class ScenarioDesigner extends React.Component<Props, State> {
 						}
 					</Query>
 
-					<Query query={GET_ROAD_CONDITION_INFO}>
+					<Query query={schema}>
 						{
 							({data}) => (
 								<InsightsPane paneName="Insights"
