@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import { schema } from "./schema";
 
 export const resolvers = {
     Mutation: {
