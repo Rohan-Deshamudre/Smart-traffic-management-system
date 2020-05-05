@@ -1,6 +1,7 @@
 import * as React from "react";
 import gql from "graphql-tag";
 import ApolloClient from 'apollo-boost';
+import {CREATE_FOLDER} from "../../components/CRUDFolders";
 
 const LOGIN = gql`
     mutation tokenAuth($username: String!, $password: String!) {
@@ -55,9 +56,15 @@ class Login extends React.Component<Props, State> {
         });
 
         client.query({
-            query: LOGIN,
-            variables: {username, password}
-        }).then((result) => console.log(result))
+            query: gql`
+                {
+                    rates(currency: "USD") {
+                        currency
+                    }
+                }
+            `
+        })
+        .then(result => console.log(result));
 
         // return (
         //     <Query query={LOGIN} variables={{username, password}}>
