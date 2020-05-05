@@ -2,29 +2,51 @@ import gql from 'graphql-tag';
 
 export const schema = gql`
     type Query {
-        appData: ApplicationData,
-        longitude: Float,
-        lattitude: Float,
+        appData: ApplicationData
+        longitude: Float
+        lattitude: Float
         
-		mapLocation: String
+	mapLocation: String
         
-        treeIsUpToDate: Boolean,
-        curNodeId: Int,
+        treeIsUpToDate: Boolean
+        curNodeId: Int
         curNodeType: String
-		simulationScene: SimulationScene
+	simulationScene: SimulationScene
     }
     
     type SimulationScene {
-        id: ID!,
-        time: String!,
+        id: ID!
+        time: String!
         simulationSceneEvents: [SimulationSceneEvent!]!
     }
     
     type SimulationSceneEvent {
         id: ID!
-        roadSegmentId: ID!,
-        roadConditionTypeId: ID!,
+        roadSegmentId: ID!
+        roadConditionTypeId: ID!
         value: Int!
+        roadSegment: RoadSegment
+        roadConditionType: RoadConditionType
+    }
+
+    type RoadConditionType {
+        id: ID!
+        name: String!
+        img: String
+        description: String
+    }
+
+    type RoadSegment {
+        id: ID!
+        name: String!
+        roadSegmentType: RoadSegmentType
+    }
+
+    type RoadSegmentType {
+        id: ID!
+        name: String!
+        img: String
+        description: String
     }
     
     type ApplicationData {
@@ -32,8 +54,8 @@ export const schema = gql`
     }
 
     type Coordinates {
-        lng: Float,
-        lat: Float,
+        lng: Float
+        lat: Float
         zoom: Int
     }
 

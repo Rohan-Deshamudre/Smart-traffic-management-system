@@ -17,18 +17,40 @@ def simulation_id_to_json(simulation_scene_id):
 
     for simulation_scene_event in \
             simulation_scene.simulation_scene_events.all():
+        road_segment_type = simulation_scene_event.road_segment.road_segment_type
+        road_segment = \
+            {'id': simulation_scene_event.road_segment.id,
+             'name': simulation_scene_event.road_segment.name,
+             'roadSegmentType': {
+                 'id': road_segment_type.id,
+                 'name': road_segment_type.name,
+                 'img': road_segment_type.img,
+                 'description': road_segment_type.description,
+             },
+            }
+        road_condition_type = \
+            {'id': simulation_scene_event.road_condition_type.id,
+             'name': simulation_scene_event.road_condition_type.name,
+             'img':simulation_scene_event.road_condition_type.img,
+             'description':
+                 simulation_scene_event.road_condition_type.description,
+            }
         simulation_scene_event_object = \
             {'id': simulation_scene_event.id,
              'roadSegmentId': simulation_scene_event.road_segment_id,
              'roadConditionTypeId':
                  simulation_scene_event.road_condition_type_id,
              'value': simulation_scene_event.value,
-             '__typename': 'SimulationSceneEvent'}
+             'roadSegment': road_segment,
+             'roadConditionType': road_condition_type,
+             '__typename': 'SimulationSceneEvent',
+            }
         simulation_scene_event_array.append(simulation_scene_event_object)
     simulation_scene_object = \
-        {'id': simulation_scene.id,
-         'time': str(simulation_scene.time.isoformat()),
-         'simulationSceneEvents': simulation_scene_event_array,
-         '__typename': 'SimulationScene'}
+            {'id': simulation_scene.id,
+             'time': str(simulation_scene.time.isoformat()),
+             'simulationSceneEvents': simulation_scene_event_array,
+             '__typename': 'SimulationScene',
+            }
 
     return simulation_scene_object
