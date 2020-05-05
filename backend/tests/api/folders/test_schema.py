@@ -1,12 +1,15 @@
 from django.test import TestCase
 from graphene.test import Client
+from django.contrib.auth import get_user_model
+
+from graphql_jwt.testcases import JSONWebTokenTestCase
 
 from scenwise_backend.schema import schema
 
 from tests.api.folders.test_methods import create_folder_types, create_folders
 
 
-class FolderSchemaTest(TestCase):
+class FolderSchemaTest(JSONWebTokenTestCase):
     databases = '__all__'
 
     def setUp(self):
@@ -14,6 +17,8 @@ class FolderSchemaTest(TestCase):
             ['Test-Type-1', 'Test-Type-2', 'Test-Type-3'])
         self.folders = create_folders(['Test-1', 'Test-2', 'Test-3'],
                                       self.folder_types)
+        self.user = get_user_model().objects.create(username='engi')
+        self.client.authenticate(self.user)
 
     def test_query(self):
         client = Client(schema)
@@ -29,7 +34,8 @@ class FolderSchemaTest(TestCase):
                                             name
                                         }
                                     }
-                                    ''' % (folder.name, folder.description))
+                                    ''' % (folder.name, folder.description), context={'user': self.user,
+                                        })
         """
         TODO: Get the folder objects instead of a string
         """
