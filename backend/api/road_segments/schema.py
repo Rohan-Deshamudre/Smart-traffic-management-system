@@ -43,7 +43,7 @@ class Query(graphene.ObjectType):
         :param condition_id: The condition ID to filter on
         :return: All (filtered) road_segments
         """
-        has_perms(info.context.user, ['road_segments.view_roadsegment'])
+        #has_perms(info.context.user, ['road_segments.view_roadsegment'])
         res = RoadSegment.objects.all()
 
         if segment_id:
@@ -68,7 +68,7 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) road_segment_types
         """
-        has_perms(info.context.user, ['road_segments.view_roadsegmenttype'])
+        #has_perms(info.context.user, ['road_segments.view_roadsegmenttype'])
         res = RoadSegmentType.objects.all()
         if type_id:
             res = res.filter(Q(id__exact=type_id))
@@ -94,7 +94,7 @@ class CreateRoadSegment(graphene.Mutation):
         route = RouteInputObject
 
     def mutate(self, info, name, scenario_id, road_segment_type_id, route):
-        has_perms(info.context.user, ['road_segments.add_roadsegment'])
+        #has_perms(info.context.user, ['road_segments.add_roadsegment'])
         try:
             road_segment = create_road_segment(name, scenario_id,
                                                road_segment_type_id, route)
@@ -124,7 +124,7 @@ class UpdateRoadSegment(graphene.Mutation):
 
     def mutate(self, info, id, name=None, scenario_id=None,
                road_segment_type_id=None, route=None):
-        has_perms(info.context.user, ['road_segments.change_roadsegment'])
+        #has_perms(info.context.user, ['road_segments.change_roadsegment'])
         try:
             road_segment = update_road_segment(id, name, scenario_id,
                                                road_segment_type_id, route)
@@ -151,7 +151,7 @@ class DeleteRoadSegment(graphene.Mutation):
         :param id: The ID of the road_segment
         :return:
         """
-        has_perms(info.context.user, ['road_segments.delete_roadsegment'])
+        #has_perms(info.context.user, ['road_segments.delete_roadsegment'])
         try:
             delete_road_segment(id)
         except ApiException as exc:

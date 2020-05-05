@@ -31,7 +31,7 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) folders
         """
-        has_perms(info.context.user, ['labels.view_label'])
+        #has_perms(info.context.user, ['labels.view_label'])
 
         res = Label.objects.all()
         if label_id:

@@ -34,7 +34,7 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) folders
         """
-        has_perms(info.context.user, ['folders.view_folder', 'folders.view_foldertype'])
+        #has_perms(info.context.user, ['folders.view_folder', 'folders.view_foldertype'])
 
         res = methods.get_all_folders()
         if folder_id:
@@ -61,7 +61,7 @@ class CreateFolder(graphene.Mutation):
 
     def mutate(self, info, folder_type_id, name, description="",
                parent_id=None):
-        has_perms(info.context.user, ['folders.add_folder', 'folders.add_foldertype'])
+        #has_perms(info.context.user, ['folders.add_folder', 'folders.add_foldertype'])
 
         try:
             folder = methods.create_folder(
@@ -95,7 +95,7 @@ class UpdateFolder(graphene.Mutation):
         description = graphene.String()
 
     def mutate(self, info, id, name=None, parent_id=None, description=None):
-        has_perms(info.context.user, ['folders.change_folder', 'folders.change_foldertype'])
+        #has_perms(info.context.user, ['folders.change_folder', 'folders.change_foldertype'])
 
         try:
             folder = methods.update_folder(id, name, parent_id, description)
@@ -124,7 +124,7 @@ class DeleteFolder(graphene.Mutation):
         :param kwargs:
         :return:
         """
-        has_perms(info.context.user, ['folders.delete_folder', 'folders.delete_foldertype'])
+        #has_perms(info.context.user, ['folders.delete_folder', 'folders.delete_foldertype'])
 
         try:
             methods.delete_folder(id)
