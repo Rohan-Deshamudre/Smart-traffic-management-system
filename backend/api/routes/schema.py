@@ -18,4 +18,5 @@ class RouteSegmentObjectType(DjangoObjectType):
 class Query(graphene.ObjectType):
 
     def resolve_routes(self, info, **kwargs):
+        has_perms(info, ['routes.view_route'])
         return Route.objects.all()

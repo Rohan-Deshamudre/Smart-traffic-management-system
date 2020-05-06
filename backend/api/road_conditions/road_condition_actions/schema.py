@@ -83,6 +83,7 @@ class Query(graphene.ObjectType):
         :param action_id: The action ID to filter on
         :return: All (filtered) road_condition_actions
         """
+        has_perms(info, ['road_conditions.view_roadconditionaction'])
         res = RoadConditionAction.objects.all()
         if action_id:
             res = res.filter(Q(id__exact=action_id))
@@ -100,6 +101,7 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) road_condition_action_goals
         """
+        has_perms(info, ['road_conditions.view_roadconditionactiongoal'])
         res = RoadConditionActionGoal.objects.all()
         if goal_id:
             res = res.filter(Q(id__exact=goal_id))
@@ -124,6 +126,7 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) road_condition_action_constraints
         """
+        has_perms(info, ['road_conditions.view_roadconditionactionconstraint'])
         res = RoadConditionActionConstraint.objects.all()
         if constraint_id:
             res = res.filter(Q(id__exact=constraint_id))
@@ -146,6 +149,7 @@ class Query(graphene.ObjectType):
         :param desc: The (part of the) description to filter on
         :return: All (filtered) road_condition_action_constraint_types
         """
+        has_perms(info, ['road_conditions.view_roadconditionactionconstrainttype'])
         res = RoadConditionActionConstraintType.objects.all()
         if type_id:
             res = res.filter(Q(id__exact=type_id))
@@ -176,6 +180,7 @@ class CreateRoadConditionAction(graphene.Mutation):
     def mutate(self, info, road_condition_action_goal_id, instrument_system_id,
                action_name, road_condition_id,
                constraint=None, description="", instrument_action_ids=[]):
+        has_perms(info, ['road_conditions.add_roadconditionaction'])
         try:
             road_condition_action = create_road_condition_action(
                 road_condition_id, instrument_system_id, action_name,
@@ -215,6 +220,7 @@ class UpdateRoadConditionAction(graphene.Mutation):
     def mutate(self, info, id, road_condition_action_goal_id=None,
                instrument_system_id=None, action_name=None,
                constraint=None, description=None, instrument_action_ids=None):
+        has_perms(info, ['road_conditions.change_roadconditionaction'])
         try:
             road_condition_action = \
                 update_road_condition_action(id,
@@ -244,6 +250,7 @@ class DeleteRoadConditionAction(graphene.Mutation):
         id = graphene.Int(required=True)
 
     def mutate(self, info, id):
+        has_perms(info, ['road_conditions.delete_roadconditionaction'])
         try:
             delete_road_condition_action(id)
         except ApiException as exc:
