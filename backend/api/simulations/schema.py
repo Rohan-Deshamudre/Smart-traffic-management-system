@@ -15,6 +15,8 @@ from api.simulations.methods.update import update_simulation, \
 
 from .models import *
 
+from utils.auth import has_perms
+
 
 class SimulationTypeObject(DjangoObjectType):
     start_time = graphene.DateTime()

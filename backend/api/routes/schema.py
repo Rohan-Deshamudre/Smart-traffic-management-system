@@ -2,6 +2,7 @@ import graphene
 from graphene_django import DjangoObjectType
 from .models import *
 
+from utils.auth import has_perms
 
 class RouteObjectType(DjangoObjectType):
     class Meta:

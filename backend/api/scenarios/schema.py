@@ -10,6 +10,7 @@ from api.scenarios.methods.delete import delete_scenario
 from api.scenarios.methods.update import update_scenario
 from .models import *
 
+from utils.auth import has_perms
 
 class ScenarioObjectType(DjangoObjectType):
     class Meta:

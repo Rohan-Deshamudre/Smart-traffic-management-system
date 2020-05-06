@@ -19,6 +19,8 @@ from api.road_conditions.road_condition_actions. \
 
 from .models import *
 
+from utils.auth import has_perms
+
 
 class RoadConditionActionObjectType(DjangoObjectType):
     class Meta:
