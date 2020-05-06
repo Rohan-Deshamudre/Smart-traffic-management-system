@@ -4,10 +4,8 @@ import NavBar from "./modules/NavBar";
 import Workspace from "./modules/Workspace";
 import LeftPane from "./modules/LeftPane";
 import RightPane from "./../home/modules/RightPane";
-import InsightsPane from "./modules/InsightsPane";
 import {Query} from 'react-apollo';
 import {READ_FOLDERS} from "../../components/CRUDFolders";
-import {schema} from "../../local_store/schema";
 import gql from "graphql-tag";
 
 // @ts-ignore
@@ -84,20 +82,6 @@ class ScenarioDesigner extends React.Component<Props, State> {
 										toggle={this.toggleLeftPane} 
 										data={data}
 										active={this.state.leftPaneActive}
-								/>
-							)
-						}
-					</Query>
-
-					<Query query={schema}>
-						{
-							({data}) => (
-								<InsightsPane paneName="Insights"
-											readOnly={false}
-											icon={editorIcon}
-											toggle={this.toggleInsightsPane}
-											data={data}
-											active={this.state.insightsPaneActive}
 								/>
 							)
 						}

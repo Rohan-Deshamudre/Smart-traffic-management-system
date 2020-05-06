@@ -1,7 +1,7 @@
 import * as React from 'react'
 import asInsightsPane from '../../../components/InsightsPane';
 
-import '../styles/InsightsPane';
+import '../styles/insightsPane.scss';
 
 import PaneBottomButtons from "../../../components/buttons/PaneBottomButtons";
 import {ApolloConsumer} from "react-apollo";
@@ -61,7 +61,7 @@ class InsightsPane extends React.Component<Props, State, any> {
         prevState: Readonly<State>, 
         snapshot?: any
     ): void {
-		if ((prevProps.data.id !== this.props.data.id || prevProps.data.curNodeType) !== this.props.data.curNodeType && !this.props.active) {
+		if ((prevProps.data.id !== this.props.data.id || prevProps.data.roadSegmentId) !== this.props.data.roadSegmentId && !this.props.active) {
 			this.props.toggle();
 		}
 	}
@@ -71,24 +71,42 @@ class InsightsPane extends React.Component<Props, State, any> {
 		switch (data.roadConditionTypeId) {
             // "ScenarioObjectType"
 			case 0:
-                return <UpdateScenario readOnly={this.props.readOnly} scenarioId={data.currentTreeId} id={data.curNodeId}/>;
+                return (
+					<UpdateScenario readOnly={this.props.readOnly} 
+									scenarioId={data.currentTreeId} 
+									id={data.curNodeId}
+					/>
+				);
             
             // "RoadSegmentObjectType"
 			case 1:
 				return data.id === -1 ? (
-					<AddRoadSegment scenarioId={data.currentTreeId} parentInfo={data.parentInfo} />
+					<AddRoadSegment scenarioId={data.currentTreeId} 
+									parentInfo={data.parentInfo} 
+					/>
 				) : (
-					<UpdateRoadSegment readOnly={this.props.readOnly} scenarioId={data.currentTreeId} id={data.curNodeId}/>
+					<UpdateRoadSegment readOnly={this.props.readOnly} 
+									scenarioId={data.currentTreeId} 
+									id={data.curNodeId}
+					/>
 				);
             
             // "RoadConditionObjectType"
             case 2:
 				return data.id === -1 ? (
-					<AddRoadCondition scenarioId={data.currentTreeId} parentInfo={data.parentInfo}/>
+					<AddRoadCondition scenarioId={data.currentTreeId} 
+										parentInfo={data.parentInfo}
+					/>
 				) : (
 					<ApolloConsumer>
 						{client => {
-						return (<UpdateRoadCondition readOnly={this.props.readOnly} scenarioId={leftPaneData.currentTreeId} id={leftPaneData.curNodeId} client={client}/>)
+							return (
+								<UpdateRoadCondition readOnly={this.props.readOnly} 
+													scenarioId={data.currentTreeId} 
+													id={data.curNodeId} 
+													client={client}
+								/>
+							);
 						}}
 					</ApolloConsumer>
                 );
@@ -96,9 +114,14 @@ class InsightsPane extends React.Component<Props, State, any> {
             // "RoadConditionActionObjectType"
 			case 3:
 				return data.curNodeId === -1 ? (
-					<AddRoadConditionAction scenarioId={data.currentTreeId} parentInfo={data.parentInfo}/>
+					<AddRoadConditionAction scenarioId={data.currentTreeId} 
+											parentInfo={data.parentInfo}
+					/>
 				) : (
-					<UpdateRoadConditionAction readOnly={this.props.readOnly} scenarioId={data.currentTreeId} id={data.curNodeId}/>
+					<UpdateRoadConditionAction readOnly={this.props.readOnly} 
+												scenarioId={data.currentTreeId} 
+												id={data.curNodeId}
+					/>
                 );
                 
 			default:
