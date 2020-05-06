@@ -72,7 +72,7 @@ class Login extends React.Component<Props, State> {
                                                 password
                                             }
                                         }).then((res) => {
-                                            document.cookie = 'token=' + res.data.tokenAuth.token;
+                                            //document.cookie = 'JWT=' + res.data.tokenAuth.token;
                                             window.location.href = window.location.origin;
                                         });
                                         this.setState({ username: '', password: '' })
