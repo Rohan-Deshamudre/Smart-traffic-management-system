@@ -13,7 +13,7 @@ const LOGIN = gql`
 
 interface State {
     password: string,
-    username: string
+    username: string,
 }
 
 interface Props { }
@@ -46,7 +46,7 @@ class Login extends React.Component<Props, State> {
                             <p>Username:
                                 <input
                                     type="text"
-                                    value={ username }
+                                    value={username}
                                     onChange={
                                         (event) => {
                                             // TODO Validate stuff
@@ -59,7 +59,7 @@ class Login extends React.Component<Props, State> {
                             <p>Password:
                                 <input
                                     type="password"
-                                    value={ password }
+                                    value={password}
                                     onChange={
                                         (event) => {
                                             // TODO Validate stuff
@@ -81,8 +81,9 @@ class Login extends React.Component<Props, State> {
                                         }).then((res) => {
                                             document.cookie = 'token=' + res.data.tokenAuth.token;
                                             this.toHome();
+                                            console.log(res.data.tokenAuth.token)
                                         });
-                                        this.setState({username: '', password: ''})
+                                        this.setState({ username: '', password: '' })
                                     }
                                 }
                                 title="login"
