@@ -7,7 +7,7 @@ import LeftPane from "./modules/LeftPane";
 import RightPane from "./modules/RightPane";
 
 import "./../../components/styles/structure.scss"
-import {Query} from 'react-apollo';
+import { Query } from 'react-apollo';
 import { READ_FOLDERS } from "../../components/CRUDFolders";
 
 // @ts-ignore
@@ -51,10 +51,10 @@ class Home extends React.Component<Props, State> {
         return (
             <div className="view home-view">
                 <NavBar mode="Home mode" />
-                
+
                 <Query query={READ_FOLDERS}>
                     {
-                        ({loading, error, data, client}) => {
+                        ({ loading, error, data, client }) => {
                             client.writeData({
                                 data: {
                                     currentTreeId: null,
@@ -65,8 +65,11 @@ class Home extends React.Component<Props, State> {
                             });
 
                             if (loading) return <div>Fetching</div>;
-                            if (error) return <div>Error</div>;
-                            
+                            if (error) {
+                                console.log(error)
+                                return <div>Error</div>;
+                            }
+
                             /** Obtain the scenarios and folders */
                             const scenarioFolders = data.folders
                                 .filter((folder: any) => folder.folderType.id === '1');
@@ -79,27 +82,27 @@ class Home extends React.Component<Props, State> {
                             return (
                                 <div className="home-container structure-container">
                                     <LeftPane icon={scenarioIcon}
-                                            paneName="Scenario's"
-                                            toggle={this.toggleLeftPane}
-                                            active={this.state.leftPaneActive}
-                                            folders={scenarioFolders}
-                                            scenarios={scenariosWithoutFolders}
-                                            boundingBox={data.boundingBox}
+                                        paneName="Scenario's"
+                                        toggle={this.toggleLeftPane}
+                                        active={this.state.leftPaneActive}
+                                        folders={scenarioFolders}
+                                        scenarios={scenariosWithoutFolders}
+                                        boundingBox={data.boundingBox}
                                     />
 
                                     <Workspace
                                         smallWorkspaceDeactivated={true}
                                         rightPaneActive={this.state.rightPaneActive}
                                     />
-                                    
+
                                     <RightPane icon={instrumentsIcon}
-                                            paneName="Instrumenten"
-                                            toggle={this.toggleRightPane}
-                                            active={this.state.rightPaneActive}
-                                            instruments={data.instruments}
-                                            instrumentTypes={data.instrumentTypes}
-                                            currDrip={data.currDripId}
-                                            boundingBox={data.boundingBox}
+                                        paneName="Instrumenten"
+                                        toggle={this.toggleRightPane}
+                                        active={this.state.rightPaneActive}
+                                        instruments={data.instruments}
+                                        instrumentTypes={data.instrumentTypes}
+                                        currDrip={data.currDripId}
+                                        boundingBox={data.boundingBox}
                                     />
                                 </div>
                             );

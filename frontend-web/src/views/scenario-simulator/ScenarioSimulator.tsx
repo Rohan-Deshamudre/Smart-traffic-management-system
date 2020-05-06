@@ -4,15 +4,15 @@ import NavBar from "./modules/NavBar";
 import Workspace from "./modules/Workspace";
 import LeftPane from "../scenario-designer/modules/LeftPane";
 import RightPane from "./modules/RightPane";
-import {ApolloConsumer, Query} from 'react-apollo';
-import {GET_WORKSPACE_DATA, GET_TREE} from '../../components/workspaceData';
+import { ApolloConsumer, Query } from 'react-apollo';
+import { GET_WORKSPACE_DATA, GET_TREE } from '../../components/workspaceData';
 import * as moment from 'moment';
 
 // @ts-ignore
 import simulationIcon from '../../assets/node_icons/simulations.svg';
 // @ts-ignore
 import editorIcon from "./../../assets/node_icons/designer.svg";
-import {GET_DESIGNER_DATA} from "../scenario-designer/ScenarioDesigner";
+import { GET_DESIGNER_DATA } from "../scenario-designer/ScenarioDesigner";
 
 interface State {
 	leftPaneActive: boolean;
@@ -49,7 +49,7 @@ class ScenarioSimulator extends React.Component<Props, State> {
 	componentDidMount() {
 		this.ws.onopen = () => {
 			this.setState({
-				simulationLog: [{time: 'Systeem', text: "Connectie gemaakt"}]
+				simulationLog: [{ time: 'Systeem', text: "Connectie gemaakt" }]
 			})
 		};
 
@@ -58,7 +58,7 @@ class ScenarioSimulator extends React.Component<Props, State> {
 			if (!message['text']) {
 				this.setState({
 					simulationStatus: message.id == -1 ? this.replaceLiveId(message) : message,
-					simulationLog: [...this.state.simulationLog, {time: moment(message.time).format('HH:mm:ss'), simulationSceneEvents: message.simulationSceneEvents} ]
+					simulationLog: [...this.state.simulationLog, { time: moment(message.time).format('HH:mm:ss'), simulationSceneEvents: message.simulationSceneEvents }]
 				})
 			} else if (message.text === "DISC OK") {
 				this.setState({
@@ -73,7 +73,7 @@ class ScenarioSimulator extends React.Component<Props, State> {
 
 		this.ws.onclose = () => {
 			this.setState({
-				simulationLog: [...this.state.simulationLog, {time: 'Systeem', text: "Connectie verbroken"}]
+				simulationLog: [...this.state.simulationLog, { time: 'Systeem', text: "Connectie verbroken" }]
 			});
 		};
 	}
@@ -84,7 +84,7 @@ class ScenarioSimulator extends React.Component<Props, State> {
 
 	sendMessage(message, description = "Ongespecificeerd bericht naar de server") {
 		this.setState({
-			simulationLog: [...this.state.simulationLog, {time: 'Systeem', text: description}]
+			simulationLog: [...this.state.simulationLog, { time: 'Systeem', text: description }]
 		});
 		this.ws.send(message);
 	}
@@ -103,9 +103,9 @@ class ScenarioSimulator extends React.Component<Props, State> {
 
 	replaceLiveId(message) {
 		if (message.simulationSceneEvents !== undefined) {
-		    let i = 0;
-            message.simulationSceneEvents = message.simulationSceneEvents.map(event => ({...event, id: i++}) );
-        }
+			let i = 0;
+			message.simulationSceneEvents = message.simulationSceneEvents.map(event => ({ ...event, id: i++ }));
+		}
 		return message;
 	}
 
@@ -118,13 +118,13 @@ class ScenarioSimulator extends React.Component<Props, State> {
 				<div className="home-container structure-container">
 					<Query query={GET_DESIGNER_DATA}>
 						{
-							({data}) => (
+							({ data }) => (
 								<LeftPane paneName="Designer"
-										readOnly
-										icon={editorIcon}
-										toggle={this.toggleLeftPane} 
-										data={data}
-										active={this.state.leftPaneActive}
+									readOnly
+									icon={editorIcon}
+									toggle={this.toggleLeftPane}
+									data={data}
+									active={this.state.leftPaneActive}
 								/>
 							)
 						}
@@ -133,27 +133,30 @@ class ScenarioSimulator extends React.Component<Props, State> {
 					<ApolloConsumer>
 						{client =>
 							<Workspace rightPaneActive={this.state.rightPaneActive}
-									   simulationStatus={this.state.simulationStatus} 
-									   client={client}
+								simulationStatus={this.state.simulationStatus}
+								client={client}
 							/>
 						}
 					</ApolloConsumer>
 
 					<Query query={GET_WORKSPACE_DATA}>
 						{
-							({loading, error, data}) => {
+							({ loading, error, data }) => {
 								if (loading) return <div>Fetching</div>;
-								if (error) return <div>Error</div>;
+								if (error) {
+									console.log(error)
+									return <div>Error</div>;
+								}
 
 								const id = data.currentTreeId;
 								return (
 									<RightPane paneName="Simulaties"
-											icon={simulationIcon}
-											toggle={this.toggleRightPane}
-											active={this.state.rightPaneActive}
-											simulationLog={this.state.simulationLog} 
-											messageSocket={this.sendMessage}
-											scenarioId={id}
+										icon={simulationIcon}
+										toggle={this.toggleRightPane}
+										active={this.state.rightPaneActive}
+										simulationLog={this.state.simulationLog}
+										messageSocket={this.sendMessage}
+										scenarioId={id}
 									/>
 								);
 							}
