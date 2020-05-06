@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Mutation } from 'react-apollo'
+import { Mutation, ApolloConsumer } from 'react-apollo'
 import gql from "graphql-tag";
 
 const LOGIN = gql`
@@ -15,9 +15,12 @@ interface State {
     username: string,
 }
 
-interface Props { }
+interface Props {
+    loginCallback: Function
+}
 
 class Login extends React.Component<Props, State> {
+
 
     constructor(props: Props) {
         super(props);
@@ -25,66 +28,72 @@ class Login extends React.Component<Props, State> {
         this.state = { username: '', password: '' };
     }
 
+
+
     render() {
         const { username, password } = this.state;
 
         return (
             <div className="view login-view">
+                <ApolloConsumer>
+                    {client => (
+                        <Mutation mutation={LOGIN} >
 
-                <Mutation mutation={LOGIN} >
+                            {(login) => (
+                                <div>
 
-                    {(login) => (
-                        <div>
-
-                            <p>Username:
+                                    <p>Username:
                                 <input
-                                    type="text"
-                                    value={username}
-                                    onChange={
-                                        (event) => {
-                                            // TODO Validate stuff
-                                            this.setState({ username: event.target.value })
-                                        }
-                                    }
-                                />
-                            </p>
-
-                            <p>Password:
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={
-                                        (event) => {
-                                            // TODO Validate stuff
-                                            this.setState({ password: event.target.value })
-                                        }
-                                    }
-                                />
-                            </p>
-
-                            <button
-                                onClick={
-                                    (event) => {
-                                        event.preventDefault();
-                                        login({
-                                            variables: {
-                                                username,
-                                                password
+                                            type="text"
+                                            value={username}
+                                            onChange={
+                                                (event) => {
+                                                    // TODO Validate stuff
+                                                    this.setState({ username: event.target.value })
+                                                }
                                             }
-                                        }).then((res) => {
-                                            //document.cookie = 'JWT=' + res.data.tokenAuth.token;
-                                            window.location.href = window.location.origin;
-                                        });
-                                        this.setState({ username: '', password: '' })
-                                    }
-                                }
-                                title="login"
-                            />
-                        </div>
+                                        />
+                                    </p>
+
+                                    <p>Password:
+                                <input
+                                            type="password"
+                                            value={password}
+                                            onChange={
+                                                (event) => {
+                                                    // TODO Validate stuff
+                                                    this.setState({ password: event.target.value })
+                                                }
+                                            }
+                                        />
+                                    </p>
+
+                                    <button
+                                        onClick={
+                                            (event) => {
+                                                event.preventDefault();
+                                                login({
+                                                    variables: {
+                                                        username,
+                                                        password
+                                                    }
+                                                }).then((res) => {
+                                                    if (res.data.tokenAuth.token) {
+                                                        // TODO: go to map
+                                                        window.location.reload()
+                                                    }
+                                                });
+                                                this.setState({ username: '', password: '' })
+                                            }
+                                        }
+                                        title="login"
+                                    />
+                                </div>
+                            )}
+
+                        </Mutation>
                     )}
-
-                </Mutation>
-
+                </ApolloConsumer>
             </div>
         );
     }

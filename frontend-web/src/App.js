@@ -13,12 +13,14 @@ import Login from "./views/login/Login";
 
 
 class App extends Component {
+
     render() {
         return (
             <Router history={history}>
                 <Query query={gql`{currentTreeId @client}`}>
                     {({ data }) => {
-                        if (!document.cookie.includes('JWT')) {
+                        // TODO: go to home ipv login
+                        if (true) {
                             return <Login />
                         }
 
