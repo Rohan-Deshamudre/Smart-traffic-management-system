@@ -4,8 +4,10 @@ import NavBar from "./modules/NavBar";
 import Workspace from "./modules/Workspace";
 import LeftPane from "../scenario-designer/modules/LeftPane";
 import RightPane from "./modules/RightPane";
+import InsightsPane from "../scenario-designer/modules/InsightsPane";
 import {ApolloConsumer, Query} from 'react-apollo';
 import {GET_WORKSPACE_DATA, GET_TREE} from '../../components/workspaceData';
+import Log from "./components/Log";
 import * as moment from 'moment';
 
 // @ts-ignore
@@ -13,17 +15,40 @@ import simulationIcon from '../../assets/node_icons/simulations.svg';
 // @ts-ignore
 import editorIcon from "./../../assets/node_icons/designer.svg";
 import {GET_DESIGNER_DATA} from "../scenario-designer/ScenarioDesigner";
+import { Image } from 'react-bootstrap';
 
 interface State {
 	leftPaneActive: boolean;
 	rightPaneActive: boolean;
+	insightsPaneActive: boolean;
 	simulationStatus: any;
 	simulationLog: any;
 }
 
-interface Props {
+type Props = {
+	data: {
+        id: number
+        value: string
+        roadSegmentId: number
+        roadConditionTypeId: number
+        roadSegment: {
+            id: number
+            name: string
+            roadSegmentType: {
+                id: number
+                name: string
+                img: Image
+                description: string
+            }
+        }
+        roadConditionType: {
+            id: number
+            name: string
+            img: Image
+            description: string
+        }
+    };
 }
-
 
 class ScenarioSimulator extends React.Component<Props, State> {
 	ws = new WebSocket(process.env.SIMULATION_URL);
@@ -34,12 +59,14 @@ class ScenarioSimulator extends React.Component<Props, State> {
 		this.state = {
 			leftPaneActive: false,
 			rightPaneActive: true,
+			insightsPaneActive: true,
 			simulationStatus: {},
 			simulationLog: []
 		};
 
 		this.toggleLeftPane = this.toggleLeftPane.bind(this);
 		this.toggleRightPane = this.toggleRightPane.bind(this);
+		this.toggleInsightsPane = this.toggleInsightsPane.bind(this);
 		this.componentDidMount = this.componentDidMount.bind(this);
 		this.componentWillUnmount = this.componentWillUnmount.bind(this);
 		this.sendMessage = this.sendMessage.bind(this);
@@ -89,6 +116,12 @@ class ScenarioSimulator extends React.Component<Props, State> {
 		this.ws.send(message);
 	}
 
+	generateInsights() {
+		this.setState({
+			simulationLog: [...this.state.simulationLog, {time: 'Systeem', text: this.props.data.value}]
+		})
+	}
+
 	toggleLeftPane() {
 		this.setState({
 			leftPaneActive: !this.state.leftPaneActive
@@ -98,6 +131,12 @@ class ScenarioSimulator extends React.Component<Props, State> {
 	toggleRightPane() {
 		this.setState({
 			rightPaneActive: !this.state.rightPaneActive
+		})
+	}
+
+	toggleInsightsPane() {
+		this.setState({
+			insightsPaneActive: !this.state.insightsPaneActive
 		})
 	}
 
