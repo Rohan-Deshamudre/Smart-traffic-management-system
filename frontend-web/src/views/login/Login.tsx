@@ -3,6 +3,8 @@ import { Mutation } from 'react-apollo'
 import gql from "graphql-tag";
 import { useHistory } from "react-router-dom";
 
+const history = useHistory();
+
 const LOGIN = gql`
     mutation PostMutation($username: String!, $password: String!) {
         tokenAuth(username: $username, password: $password) {
@@ -19,8 +21,6 @@ interface State {
 interface Props { }
 
 class Login extends React.Component<Props, State> {
-
-    useHistory = useHistory();
 
     constructor(props: Props) {
         super(props);
@@ -76,7 +76,7 @@ class Login extends React.Component<Props, State> {
                                             }
                                         }).then((res) => {
                                             document.cookie = 'token=' + res.data.tokenAuth.token;
-                                            this.useHistory.push('/')
+                                            history.push('/')
                                         });
                                         this.setState({username: '', password: ''})
                                     }
