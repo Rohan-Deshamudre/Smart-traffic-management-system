@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Mutation } from 'react-apollo'
 import gql from "graphql-tag";
-import { useHistory } from "react-router-dom";
 
 const LOGIN = gql`
     mutation PostMutation($username: String!, $password: String!) {
@@ -25,12 +24,6 @@ class Login extends React.Component<Props, State> {
 
         this.state = { username: '', password: '' };
     }
-
-    toHome() {
-        let path = `/`;
-        let history = useHistory();
-        history.push(path);
-    };
 
     render() {
         const { username, password } = this.state;
