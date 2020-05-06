@@ -1,8 +1,6 @@
 import React from "react";
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
+import {RaisedButton,TextField, AppBar, MuiThemeProvider} from 'material-ui';
+
 
 class Login extends React.Component {
     constructor(props) {
@@ -32,13 +30,17 @@ class Login extends React.Component {
                         />
                         <br/>
                         <RaisedButton
-                            label = {"Login"}
+                            label = "Login"
+                            style={style}
                             onClick={(click) => this.handleClick(click)} //handleClick function needs to be written to send authentication info to backend
                         />
                     </div>
                 </MuiThemeProvider>
             </div>
         );
+    }
+    handleClick(click) {
+
     }
 }
 
