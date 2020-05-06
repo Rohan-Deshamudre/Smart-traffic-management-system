@@ -1,9 +1,7 @@
 import * as React from "react";
 import { Mutation } from 'react-apollo'
 import gql from "graphql-tag";
-import { useHistory } from "react-router-dom";
-
-const history = useHistory();
+import { Redirect } from "react-router";
 
 const LOGIN = gql`
     mutation PostMutation($username: String!, $password: String!) {
@@ -15,7 +13,7 @@ const LOGIN = gql`
 
 interface State {
     password: string,
-    username: string
+    username: string,
 }
 
 interface Props { }
@@ -42,7 +40,7 @@ class Login extends React.Component<Props, State> {
                             <p>Username:
                                 <input
                                     type="text"
-                                    value={ username }
+                                    value={username}
                                     onChange={
                                         (event) => {
                                             // TODO Validate stuff
@@ -55,7 +53,7 @@ class Login extends React.Component<Props, State> {
                             <p>Password:
                                 <input
                                     type="password"
-                                    value={ password }
+                                    value={password}
                                     onChange={
                                         (event) => {
                                             // TODO Validate stuff
@@ -76,9 +74,10 @@ class Login extends React.Component<Props, State> {
                                             }
                                         }).then((res) => {
                                             document.cookie = 'token=' + res.data.tokenAuth.token;
-                                            history.push('/')
+                                            console.log(res.data.tokenAuth.token)
+                                            window.location.reload()
                                         });
-                                        this.setState({username: '', password: ''})
+                                        this.setState({ username: '', password: '' })
                                     }
                                 }
                                 title="login"
