@@ -1,9 +1,6 @@
 import * as React from 'react';
 import {Subtract} from 'utility-types';
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import Container from "react-bootstrap/Container";
-import {ApolloConsumer, Query} from "@apollo/react-components";
+import {Query} from "@apollo/react-components";
 
 import {Link} from "react-router-dom";
 import FormControl from "react-bootstrap/FormControl";

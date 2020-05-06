@@ -1,10 +1,7 @@
-import { Component } from 'react'
 import * as React from "react";
 import { Mutation } from 'react-apollo'
 import gql from "graphql-tag";
-import ApolloClient from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks'
-import { CREATE_FOLDER } from "../../components/CRUDFolders";
+import { useHistory } from "react-router-dom";
 
 const LOGIN = gql`
     mutation PostMutation($username: String!, $password: String!) {
@@ -23,6 +20,8 @@ interface Props { }
 
 class Login extends React.Component<Props, State> {
 
+    useHistory = useHistory();
+
     constructor(props: Props) {
         super(props);
 
@@ -31,34 +30,65 @@ class Login extends React.Component<Props, State> {
 
     render() {
         const { username, password } = this.state;
-        var rest;
+
         return (
             <div className="view login-view">
 
                 <Mutation mutation={LOGIN} >
+
                     {(login) => (
                         <div>
-                            <p>Username: <input type="text" value={username} onChange={e => this.setState({ username: e.target.value })} /></p>
-                            <p>Password: <input type="password" value={password} onChange={e => this.setState({ password: e.target.value })} /></p>
-                            <button onClick={() => {
-                                login({
-                                    variables: {
-                                        username,
-                                        password
+
+                            <p>Username:
+                                <input
+                                    type="text"
+                                    value={ username }
+                                    onChange={
+                                        (event) => {
+                                            // TODO Validate stuff
+                                            this.setState({ username: event.target.value })
+                                        }
                                     }
-                                })
-                                    .then((res) => {
-                                        console.log(res)
-                                    })
-                                this.setState({ username: '', password: '' })
-                            }}
+                                />
+                            </p>
+
+                            <p>Password:
+                                <input
+                                    type="password"
+                                    value={ password }
+                                    onChange={
+                                        (event) => {
+                                            // TODO Validate stuff
+                                            this.setState({ password: event.target.value })
+                                        }
+                                    }
+                                />
+                            </p>
+
+                            <button
+                                onClick={
+                                    (event) => {
+                                        event.preventDefault();
+                                        login({
+                                            variables: {
+                                                username,
+                                                password
+                                            }
+                                        }).then((res) => {
+                                            document.cookie = 'token=' + res.data.tokenAuth.token;
+                                            this.useHistory.push('/')
+                                        });
+                                        this.setState({username: '', password: ''})
+                                    }
+                                }
                                 title="login"
                             />
                         </div>
                     )}
+
                 </Mutation>
 
-            </div >
+            </div>
         );
     }
 }
