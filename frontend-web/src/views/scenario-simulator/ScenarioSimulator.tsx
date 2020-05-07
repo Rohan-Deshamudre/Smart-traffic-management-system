@@ -12,6 +12,8 @@ import * as moment from 'moment';
 // @ts-ignore
 import simulationIcon from '../../assets/node_icons/simulations.svg';
 // @ts-ignore
+import insightsIcon from '../../assets/insights.svg';
+// @ts-ignore
 import editorIcon from "./../../assets/node_icons/designer.svg";
 import { GET_DESIGNER_DATA } from "../scenario-designer/ScenarioDesigner";
 
@@ -136,7 +138,7 @@ class ScenarioSimulator extends React.Component<Props, State> {
                                 const id = data.currentTreeId;
                                 return (
                                     <InsightsPane paneName="Insights"
-                                        icon={simulationIcon}
+                                        icon={insightsIcon}
                                         toggle={this.toggleInsightsPane}
                                         active={this.state.insightsPaneActive}
                                         simulationLog={this.state.simulationLog}
