@@ -1,7 +1,10 @@
 import * as React from 'react';
 import {Subtract} from 'utility-types';
 
-import "./styles/pane.scss"
+import "./styles/pane.scss";
+// @ts-ignore
+import scenarioIcon from "../assets/node_icons/scenario.svg";
+// @ts-ignore
 import closeIcon from "../assets/left-collapse.svg";
 
 export interface InjectedInsightsPane {
@@ -39,13 +42,13 @@ const asInsightsPane = <P extends InjectedInsightsPane>(
                     {
                         !active ? (
                             <div className="open-pane-button insights" onClick={this.props.toggle}>
-                                <img src={this.props.icon} alt={""} />
                                 <div className="description">{this.props.paneName}</div>
+                                <img src={this.props.icon} alt={""} />
                             </div>
                         ) : null
 					}
 					<div
-						className={(active ? "active-insights-pane " : "inactive-insights-pane ") + "insightspane-container pane-container"}>
+						className={(active ? "active-insights-pane " : "inactive-insights-pane ") + " insightspane-container"}>
 						<div className="close-pane-button insights" onClick={this.props.toggle}>
 							<img src={closeIcon} alt="x" />
 						</div>

@@ -2,20 +2,20 @@ import * as React from 'react';
 
 import NavBar from "./modules/NavBar";
 import Workspace from "./modules/Workspace";
+import InsightsPane from "./modules/InsightsPane";
 import LeftPane from "../scenario-designer/modules/LeftPane";
 import RightPane from "./modules/RightPane";
-import InsightsPane from "../scenario-designer/modules/InsightsPane";
 import {ApolloConsumer, Query} from 'react-apollo';
 import {GET_WORKSPACE_DATA, GET_TREE} from '../../components/workspaceData';
-import Log from "./components/Log";
 import * as moment from 'moment';
 
 // @ts-ignore
 import simulationIcon from '../../assets/node_icons/simulations.svg';
 // @ts-ignore
+import insightsIcon from '../../assets/insights.svg';
+// @ts-ignore
 import editorIcon from "./../../assets/node_icons/designer.svg";
 import {GET_DESIGNER_DATA} from "../scenario-designer/ScenarioDesigner";
-import { Image } from 'react-bootstrap';
 
 interface State {
 	leftPaneActive: boolean;
@@ -25,29 +25,7 @@ interface State {
 	simulationLog: any;
 }
 
-type Props = {
-	data: {
-        id: number
-        value: string
-        roadSegmentId: number
-        roadConditionTypeId: number
-        roadSegment: {
-            id: number
-            name: string
-            roadSegmentType: {
-                id: number
-                name: string
-                img: Image
-                description: string
-            }
-        }
-        roadConditionType: {
-            id: number
-            name: string
-            img: Image
-            description: string
-        }
-    };
+interface Props {
 }
 
 class ScenarioSimulator extends React.Component<Props, State> {
@@ -59,7 +37,7 @@ class ScenarioSimulator extends React.Component<Props, State> {
 		this.state = {
 			leftPaneActive: false,
 			rightPaneActive: true,
-			insightsPaneActive: true,
+			insightsPaneActive: false,
 			simulationStatus: {},
 			simulationLog: []
 		};
@@ -116,12 +94,6 @@ class ScenarioSimulator extends React.Component<Props, State> {
 		this.ws.send(message);
 	}
 
-	generateInsights() {
-		this.setState({
-			simulationLog: [...this.state.simulationLog, {time: 'Systeem', text: this.props.data.value}]
-		})
-	}
-
 	toggleLeftPane() {
 		this.setState({
 			leftPaneActive: !this.state.leftPaneActive
@@ -168,6 +140,26 @@ class ScenarioSimulator extends React.Component<Props, State> {
 							)
 						}
 					</Query>
+
+                    <Query query={GET_WORKSPACE_DATA}>
+                        {
+                            ({ loading, error, data }) => {
+                                if (loading) return <div>Fetching</div>;
+                                if (error) return <div>Error</div>;
+
+                                const id = data.currentTreeId;
+                                return (
+                                    <InsightsPane paneName="Insights"
+                                        icon={insightsIcon}
+                                        toggle={this.toggleInsightsPane}
+                                        active={this.state.insightsPaneActive}
+                                        simulationLog={this.state.simulationLog}
+                                        messageSocket={this.sendMessage}
+                                    />
+                                );
+                            }
+                        }
+                    </Query>
 
 					<ApolloConsumer>
 						{client =>
