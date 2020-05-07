@@ -129,6 +129,21 @@ class ScenarioSimulator extends React.Component<Props, State> {
 
                 <div className="home-container structure-container">
 
+                    <Query query={GET_DESIGNER_DATA}>
+                        {
+                            ({ data }) => (
+                                <LeftPane paneName="Designer"
+                                    readOnly
+                                    icon={editorIcon}
+                                    toggle={this.toggleLeftPane}
+                                    data={data}
+                                    active={this.state.leftPaneActive}
+                                />
+                            )
+                        }
+                    </Query>
+
+
                     <Query query={GET_WORKSPACE_DATA}>
                         {
                             ({ loading, error, data }) => {
@@ -148,21 +163,7 @@ class ScenarioSimulator extends React.Component<Props, State> {
                             }
                         }
                     </Query>
-                    {/*
-                    <Query query={GET_DESIGNER_DATA}>
-                        {
-                            ({ data }) => (
-                                <LeftPane paneName="Designer"
-                                    readOnly
-                                    icon={editorIcon}
-                                    toggle={this.toggleLeftPane}
-                                    data={data}
-                                    active={this.state.leftPaneActive}
-                                />
-                            )
-                        }
-                    </Query>
-		 */}
+
                     <ApolloConsumer>
                         {client =>
                             <Workspace rightPaneActive={this.state.rightPaneActive}
