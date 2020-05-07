@@ -7,7 +7,7 @@ import SimulationItem from '../components/SimulationItem';
 import { Query } from 'react-apollo';
 import { GET_TREE } from '../../../components/workspaceData';
 import { treeUtils } from "../../../components/tree/treeUtils";
-import Log from "../components/Log";
+import InsightsLog from "../components/InsightsLog";
 import * as moment from 'moment';
 import { GET_SIMULATION_FROM_SCENARIO } from "../SimulationQueries";
 import SimulationList from "../components/SimulationList";
@@ -58,7 +58,7 @@ class InsightsPane extends React.Component<Props, {}, any> {
                 </div>
 
                 <div className="bottom">
-                    <Log simulationLog={this.props.simulationLog} />
+                    <InsightsLog simulationLog={this.props.simulationLog} />
                 </div>
             </div>
         );

@@ -146,7 +146,7 @@ class ScenarioSimulator extends React.Component<Props, State> {
                             }
                         }
                     </Query>
-
+                    {/*
                     <Query query={GET_DESIGNER_DATA}>
                         {
                             ({ data }) => (
@@ -160,7 +160,7 @@ class ScenarioSimulator extends React.Component<Props, State> {
                             )
                         }
                     </Query>
-
+		 */}
                     <ApolloConsumer>
                         {client =>
                             <Workspace rightPaneActive={this.state.rightPaneActive}
