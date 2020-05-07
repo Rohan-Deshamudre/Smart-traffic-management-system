@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import '../styles/leftPane.scss';
 import '../styles/rightPane.scss';
-import asLeftPane from "../../../components/LeftPane";
+import asInsightsPane from "../../../components/InsightsPane";
 import SimulationItem from '../components/SimulationItem';
 import { Query } from 'react-apollo';
 import { GET_TREE } from '../../../components/workspaceData';
@@ -66,4 +66,4 @@ class InsightsPane extends React.Component<Props, {}, any> {
 
 }
 
-export default asLeftPane(InsightsPane);
+export default asInsightsPane(InsightsPane);
