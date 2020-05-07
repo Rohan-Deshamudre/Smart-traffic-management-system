@@ -7,6 +7,7 @@ import CardContent from "@material-ui/core/CardContent";
 import TextField from "@material-ui/core/TextField";
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
+import {Grid} from "@material-ui/core";
 
 const LOGIN = gql`
     mutation PostMutation($username: String!, $password: String!) {
@@ -45,63 +46,72 @@ class Login extends React.Component<Props, State> {
                         <Mutation mutation={LOGIN} >
                             {(login) => (
                                 <div>
-                                    <Card style={{width: 400}}>
-                                        <CardHeader title={'Login'} style={{textAlign: 'center',background: '#212121', color: '#fff'}}/>
-                                        <CardContent>
-                                            <div>
-                                                <TextField
-                                                    fullWidth
-                                                    label = "Username"
-                                                    type = "text"
-                                                    value={username}
-                                                    onChange={
+                                    <Grid
+                                        container
+                                        spacing={0}
+                                        direction="column"
+                                        alignItems="center"
+                                        justify="center"
+                                        style={{ minHeight: '100vh' }}
+                                    ><Grid item xs={3}>
+                                        <Card style={{width: 400}}>
+                                            <CardHeader title={'Login'} style={{textAlign: 'center',background: '#212121', color: '#fff'}}/>
+                                            <CardContent>
+                                                <div>
+                                                   <TextField
+                                                        fullWidth
+                                                        label = "Username"
+                                                        type = "text"
+                                                        value={username}
+                                                        onChange={
+                                                            (event) => {
+                                                                // TODO Validate stuff
+                                                             this.setState({ username: event.target.value })
+                                                            }
+                                                        }
+                                                    />
+                                                   <br/>
+                                                    <TextField
+                                                        fullWidth
+                                                        label = "Password"
+                                                        type="password"
+                                                        value={password}
+                                                        onChange={
+                                                            (event) => {
+                                                                // TODO Validate stuff
+                                                                this.setState({ password: event.target.value })
+                                                            }
+                                                        }
+                                                    />
+                                                </div>
+                                            </CardContent>
+                                            <CardActions style = {{justifyContent: 'center'}}>
+                                               <Button
+                                                    variant= "contained"
+                                                    size= "large"
+                                                    color= "primary"
+                                                    onClick={
                                                         (event) => {
-                                                            // TODO Validate stuff
-                                                            this.setState({ username: event.target.value })
+                                                            event.preventDefault();
+                                                            login({
+                                                                variables: {
+                                                                    username,
+                                                                    password
+                                                                }
+                                                            }).then((res) => {
+                                                                if (res.data.tokenAuth.token) {
+                                                                    // TODO: go to map
+                                                                    window.location.reload()
+                                                                }
+                                                            });
+                                                            this.setState({ username: '', password: '' })
                                                         }
                                                     }
-                                                />
-                                                <br/>
-                                                <TextField
-                                                    fullWidth
-                                                    label = "Password"
-                                                    type="password"
-                                                    value={password}
-                                                    onChange={
-                                                        (event) => {
-                                                            // TODO Validate stuff
-                                                            this.setState({ password: event.target.value })
-                                                        }
-                                                    }
-                                                />
-                                            </div>
-                                        </CardContent>
-                                        <CardActions>
-                                            <Button
-                                                variant= "contained"
-                                                size= "large"
-                                                color= "primary"
-                                                style={{alignItems: 'center'}}
-                                                onClick={
-                                                    (event) => {
-                                                        event.preventDefault();
-                                                        login({
-                                                            variables: {
-                                                                username,
-                                                                password
-                                                            }
-                                                        }).then((res) => {
-                                                            if (res.data.tokenAuth.token) {
-                                                                // TODO: go to map
-                                                                window.location.reload()
-                                                            }
-                                                        });
-                                                        this.setState({ username: '', password: '' })
-                                                    }
-                                                }
-                                            > Login </Button>
-                                        </CardActions>
-                                    </Card>
+                                                > Login </Button>
+                                            </CardActions>
+                                        </Card>
+                                    </Grid>
+                                    </Grid>
                                 </div>
                             )}
                         </Mutation>
