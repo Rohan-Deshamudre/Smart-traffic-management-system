@@ -14,6 +14,8 @@ import { READ_FOLDERS } from "../../components/CRUDFolders";
 import scenarioIcon from "../../assets/node_icons/scenario.svg";
 // @ts-ignore
 import instrumentsIcon from "../../assets/node_icons/instruments.svg";
+import { Auth } from '../../helper/auth';
+import { Redirect } from 'react-router-dom';
 
 interface State {
     leftPaneActive: boolean;
@@ -48,6 +50,9 @@ class Home extends React.Component<Props, State> {
     }
 
     render() {
+        if (!Auth.isLoggedIn()) {
+            return <Redirect to='/login' />
+        }
         return (
             <div className="view home-view">
                 <NavBar mode="Home mode" />

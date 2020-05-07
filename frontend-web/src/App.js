@@ -10,6 +10,9 @@ import Home from "./views/home/Home";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import Login from "./views/login/Login";
+import { Redirect } from 'react-router-dom'
+
+import { Auth } from './helper/auth';
 
 
 class App extends Component {
@@ -20,12 +23,15 @@ class App extends Component {
                 <Query query={gql`{currentTreeId @client}`}>
                     {({ data }) => {
                         // TODO: go to home ipv login
-                        if (true) {
-                            return <Login />
-                        }
+                        console.log("whahaha")
 
                         if (data.currentTreeId === null) {
-                            return <Home />
+                            return (
+                                <Switch>
+                                    <Route path="/login" component={Login} />
+                                    <Home />
+                                </Switch>
+                            )
                         } else {
                             return (
                                 <Switch>
