@@ -11,12 +11,12 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { resolvers } from './local_store/resolvers';
 import { schema } from './local_store/schema';
 import { defaultStore } from "./local_store/default";
-import {Cache} from "apollo-cache/lib/types";
+import { Cache } from "apollo-cache/lib/types";
 
 
 // Add the correct link
 const httpLink = createHttpLink({
-    uri: process.env.API_URL
+    uri: process.env.API_URL,
 });
 
 const cache = new InMemoryCache();
@@ -27,10 +27,11 @@ const client = new ApolloClient({
     typeDefs: schema,
     link: httpLink,
     cache: cache,
+    credentials: 'same-origin'
 });
 
 // Set default local state
-cache.writeData({data: defaultStore});
+cache.writeData({ data: defaultStore });
 client.onResetStore(() => cache.writeData({ data })); // If client.resetStore is called
 
 // Render the app

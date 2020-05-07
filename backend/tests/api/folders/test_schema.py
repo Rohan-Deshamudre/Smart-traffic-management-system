@@ -1,5 +1,6 @@
 from django.test import TestCase
 from graphene.test import Client
+from django.contrib.auth import get_user_model
 
 from scenwise_backend.schema import schema
 
@@ -19,7 +20,7 @@ class FolderSchemaTest(TestCase):
         client = Client(schema)
         folder = self.folders[0]
         executed = client.execute('''
-                                    query {
+                                    {
                                         folders
                                         (
                                             name: "%s",
@@ -29,7 +30,8 @@ class FolderSchemaTest(TestCase):
                                             name
                                         }
                                     }
-                                    ''' % (folder.name, folder.description))
+                                    ''' % (folder.name, folder.description)
+                                        )
         """
         TODO: Get the folder objects instead of a string
         """
