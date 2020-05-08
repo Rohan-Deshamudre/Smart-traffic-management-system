@@ -19,41 +19,46 @@ class Log extends React.Component<Props, State> {
 	render() {
 		let conditionString = (id) => (
 			<Query query={GET_ROAD_CONDITION_TYPES}>
-				{({data, loading, error}) => {
-					if (loading) return <p>Loading</p>;
-					if (error) return <p>Error</p>;
-					for (let type of data.roadConditionTypes) {
-						if (parseInt(type.id) === id) {
-							return (
-								type.name
-							)
+				{
+					({data, loading, error}) => {
+						if (loading) return <p>Loading</p>;
+						if (error) return <p>Error</p>;
+
+						for (let type of data.roadConditionTypes) {
+							if (parseInt(type.id) === id) {
+								return (
+									type.name
+								)
+							}
 						}
+						return id;
 					}
-					return id;
-				}}
+				}
 			</Query>
 		);
 
 		let log = this.props.simulationLog.map((log, index) => (
 			<div key={index} className="log-item">
 				<div className="log-time-stamp">{log.time}</div>
+
 				{
 					log.text ? (
 						<div className="log-info-message-list">
 							<div className="log-info-message">{log.text}</div>
 						</div>
 					) : (
-						<div className="log-info-message-list">{
-							log.simulationSceneEvents.length > 0
-								? log.simulationSceneEvents.map(event => (
-									<div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()}
-										 className="log-info-message">
-										{conditionString(event.roadConditionTypeId)} with
-										value {_.round(event.value, 2)} on segment: {event.roadSegmentId}
-									</div>
-								))
-								: <div className="log-info-message">Geen verkeersstatussen gevonden.</div>
-						}
+						<div className="log-info-message-list">
+							{
+								log.simulationSceneEvents.length > 0
+									? log.simulationSceneEvents.map(event => (
+										<div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()}
+											className="log-info-message">
+											{conditionString(event.roadConditionTypeId)} with
+											value {_.round(event.value, 2)} on segment: {event.roadSegmentId}
+										</div>
+									))
+									: <div className="log-info-message">Geen verkeersstatussen gevonden.</div>
+							}
 						</div>
 					)
 				}
