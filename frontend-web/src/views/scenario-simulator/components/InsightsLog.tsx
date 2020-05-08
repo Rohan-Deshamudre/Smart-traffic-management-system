@@ -87,6 +87,11 @@ class InsightsLog extends React.Component<Props, State> {
                                                                             {event.roadSegment.name}
                                                                         </i>
                                                                     </div>
+                                                                    <br/>
+                                                                    <p>This stretch road has been occupied for road repairs and maintenance causing
+                                                                        obstructions in your route. All vehicles approaching this road segment are advised to take
+                                                                        an alternate route as it may be partially or completely closed.
+                                                                    </p>
                                                                 </div>
                                                             )
                                                         }
