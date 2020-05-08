@@ -27,6 +27,10 @@ $open-button-width: 200px;
   border-bottom: 1px solid black;
   overflow-y: scroll;
 
+  a {
+    text-decoration: underline;
+  }
+
   ul {
     list-style:none;
     max-height:100px;

@@ -56,13 +56,13 @@ class InsightsLog extends React.Component<Props, State> {
                                                 <div className="box">
                                                     <div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()}
                                                         className="log-info-message">
-                                                        {event.roadConditionType.description}.
+                                                        {event.roadConditionType.description}
                                                         <p>
-                                                            {conditionString(event.roadConditionType.name)} of level {_.round(event.value, 2)} 
-                                                             on {event.roadSegment.roadSegmentType.name}:
+                                                            <a>{conditionString(event.roadConditionType.name)}</a> of level {_.round(event.value, 2)} 
+                                                            on {event.roadSegment.roadSegmentType.name}:
                                                         </p>
                                                         <ul>
-                                                            {event.roadSegment.roadSegmentType.img}
+                                                            <img src="../../../assets/tree_icons/road_segment/roadsegment.svg" width="15" height="15"></img>
                                                             <li>road_segment_name : {event.roadSegment.name}</li>
                                                             <li>road_segment_type_description : {event.roadSegment.roadSegmentType.description}</li>
                                                         </ul>
