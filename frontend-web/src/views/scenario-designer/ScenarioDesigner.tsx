@@ -16,7 +16,6 @@ import editorIcon from "./../../assets/node_icons/designer.svg";
 interface State {
 	leftPaneActive: boolean;
 	rightPaneActive: boolean;
-	insightsPaneActive: boolean;
 }
 
 interface Props {
@@ -38,7 +37,6 @@ class ScenarioDesigner extends React.Component<Props, State> {
 		this.state = {
 			leftPaneActive: false,
 			rightPaneActive: false,
-			insightsPaneActive: false,
 		};
 
 		this.toggleLeftPane = this.toggleLeftPane.bind(this);
@@ -55,12 +53,6 @@ class ScenarioDesigner extends React.Component<Props, State> {
 	toggleRightPane() {
 		this.setState({
 			rightPaneActive: !this.state.rightPaneActive
-		})
-	}
-
-	toggleInsightsPane() {
-		this.setState({
-			insightsPaneActive: !this.state.insightsPaneActive
 		})
 	}
 
