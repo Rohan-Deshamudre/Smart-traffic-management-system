@@ -72,6 +72,11 @@ class InsightsLog extends React.Component<Props, State> {
                                                                             {event.roadSegment.name}
                                                                         </i>
                                                                     </div>
+                                                                    <br/>
+                                                                    <p>This stretch of your route is suffering from congestion which means slow moving traffic,
+                                                                        longer trip time and increased vehicular queuing. All vehicles approaching this road segment
+                                                                        are advised to take an alternate route until the condition improves.
+                                                                    </p>
                                                                 </div>
                                                             ) : (
                                                                 <div>
