@@ -38,7 +38,7 @@ class InsightsPane extends React.Component<Props, {}, any> {
     start(client, id, roadSegmentIds = []) {
         // First stop other streams
         client.writeData({ data: { simulating: true } });
-        this.props.messageSocket(this.makeMessageObject(id, roadSegmentIds), "-- Simulatie gestart");
+        this.props.messageSocket(this.makeMessageObject(id, roadSegmentIds), "Start!");
     };
 
     stop(client) {
@@ -46,7 +46,7 @@ class InsightsPane extends React.Component<Props, {}, any> {
         const stopMsg = {
             'type': 1
         };
-        this.props.messageSocket(JSON.stringify(stopMsg), "-- Simulatie gestopt")
+        this.props.messageSocket(JSON.stringify(stopMsg), "Stop!")
     };
 
 
@@ -57,13 +57,24 @@ class InsightsPane extends React.Component<Props, {}, any> {
                     <div className="d-block header-title">Insights</div>
                 </div>
 
+                <div className="mid">
+                    <p>
+                        The insights provide a visual overview of the simulation process and generates
+                        numerical data on the condition of the road. As such, we provide insights on whether
+                        an accident has occurred, broken down cars, congestion, roadworks etc.
+                    </p>
+                    <p>
+                        Knowing the severity of such road conditions will assist the driver in taking the alternative
+                        advised to them, which will ensure they reach their destination via a different route.
+                    </p>
+                </div>
+
                 <div className="bottom">
                     <InsightsLog simulationLog={this.props.simulationLog} />
                 </div>
             </div>
         );
     }
-
 }
 
 export default asInsightsPane(InsightsPane);
