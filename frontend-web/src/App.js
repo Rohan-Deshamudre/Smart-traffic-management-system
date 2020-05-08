@@ -12,9 +12,6 @@ import { Query } from "react-apollo";
 import Login from "./views/login/Login";
 import { Redirect } from 'react-router-dom'
 
-import { Auth } from './helper/auth';
-
-
 class App extends Component {
 
     render() {
@@ -22,9 +19,6 @@ class App extends Component {
             <Router history={history}>
                 <Query query={gql`{currentTreeId @client}`}>
                     {({ data }) => {
-                        // TODO: go to home ipv login
-                        console.log("whahaha")
-
                         if (data.currentTreeId === null) {
                             return (
                                 <Switch>
