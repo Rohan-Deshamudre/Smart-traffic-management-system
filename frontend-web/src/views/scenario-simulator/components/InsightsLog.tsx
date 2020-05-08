@@ -58,11 +58,12 @@ class InsightsLog extends React.Component<Props, State> {
                                                         className="log-info-message">
                                                         {event.roadConditionType.description}
                                                         <p>
-                                                            <a>{conditionString(event.roadConditionType.name)}</a> of level {_.round(event.value, 2)} 
+                                                            <a>{conditionString(event.roadConditionType.name)}</a> of level {_.round(event.value, 2)}
                                                             on {event.roadSegment.roadSegmentType.name}:
                                                         </p>
                                                         <ul>
-                                                            <img src="../../../assets/tree_icons/road_segment/roadsegment.svg" width="15" height="15"></img>
+                                                            <img src="../../../assets/tree_icons/road_segment/roadsegment.svg" width="25" height="30"></img>
+                                                            <button>Road Segment</button>
                                                             <li>road_segment_name : {event.roadSegment.name}</li>
                                                             <li>road_segment_type_description : {event.roadSegment.roadSegmentType.description}</li>
                                                         </ul>
@@ -90,5 +91,7 @@ class InsightsLog extends React.Component<Props, State> {
         );
     }
 }
+
+
 
 export default InsightsLog;
