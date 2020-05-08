@@ -4,7 +4,6 @@ import { Query } from "react-apollo";
 import { GET_ROAD_CONDITION_TYPES } from "../../scenario-designer/toolboxes/road-condition/RoadConditionToolboxQueries";
 import Type from "../../../components/other/Type";
 import * as _ from 'lodash';
-import "../styles/insightsPane.scss";
 
 type State = {}
 
