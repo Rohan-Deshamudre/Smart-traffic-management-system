@@ -58,15 +58,34 @@ class InsightsLog extends React.Component<Props, State> {
                                                         className="log-info-message">
                                                         {event.roadConditionType.description}
                                                         <p>
-                                                            <a>{conditionString(event.roadConditionType.name)}</a> of level {_.round(event.value, 2)}
-                                                            on {event.roadSegment.roadSegmentType.name}:
+                                                            <a>{conditionString(event.roadConditionType.name)}</a> of level {_.round(event.value, 2)} 
+                                                            on {event.roadSegment.name}.
+                                                            <p>{event.roadSegment.roadSegmentType.description}</p>
                                                         </p>
-                                                        <ul>
-                                                            <img src="../../../assets/tree_icons/road_segment/roadsegment.svg" width="25" height="30"></img>
-                                                            <button>Road Segment</button>
-                                                            <li>road_segment_name : {event.roadSegment.name}</li>
-                                                            <li>road_segment_type_description : {event.roadSegment.roadSegmentType.description}</li>
-                                                        </ul>
+                                                        {
+                                                            (event.roadConditionType.name.toString() == "Congestion") ? (
+                                                                <div>
+                                                                    <img src="../../../assets/tree_icons/road_condition/congestion.svg" width="50" height="50"></img>
+                                                                    <img src="../../../assets/tree_icons/road_segment/roadsegment.svg" width="50" height="50"></img>
+                                                                    <div className="button">
+                                                                        <i className="fa fa-exclamation-triangle">
+                                                                            {event.roadSegment.name}
+                                                                        </i>
+                                                                    </div>
+                                                                </div>
+                                                            ) : (
+                                                                <div>
+                                                                <img src="../../../assets/tree_icons/road_condition/roadwork.svg" width="50" height="50"></img>
+                                                                <img src="../../../assets/tree_icons/road_segment/roadsegment.svg" width="50" height="50"></img>
+                                                                    <div className="button">
+                                                                        <i className="fa fa-exclamation-triangle">
+                                                                            {event.roadSegment.name}
+                                                                        </i>
+                                                                    </div>
+                                                                </div>
+                                                            )
+                                                        }
+                                                        
                                                     </div>
                                                 </div>
                                             </section>
@@ -91,7 +110,5 @@ class InsightsLog extends React.Component<Props, State> {
         );
     }
 }
-
-
 
 export default InsightsLog;

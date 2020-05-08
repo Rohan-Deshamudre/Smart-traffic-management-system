@@ -31,15 +31,6 @@ $open-button-width: 200px;
     text-decoration: underline;
   }
 
-  ul {
-    list-style:none;
-    max-height:100px;
-    margin:0;
-    overflow:auto;
-    padding:0;
-    text-indent:10px;
-  }
-
   .stats {
     margin-top: 25px;
     color: #CCC;
@@ -65,6 +56,44 @@ $open-button-width: 200px;
     float: left;
     width: auto;
     margin-left: 10px;
+  }
+
+  .button {
+    border: 0 none;
+    border-radius: 2px 2px 2px 2px;
+    background: #c0392b;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Arial,sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 20px;
+    margin-left: 10px;
+    margin-top: 3px;
+    padding: 7px 10px;
+    text-transform: none;
+    transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
+    width: 150px;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+  }
+
+  .button:hover {
+    background: #e74c3c;
+  }
+
+  .button:active {
+    --webkit-box-shadow: 0px 0px 53px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 53px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 53px 0px rgba(0,0,0,0.75);
+  }
+
+  i {
+    margin-right: 10px;
   }
 }
 
