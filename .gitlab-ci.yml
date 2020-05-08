@@ -9,6 +9,10 @@ build frontend-web:
   script:
     - cd frontend-web
     - npm i
+    - npm run-script build
+  artifacts:
+    paths:
+      - frontend-web/build
     
 test backend:
   image: python:3.6
