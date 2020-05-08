@@ -56,18 +56,15 @@ class InsightsLog extends React.Component<Props, State> {
                                                 <div className="box">
                                                     <div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()}
                                                         className="log-info-message">
-                                                        {conditionString(event.roadConditionTypeId)} with value {_.round(event.value, 2)} 
-                                                        on {event.roadSegment.roadSegmentType.name}:
+                                                        {event.roadConditionType.description}.
+                                                        <p>
+                                                            {conditionString(event.roadConditionType.name)} of level {_.round(event.value, 2)} 
+                                                             on {event.roadSegment.roadSegmentType.name}:
+                                                        </p>
                                                         <ul>
-                                                            <li>id : {event.id}</li>
-                                                            <li>road_segment_id : {event.roadSegmentId}</li>
+                                                            {event.roadSegment.roadSegmentType.img}
                                                             <li>road_segment_name : {event.roadSegment.name}</li>
-                                                            <li>road_segment_type_id : {event.roadSegment.roadSegmentType.id}</li>
-                                                            <li>road_segment_type_name : {event.roadSegment.roadSegmentType.name}</li>
                                                             <li>road_segment_type_description : {event.roadSegment.roadSegmentType.description}</li>
-                                                            <li>road_condition_type_id : {event.roadConditionTypeId}</li>
-                                                            <li>road_condition_type_name : {event.roadConditionType.name}</li>
-                                                            <li>road_condition_type_description: {event.roadConditionType.description}</li>
                                                         </ul>
                                                     </div>
                                                 </div>

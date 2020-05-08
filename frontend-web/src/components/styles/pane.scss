@@ -25,6 +25,7 @@ $open-button-width: 200px;
   z-index: 10;
   border-right: 1px solid black;
   border-bottom: 1px solid black;
+  overflow-y: scroll;
 
   ul {
     list-style:none;
