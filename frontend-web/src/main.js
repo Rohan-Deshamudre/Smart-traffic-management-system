@@ -12,12 +12,34 @@ import { resolvers } from './local_store/resolvers';
 import { schema } from './local_store/schema';
 import { defaultStore } from "./local_store/default";
 import { Cache } from "apollo-cache/lib/types";
+import { ApolloLink } from 'apollo-link';
 
+import { Auth } from './helper/auth';
 
+// https://hasura.io/blog/best-practices-of-using-jwt-with-graphql/
 // Add the correct link
 const httpLink = createHttpLink({
     uri: process.env.API_URL,
 });
+
+const authMiddleware = new ApolloLink((operation, forward) => {
+    let token = Auth.isLoggedIn()
+    console.log(token);
+    if (token) {
+        operation.setContext({
+            headers: {
+                Authorization: `JWT ${token}`
+            }
+        });
+        console.log(`JWT $token`)
+    }
+    return forward(operation);
+})
+
+const link = ApolloLink.from([
+    authMiddleware,
+    httpLink
+]);
 
 const cache = new InMemoryCache();
 
@@ -25,9 +47,9 @@ const cache = new InMemoryCache();
 const client = new ApolloClient({
     resolvers: resolvers,
     typeDefs: schema,
-    link: httpLink,
-    cache: cache,
-    credentials: 'same-origin'
+    //TODO: add logout call on token expiration
+    link,
+    cache
 });
 
 // Set default local state
