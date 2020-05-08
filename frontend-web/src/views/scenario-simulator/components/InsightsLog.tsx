@@ -4,6 +4,7 @@ import { Query } from "react-apollo";
 import { GET_ROAD_CONDITION_TYPES } from "../../scenario-designer/toolboxes/road-condition/RoadConditionToolboxQueries";
 import Type from "../../../components/other/Type";
 import * as _ from 'lodash';
+import "../styles/insightsPane.scss";
 
 type State = {}
 
@@ -52,20 +53,26 @@ class InsightsLog extends React.Component<Props, State> {
                                     // @ts-ignore
                                     (log.simulationSceneEvents.length > 0) ? (
                                         log.simulationSceneEvents.map(event => (
-                                            <div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()}
-                                                className="log-info-message">
-                                                {conditionString(event.roadConditionTypeId)} with value {_.round(event.value, 2)} 
-                                                on {event.roadSegment.roadSegmentType.name}:
-                                                <ul>
-                                                    <li>{event.roadSegment.name}</li>
-                                                    <li>{event.roadSegment.id}</li>
-                                                    <li>{event.roadSegment.roadSegmentType.id}</li>
-                                                    <li>{event.roadSegment.roadSegmentType.description}</li>
-                                                    <li>{event.roadConditionType.id}</li>
-                                                    <li>{event.roadConditionType.name}</li>
-                                                    <li>{event.roadConditionType.description}</li>
-                                                </ul>
-                                            </div>
+                                            <section className="stats">
+                                                <div className="box">
+                                                    <div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()}
+                                                        className="log-info-message">
+                                                        {conditionString(event.roadConditionTypeId)} with value {_.round(event.value, 2)} 
+                                                        on {event.roadSegment.roadSegmentType.name}:
+                                                        <ul>
+                                                            <li>id : {event.id}</li>
+                                                            <li>road_segment_id : {event.roadSegmentId}</li>
+                                                            <li>road_segment_name : {event.roadSegment.name}</li>
+                                                            <li>road_segment_type_id : {event.roadSegment.roadSegmentType.id}</li>
+                                                            <li>road_segment_type_name : {event.roadSegment.roadSegmentType.name}</li>
+                                                            <li>road_segment_type_description : {event.roadSegment.roadSegmentType.description}</li>
+                                                            <li>road_condition_type_id : {event.roadConditionTypeId}</li>
+                                                            <li>road_condition_type_name : {event.roadConditionType.name}</li>
+                                                            <li>road_condition_type_description: {event.roadConditionType.description}</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </section>
                                         ))
                                     ) : (
                                             <div className="log-info-message">

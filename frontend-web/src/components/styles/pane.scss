@@ -24,6 +24,43 @@ $open-button-width: 200px;
   background-color: white;
   z-index: 10;
   border-right: 1px solid black;
+  border-bottom: 1px solid black;
+
+  ul {
+    list-style:none;
+    max-height:100px;
+    margin:0;
+    overflow:auto;
+    padding:0;
+    text-indent:10px;
+  }
+
+  .stats {
+    margin-top: 25px;
+    color: #CCC;
+  }
+
+  .stats .box {
+    background-color: #313348;
+    padding: 15px;
+    overflow: hidden;
+  }
+
+  .statistics .box > i {
+    float: left;
+    color: #FFF;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 22px;
+  }
+
+  .stats .box .log-info-message {
+    float: left;
+    width: auto;
+    margin-left: 10px;
+  }
 }
 
 .pane {
