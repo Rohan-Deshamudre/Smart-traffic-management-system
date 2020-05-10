@@ -8,7 +8,12 @@ build frontend-web:
   stage: build
   script:
     - cd frontend-web
-    - npm i
+    - npm install
+    - npm rebuild node-sass
+    - npm run-script build
+  artifacts:
+    paths:
+      - frontend-web/build
     
 test backend:
   image: python:3.6
