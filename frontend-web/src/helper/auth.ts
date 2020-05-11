@@ -14,6 +14,10 @@ export module Auth {
         sessionStorage.removeItem('token')
     }
 
+    export function setRoles(roles) {
+        sessionStorage.setItem('roles', roles)
+    }
+
     /**
      * Check if user is authenticated.
      */
