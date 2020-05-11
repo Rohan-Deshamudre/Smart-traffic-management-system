@@ -23,18 +23,22 @@ const httpLink = createHttpLink({
 });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
-    let token = Auth.isLoggedIn()
-    console.log(token);
-    if (token) {
-        operation.setContext({
-            headers: {
-                Authorization: `JWT ${token}`
-            }
-        });
-        console.log(`JWT $token`)
+
+    if (Auth.isLoggedIn()) {
+        let token = Auth.getToken();
+        if (token) {
+            operation.setContext({
+                headers: {
+                    Authorization: `JWT ${token}`
+                }
+            });
+            console.log(`JWT $token`)
+        }
+        return forward(operation);
+    } else {
+
     }
-    return forward(operation);
-})
+});
 
 const link = ApolloLink.from([
     authMiddleware,

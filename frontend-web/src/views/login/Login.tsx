@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Mutation, ApolloConsumer } from 'react-apollo'
+import { Mutation} from 'react-apollo'
 import gql from "graphql-tag";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -103,7 +103,7 @@ class Login extends React.Component<Props, State> {
                                                         }).then((res) => {
                                                             if (res.data.tokenAuth.token) {
                                                                 // TODO: go to map
-                                                                Auth.login(res.data.tokenAuth.token)
+                                                                Auth.saveToken(res.data.tokenAuth.token);
                                                                 this.setState(() => ({
                                                                     valid: true
                                                                 }))
