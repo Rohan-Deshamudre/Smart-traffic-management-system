@@ -10,7 +10,6 @@ import Home from "./views/home/Home";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import Login from "./views/login/Login";
-import { Redirect } from 'react-router-dom'
 
 class App extends Component {
 
