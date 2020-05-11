@@ -16,35 +16,37 @@ class InsightsLog extends React.Component<Props, State> {
         super(props);
     }
 
-    getCondition(type) {
+    getDescription(type) {
         switch(type) {
             case "Broken Car":
-                return "brokencar";
+                return <p>
+                    A vehicle malfunction has caused slight disruptions in this segment of road causing a slight increase in vehicular
+                    queueing and travel time. In order to prevent any further problems, all vehicles are advised to
+                    proceed with caution or take an alternate route if possible.
+                </p>
             case "Accident":
-                return "accident";
+                return <p>
+                    One or more vehicles have met with an accident causing disruptions and delays on
+                    this stretch of road. The necessary measures to deal with the incident and to prevent further
+                    issues are currently in progress and all vehicles are advised to take an alternate route until the disruptions are resolved.
+                </p>
             case "Congestion":
-                return "congestion";
+                return <p>
+                    This stretch of your route is suffering from congestion which means slow moving traffic,
+                    longer trip time and increased vehicular queuing. All vehicles approaching this road segment
+                    are advised to take an alternate route until the condition improves.
+                </p>
             case "Event":
-                return "event";
+                return <p>
+                    This stretch of road has been occupied for an event which may mean it is partially or completely closed for vehicles.
+                    To avoid delays, all vehicles are advised to take an alternate route until the event has been cleared.
+                </p>
             default:
-                return "roadwork";
-        }
-    }
-
-    getSegment(type) {
-        switch(type) {
-            case "Bridge":
-                return "bridge";
-            case "Connection":
-                return "connection";
-            case "Motorway":
-                return "motorway";
-            case "Road Crossing":
-                return "roadcrossing";
-            case "Tunnel":
-                return "tunnel";
-            default:
-                return "roadsegment";
+                return <p>
+                    This stretch road has been occupied for repairs and maintenance causing
+                    obstructions in your route. All vehicles approaching this road segment are advised to take
+                    an alternate route as it may be partially or completely closed.
+                </p>
         }
     }
 
@@ -92,10 +94,10 @@ class InsightsLog extends React.Component<Props, State> {
                                                         </a>
                                                         <div>
                                                             <img src={
-                                                                "../../../assets/tree_icons/road_condition/" + this.getCondition(event.roadConditionType.name.toString()) + ".svg"
+                                                                "../../../assets/tree_icons/road_condition/" + event.roadConditionType.name.toString().toLowerCase().replace(/\s/g, "") + ".svg"
                                                             } width="50" height="50"></img>
                                                             <img src={
-                                                                "../../../assets/tree_icons/road_segment/" + this.getSegment(event.roadSegment.roadSegmentType.name.toString()) + ".svg"
+                                                                "../../../assets/tree_icons/road_segment/" + event.roadSegment.roadSegmentType.name.toString().replace(/\s/g, "") + ".svg"
                                                             } width="50" height="50"></img>
                                                             <div className="button">
                                                                 <i className="fa fa-exclamation-triangle">
@@ -103,43 +105,7 @@ class InsightsLog extends React.Component<Props, State> {
                                                                 </i>
                                                             </div>
                                                             <br/>
-                                                            {
-                                                                (
-                                                                    () => {
-                                                                        switch(event.roadConditionType.name.toString()) {
-                                                                            case "Broken Car":
-                                                                                return <p>
-                                                                                    A vehicle malfunction has caused slight disruptions in this segment of road causing a slight increase in vehicular
-                                                                                    queueing and travel time. In order to prevent any further problems, all vehicles are advised to
-                                                                                    proceed with caution or take an alternate route if possible.
-                                                                                </p>
-                                                                            case "Accident":
-                                                                                return <p>
-                                                                                    One or more vehicles have met with an accident causing disruptions and delays on
-                                                                                    this stretch of road. The necessary measures to deal with the incident and to prevent further
-                                                                                    issues are currently in progress and all vehicles are advised to take an alternate route until the disruptions are resolved.
-                                                                                </p>
-                                                                            case "Congestion":
-                                                                                return <p>
-                                                                                    This stretch of your route is suffering from congestion which means slow moving traffic,
-                                                                                    longer trip time and increased vehicular queuing. All vehicles approaching this road segment
-                                                                                    are advised to take an alternate route until the condition improves.
-                                                                                </p>
-                                                                            case "Event":
-                                                                                return <p>
-                                                                                    This stretch of road has been occupied for an event which may mean it is partially or completely closed for vehicles.
-                                                                                    To avoid delays, all vehicles are advised to take an alternate route until the event has been cleared.
-                                                                                </p>
-                                                                            case "Roadwork":
-                                                                                return <p>
-                                                                                    This stretch road has been occupied for repairs and maintenance causing
-                                                                                    obstructions in your route. All vehicles approaching this road segment are advised to take
-                                                                                    an alternate route as it may be partially or completely closed.
-                                                                                </p>
-                                                                        }
-                                                                    }
-                                                                )()
-                                                            }
+                                                            {this.getDescription(event.roadConditionType.name.toString())}
                                                         </div>
                                                     </div>
                                                 </div>
