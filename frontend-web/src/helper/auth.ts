@@ -6,22 +6,22 @@ export module Auth {
         sessionStorage.setItem('token', token)
     }
 
-    export function saveRefreshToken(token) {
-        sessionStorage.setItem('refresh_token', token)
-    }
-
     export function getToken(): string {
         return sessionStorage.getItem('token')
     }
 
     export function eraseToken(): void {
-        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('token')
+    }
+
+    export function setRoles(roles) {
+        sessionStorage.setItem('roles', roles)
     }
 
     /**
      * Check if user is authenticated.
      */
-    export function isLoggedIn(): boolean {
+    export function hasValidToken(): boolean {
 
         if (getToken() && getToken().length > 0) {
             const decoded = jwt(getToken());
@@ -38,7 +38,7 @@ export module Auth {
      */
     export function toDateTime(secs) {
         // Be careful.
-        const t = new Date(Date.UTC(1970, 0, 1, 0, 59)); // Epoch
+        const t = new Date(Date.UTC(1970, 0, 1, 0, 56)); // Epoch
         t.setSeconds(secs);
 
         return t;

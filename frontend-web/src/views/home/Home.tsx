@@ -50,7 +50,7 @@ class Home extends React.Component<Props, State> {
     }
 
     render() {
-        if (!Auth.isLoggedIn()) {
+        if (!Auth.getToken()) {
             return <Redirect to='/login' />
         }
         return (

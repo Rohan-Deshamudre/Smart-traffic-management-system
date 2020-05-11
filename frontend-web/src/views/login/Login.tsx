@@ -15,6 +15,9 @@ const LOGIN = gql`
     mutation PostMutation($username: String!, $password: String!) {
         tokenAuth(username: $username, password: $password) {
             token
+            group {
+                id
+            }
         }
     }
 `;
@@ -104,6 +107,7 @@ class Login extends React.Component<Props, State> {
                                                             if (res.data.tokenAuth.token) {
                                                                 // TODO: go to map
                                                                 Auth.saveToken(res.data.tokenAuth.token);
+                                                                Auth.setRoles(res.data.tokenAuth.group.map((role => role.id)));
                                                                 this.setState(() => ({
                                                                     valid: true
                                                                 }))
