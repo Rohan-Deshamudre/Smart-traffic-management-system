@@ -137,7 +137,7 @@ const asNavBar = <P extends InjectedPNavBar>(WrappedComponent: React.ComponentTy
 										<img src={home} alt="Sign Out" />
 									</Link>
 								</div>
-								<div className="nav-wrap" >{Auth.getName()}</div>
+								<div className="username-wrap username" >{Auth.getName()}</div>
 							</div>
 						)
 						}
