@@ -74,58 +74,52 @@ class InsightsLog extends React.Component<Props, State> {
 
         let log = this.props.simulationLog.map((log, index) => (
             <div key={index} className="log-item">
-                <div className="log-time-stamp">{log.time}</div>
+                <div className="log-info-message-list">
                 {
                     log.text ? (
-                        <div className="log-info-message-list">
-                            <div className="log-info-message">{log.text}</div>
-                        </div>
+                        <div></div>
                     ) : (
-                            <div className="log-info-message-list">
-                                {
-                                    // @ts-ignore
-                                    (log.simulationSceneEvents.length > 0) ? (
-                                        log.simulationSceneEvents.map(event => (
-                                            <section className="stats">
-                                                <div className="box">
-                                                    <div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()} className="log-info-message">
-                                                        <a>
-                                                            <h3>{event.roadConditionType.name}</h3>
-                                                        </a>
-                                                        <div>
-                                                            <img src={
-                                                                "../../../assets/tree_icons/road_condition/" + event.roadConditionType.name.toString().toLowerCase().replace(/\s/g, "") + ".svg"
-                                                            } width="50" height="50"></img>
-                                                            <img src={
-                                                                "../../../assets/tree_icons/road_segment/" + event.roadSegment.roadSegmentType.name.toString().replace(/\s/g, "") + ".svg"
-                                                            } width="50" height="50"></img>
-                                                            <div className="button">
-                                                                <i className="fa fa-exclamation-triangle">
-                                                                    {event.roadSegment.name}
-                                                                </i>
-                                                            </div>
-                                                            <br/>
-                                                            {this.getDescription(event.roadConditionType.name.toString())}
-                                                        </div>
+                            // @ts-ignore
+                            (log.simulationSceneEvents.length > 0) ? (
+                                log.simulationSceneEvents.map(event => (
+                                    <section className="stats">
+                                        <div className="box">
+                                            <div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()} className="log-info-message">
+                                                <a>
+                                                    <h3>{event.roadConditionType.name}</h3>
+                                                </a>
+                                                <div>
+                                                    <img src={
+                                                        "../../../assets/tree_icons/road_condition/" + event.roadConditionType.name.toString().toLowerCase().replace(/\s/g, "") + ".svg"
+                                                    } width="50" height="50"></img>
+                                                    <img src={
+                                                        "../../../assets/tree_icons/road_segment/" + event.roadSegment.roadSegmentType.name.toString().replace(/\s/g, "") + ".svg"
+                                                    } width="50" height="50"></img>
+                                                    <div className="button">
+                                                        <i className="fa fa-exclamation-triangle">
+                                                            {event.roadSegment.name}
+                                                        </i>
                                                     </div>
+                                                    <br/>
+                                                    {this.getDescription(event.roadConditionType.name.toString())}
                                                 </div>
-                                            </section>
-                                        ))
-                                    ) : (
-                                            <div className="log-info-message">
-                                                Geen verkeersstatussen gevonden.
                                             </div>
-                                        )
-                                }
-                            </div>
+                                        </div>
+                                    </section>
+                                ))
+                            ) : (
+                                    <div className="log-info-message">
+                                        Geen verkeersstatussen gevonden.
+                                    </div>
+                                )
                         )
                 }
+                </div>
             </div>
         ));
 
         return (
             <div>
-                <div className="right-pane-simulator-title">Simulatie log</div>
                 <div>{log}</div>
             </div>
         );
