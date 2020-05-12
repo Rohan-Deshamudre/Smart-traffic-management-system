@@ -196,6 +196,12 @@ GRAPHENE = {
     ],
 }
 
+GRPAHQL_JWT = {
+        'JWT_VERIFY_EXPIRATION': True,
+        'JWT_EXPIRATION_DELTA': timedelta(minutes=15),
+        'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7)
+        }
+
 AUTHENTICATION_BACKENDS = [
     'graphql_jwt.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',

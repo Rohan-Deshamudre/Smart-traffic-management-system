@@ -53,6 +53,7 @@ class Home extends React.Component<Props, State> {
         if (!Auth.getToken()) {
             return <Redirect to='/login' />
         }
+
         return (
             <div className="view home-view">
                 <NavBar mode="Home mode" />
