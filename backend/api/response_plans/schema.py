@@ -3,6 +3,7 @@ from django.db.models import Q
 from graphene_django import DjangoObjectType
 from graphql import GraphQLError
 
+from api.exception.api_exception import ApiException
 from api.response_plans import methods
 from .models import *
 
@@ -46,11 +47,13 @@ class CreateResponsePlan(graphene.Mutation):
             response_plan = methods.create_response_plan(
                 road_segment_id, operator, road_condition_id, parent_id)
 
+            road_condition_id = response_plan.road_condition.id if road_condition_id else None
+            
             return CreateResponsePlan(
                 id=response_plan.id,
                 road_segment_id=response_plan.road_segment.id,
                 operator=response_plan.operator,
-                road_condition_id=response_plan.road_condition.id,
+                road_condition_id=road_condition_id,
                 parent_id=response_plan.parent_id
             )
         except ApiException as exc:
@@ -79,11 +82,14 @@ class UpdateResponsePlan(graphene.Mutation):
                                                          operator,
                                                          road_condition_id,
                                                          parent_id)
+
+            road_condition_id = response_plan.road_condition.id if response_plan.road_condition else None
+
             return UpdateResponsePlan(
                 id=response_plan.id,
                 road_segment_id=response_plan.road_segment.id,
                 operator=response_plan.operator,
-                road_condition_id=response_plan.road_condition.id,
+                road_condition_id=road_condition_id,
                 parent_id=response_plan.parent_id
             )
         except ApiException as exc:
