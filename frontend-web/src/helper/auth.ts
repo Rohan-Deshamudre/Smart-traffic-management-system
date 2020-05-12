@@ -23,7 +23,7 @@ export module Auth {
     export function getName(): string {
         if (getToken() && getToken().length > 0) {
             const decoded = jwt(getToken());
-            return decoded.name;
+            return decoded.username;
         }
     }
 

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {Subtract} from 'utility-types';
-import {Query} from "@apollo/react-components";
+import { Subtract } from 'utility-types';
+import { Query } from "@apollo/react-components";
 
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import FormControl from "react-bootstrap/FormControl";
 import gql from "graphql-tag";
 
@@ -17,7 +17,7 @@ import simulationIcon from "./../assets/navbar_icons/play.svg";
 // @ts-ignore
 import designerIcon from "./../assets/navbar_icons/edit.svg";
 import TreeLevelButton from "./buttons/TreeLevelButton";
-import {Auth} from "../helper/auth";
+import { Auth } from "../helper/auth";
 
 
 // Info /medium.com/@jrwebdev/react-higher-order-component-patterns-in-typescript-42278f7590fb
@@ -69,17 +69,17 @@ const asNavBar = <P extends InjectedPNavBar>(WrappedComponent: React.ComponentTy
 
 		handleLevel(level: number, client: any) {
 			client.writeData({
-				data: {treeLevel: level}
+				data: { treeLevel: level }
 			})
 		}
 
 		constructOptionalButton(mode) {
-			switch(mode) {
+			switch (mode) {
 				case "ScenarioDesigner":
 					return (
 						<div className="nav-button">
 							<Link to="/simulator">
-								<img src={simulationIcon} alt="Simulator"/>
+								<img src={simulationIcon} alt="Simulator" />
 							</Link>
 						</div>
 					);
@@ -87,7 +87,7 @@ const asNavBar = <P extends InjectedPNavBar>(WrappedComponent: React.ComponentTy
 					return (
 						<div className="nav-button">
 							<Link to="/designer">
-								<img src={designerIcon} alt="Designer"/>
+								<img src={designerIcon} alt="Designer" />
 							</Link>
 						</div>
 					);
@@ -102,42 +102,42 @@ const asNavBar = <P extends InjectedPNavBar>(WrappedComponent: React.ComponentTy
 			return (
 				<div className="navbar-container">
 					<Query query={GET_NAVBAR_DATA}>
-						{({data, client}) => (
+						{({ data, client }) => (
 							<div className="top-bar">
 
 								{optionalButton}
 								<div className="nav-button">
 									<Link to="/">
-										<img src={home} alt="Home"/>
+										<img src={home} alt="Home" />
 									</Link>
 								</div>
 								{
 									data.workspaceSwapped === true ?
 										(
 											<div className="nav-wrap search-wrap">
-												<img src={location} alt="Map location icon" className="location-icon"/>
+												<img src={location} alt="Map location icon" className="location-icon" />
 												<FormControl className="form-control" type="text"
-															 value={this.state.input}
-															 placeholder="Zoek op kaart"
-															 onChange={(e) => this.handleInput(e)}
-															 onKeyDown={(e) => {
-																 if (e.key === 'Enter') {
-																	 client.writeData({data: {mapLocation: this.state.input}});
-																 }
-															 }}/>
+													value={this.state.input}
+													placeholder="Zoek op kaart"
+													onChange={(e) => this.handleInput(e)}
+													onKeyDown={(e) => {
+														if (e.key === 'Enter') {
+															client.writeData({ data: { mapLocation: this.state.input } });
+														}
+													}} />
 											</div>
 										) : (
-												<TreeLevelButton height={data.treeHeight}
-																 handleLevel={(level) => this.handleLevel(level, client)}
-																 level={data.treeLevel}/>
+											<TreeLevelButton height={data.treeHeight}
+												handleLevel={(level) => this.handleLevel(level, client)}
+												level={data.treeLevel} />
 										)
 								}
-								<div className="nav-button">
+								<div className="nav-button ">
 									<Link to="/login" onClick={() => this.signOut()}>
-										<img src={home} alt="Sign Out"/>
+										<img src={home} alt="Sign Out" />
 									</Link>
-									<div>{Auth.getName()}</div>
 								</div>
+								<div className="nav-wrap" >{Auth.getName()}</div>
 							</div>
 						)
 						}
