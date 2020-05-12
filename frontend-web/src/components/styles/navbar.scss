@@ -40,8 +40,21 @@
       }
     }
 
+    .username-wrap {
+      width: auto;
+      display: -webkit-flex;
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      height: 100%;
+
+      .username {
+        font-weight: 400;
+      }
+    }
+
     .nav-wrap {
-      width: 230px;
+      width: auto;
       display: flex;
       flex-direction: row;
       height: 100%;
