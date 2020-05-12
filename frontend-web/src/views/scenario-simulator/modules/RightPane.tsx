@@ -55,7 +55,10 @@ class RightPane extends React.Component<Props, {}, any> {
         return (
             <div className="pane right-pane simulator">
 				<div className="top">
-					<SimulationList scenarioId={this.props.scenarioId} start={this.start} stop={this.stop} />
+					<SimulationList scenarioId={this.props.scenarioId} 
+									start={this.start} 
+									stop={this.stop} 
+					/>
 				</div>
 				<div className="bottom">
 					<Log simulationLog={this.props.simulationLog}/>
