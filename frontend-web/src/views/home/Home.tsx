@@ -71,7 +71,6 @@ class Home extends React.Component<Props, State> {
 
                             if (loading) return <div>Fetching</div>;
                             if (error) {
-                                console.log(error)
                                 return <div>Error</div>;
                             }
 

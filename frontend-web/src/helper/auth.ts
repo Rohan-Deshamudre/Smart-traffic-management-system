@@ -2,6 +2,8 @@ const jwt = require('jwt-decode');
 
 export module Auth {
 
+    export var role: string = '';
+
     export function saveToken(token) {
         sessionStorage.setItem('token', token)
     }
@@ -16,6 +18,13 @@ export module Auth {
 
     export function setRoles(roles) {
         sessionStorage.setItem('roles', roles)
+    }
+
+    export function getName(): string {
+        if (getToken() && getToken().length > 0) {
+            const decoded = jwt(getToken());
+            return decoded.name;
+        }
     }
 
     /**

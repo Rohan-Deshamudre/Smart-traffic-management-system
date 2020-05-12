@@ -17,6 +17,7 @@ import simulationIcon from "./../assets/navbar_icons/play.svg";
 // @ts-ignore
 import designerIcon from "./../assets/navbar_icons/edit.svg";
 import TreeLevelButton from "./buttons/TreeLevelButton";
+import {Auth} from "../helper/auth";
 
 
 // Info /medium.com/@jrwebdev/react-higher-order-component-patterns-in-typescript-42278f7590fb
@@ -53,6 +54,11 @@ const asNavBar = <P extends InjectedPNavBar>(WrappedComponent: React.ComponentTy
 			this.handleInput = this.handleInput.bind(this);
 			this.handleLevel = this.handleLevel.bind(this);
 			this.constructOptionalButton = this.constructOptionalButton.bind(this);
+			this.signOut = this.signOut.bind(this)
+		}
+
+		signOut() {
+			Auth.eraseToken();
 		}
 
 		handleInput(e: React.ChangeEvent<HTMLInputElement>) {
@@ -126,6 +132,12 @@ const asNavBar = <P extends InjectedPNavBar>(WrappedComponent: React.ComponentTy
 																 level={data.treeLevel}/>
 										)
 								}
+								<div className="nav-button">
+									<Link to="/login" onClick={() => this.signOut()}>
+										<img src={home} alt="Sign Out"/>
+									</Link>
+									<div>{Auth.getName()}</div>
+								</div>
 							</div>
 						)
 						}
