@@ -32,8 +32,10 @@ export module Auth {
      */
     export function hasValidToken(): boolean {
 
+
         if (getToken() && getToken().length > 0) {
             const decoded = jwt(getToken());
+            console.log(decoded)
             const expiryDate = toDateTime(decoded.exp);
             return expiryDate > new Date();
         } else {
@@ -47,7 +49,7 @@ export module Auth {
      */
     export function toDateTime(secs) {
         // Be careful.
-        const t = new Date(Date.UTC(1970, 0, 1, 0, 56)); // Epoch
+        const t = new Date(Date.UTC(1970, 0, 1, 0, 50)); // Epoch
         t.setSeconds(secs);
 
         return t;
