@@ -2,6 +2,8 @@ from typing import List
 
 from api.exception.api_exception import ObjectNotFoundException, \
     InvalidInputException
+from api.response_plans.exceptions import ResponsePlanIsSameAsParentException, \
+    ResponsePlanChildrenAsParentException
 from api.response_plans.models import ResponsePlan
 from api.road_conditions.methods.getter import get_road_condition_with_id
 from api.road_segments.methods.getter import get_road_segment_with_id
@@ -20,6 +22,14 @@ def get_response_plan_with_id(response_plan_id: int) -> ResponsePlan:
         return ResponsePlan.objects.get(id=response_plan_id)
 
     raise ObjectNotFoundException("Response Plan", "id", response_plan_id)
+
+
+def get_response_plan_children(response_plan: ResponsePlan)-> List[ResponsePlan]:
+    children = []
+    for child in ResponsePlan.objects.filter(parent_id=response_plan.id):
+        children.append(child)
+        children.extend(get_response_plan_children(child))
+    return children
 
 
 def create_response_plan(road_segment_id: int,
@@ -56,8 +66,14 @@ def update_response_plan_road_condition(response_plan: ResponsePlan,
     
 def update_response_plan_parent(response_plan: ResponsePlan,
                                 parent_id: int):
-    # TODO: Check for loops
+    if response_plan.id == parent_id:
+        raise ResponsePlanIsSameAsParentException()
+
     parent = get_response_plan_with_id(parent_id)
+    if parent in get_response_plan_children(response_plan):
+        raise ResponsePlanChildrenAsParentException(
+            response_plan.id, parent_id)
+    
     response_plan.parent = parent
 
     
@@ -85,5 +101,7 @@ def update_response_plan(response_plan_id: int, road_segment_id: int,
 
 def delete_response_plan(response_plan_id: int):
     response_plan = get_response_plan_with_id(response_plan_id)
-    # TODO: Delete children if required
+    for child in ResponsePlan.objects.filter(parent_id=response_plan.id).all():
+        child.parent = response_plan.parent
+        child.save()
     response_plan.delete()
