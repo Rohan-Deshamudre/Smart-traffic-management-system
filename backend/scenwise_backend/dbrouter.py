@@ -6,7 +6,7 @@ This router ensures queries are redirected to the scenarios database.
 class DBRouter(object):
     route_app_labels = {'instruments', 'instrument_actions', 'scenarios',
                         'road_segments', 'road_conditions', 'routes',
-                        'simulations', 'folders', 'labels'}
+                        'simulations', 'folders', 'labels', 'response_plans'}
 
     ndw_app_labels = {'measurement_site', 'location'}
 
