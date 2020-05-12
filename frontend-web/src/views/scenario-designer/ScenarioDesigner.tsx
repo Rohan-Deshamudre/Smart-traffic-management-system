@@ -19,6 +19,7 @@ interface State {
 }
 
 interface Props {
+
 }
 
 export const GET_DESIGNER_DATA = gql`
