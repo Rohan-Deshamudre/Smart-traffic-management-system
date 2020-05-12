@@ -14,6 +14,9 @@ import os
 import sys
 
 from datetime import timedelta
+from datetime import datetime
+
+from django.core import serializers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -198,10 +201,26 @@ GRAPHENE = {
     ],
 }
 
-GRPAHQL_JWT = {
+def jwt_payload(user, context=None):
+    username = user.get_username()
+    groups = user.groups.all().values()
+
+    if hasattr(username, 'pk'):
+        username = username.pk
+
+    payload = {
+            user.USERNAME_FIELD: username,
+            'exp': datetime.utcnow() + timedelta(minutes=15),
+            'groups': list(groups)
+            }
+
+    return payload
+
+GRAPHQL_JWT = {
         'JWT_VERIFY_EXPIRATION': True,
         'JWT_EXPIRATION_DELTA': timedelta(minutes=15),
-        'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7)
+        'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
+        'JWT_PAYLOAD_HANDLER': jwt_payload
         }
 
 AUTHENTICATION_BACKENDS = [
@@ -226,3 +245,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
