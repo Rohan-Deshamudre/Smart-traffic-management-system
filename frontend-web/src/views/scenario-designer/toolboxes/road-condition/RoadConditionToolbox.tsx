@@ -5,9 +5,9 @@ import Time from "../../../../components/other/Time";
 import CongestionLevelButton from "../../../../components/buttons/CongestionLevelButton";
 import Type from "../../../../components/other/Type";
 import '../../styles/toolbox.scss';
-import {Query} from "react-apollo";
+import {Query, ApolloConsumer} from "react-apollo";
 import {GET_ROAD_CONDITION_TYPES} from "./RoadConditionToolboxQueries";
-
+import RouteToolbox from "../RouteToolbox";
 
 type Props = {
 	id: number,
@@ -20,6 +20,7 @@ type State = {
 	name: string,
 	time: TimeType,
 	level: number,
+	route: { id: number, lat: number, lng: number }[],
 	roadConditionTypeId: number,
 	roadCondition: RoadConditionToolbox[],
 	saved: boolean,
@@ -45,6 +46,7 @@ class RoadConditionToolbox extends React.Component<Props, State> {
 		name: '',
 		time: undefined,
 		level: undefined,
+		route: [],
 		roadConditionTypeId: -1,
 		roadCondition: [],
 		saved: true,
@@ -61,6 +63,7 @@ class RoadConditionToolbox extends React.Component<Props, State> {
 				...this.state,
 				roadConditionTypeId: data.roadConditions[0].roadConditionType.id,
 				name: data.roadConditions[0].name,
+				route: data.roadSegments[0].route.routePoints, 
 				time: data.roadConditions[0].roadConditionDate ? data.roadConditions[0].roadConditionDate : undefined,
 				level: data.roadConditions[0].value
 			}
@@ -70,6 +73,7 @@ class RoadConditionToolbox extends React.Component<Props, State> {
 		this.handleName = this.handleName.bind(this);
 		this.handleData = this.handleData.bind(this);
 		this.handleTime = this.handleTime.bind(this);
+		this.handleRoute = this.handleRoute.bind(this);
 		this.handleCongestionLevel = this.handleCongestionLevel.bind(this);
 		this.handleType = this.handleType.bind(this);
 		this.disabled = this.disabled.bind(this);
@@ -95,6 +99,16 @@ class RoadConditionToolbox extends React.Component<Props, State> {
 				disabled: true
 			})
 		}
+	}
+
+	handleData() {
+		this.props.handleData({
+			name: this.state.name,
+			time: this.state.time,
+			level: this.state.level,
+			route: this.state.route.map(route => ({lng: route.lng, lat: route.lat})),
+			roadConditionTypeId: this.state.roadConditionTypeId,
+		});
 	}
 
 	handleName(newName: string) {
@@ -125,8 +139,11 @@ class RoadConditionToolbox extends React.Component<Props, State> {
 		}, () => this.disabled());
 	}
 
-	handleData() {
-		this.props.handleData(this.state);
+	handleRoute(newRoute: { id: number, lng: number, lat: number }[]) {
+		this.setState({
+			route: newRoute,
+			saved: false,
+		}, () => this.disabled());
 	}
 
 
@@ -135,6 +152,7 @@ class RoadConditionToolbox extends React.Component<Props, State> {
 			disabled: (
 				this.state.name === ''
 				|| this.state.roadConditionTypeId < 0
+				|| this.state.route === undefined
 				|| (this.state.level === undefined && this.state.roadConditionTypeId === 7)
 				|| this.state.time === undefined
 			)
@@ -147,14 +165,18 @@ class RoadConditionToolbox extends React.Component<Props, State> {
 
 		const roadConditionTypes = (
 			<Query query={GET_ROAD_CONDITION_TYPES}>
-				{({data, loading, error}) => {
-					if (loading) return <p>Loading</p>;
-					if (error) return <p>Error</p>;
-					return (
-						<Type selectedId={this.state.roadConditionTypeId} handleType={this.handleType}
-							  types={data.roadConditionTypes} disabled={this.props.readOnly}/>
-					);
-				}}
+				{
+					({data, loading, error}) => {
+						if (loading) return <p>Loading</p>;
+						if (error) return <p>Error</p>;
+						return (
+							<Type selectedId={this.state.roadConditionTypeId} 
+								handleType={this.handleType}
+								types={data.roadConditionTypes} 
+								disabled={this.props.readOnly} />
+						);
+					}
+				}
 			</Query>
 		);
 
@@ -168,6 +190,18 @@ class RoadConditionToolbox extends React.Component<Props, State> {
 										   disabled={this.props.readOnly}/>) : null
 				}
 				{roadConditionTypes}
+				
+				<ApolloConsumer>
+					{
+						client => (
+							<RouteToolbox route={this.state.route} 
+									client={client} 
+									disabled={this.props.readOnly} 
+									handleRoute={this.handleRoute} />
+						)
+					}
+				</ApolloConsumer>
+
 				{!this.props.readOnly && (
 					<Button className={"opslaan-button" + disabled + success} onClick={() => {
 						if (!this.state.saved && !this.state.disabled) {
