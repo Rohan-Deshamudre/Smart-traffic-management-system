@@ -105,3 +105,10 @@ def delete_response_plan(response_plan_id: int):
         child.parent = response_plan.parent
         child.save()
     response_plan.delete()
+
+
+def delete_response_plan_cascade(response_plan_id: int):
+    response_plan = get_response_plan_with_id(response_plan_id)
+    for child in ResponsePlan.objects.filter(parent_id=response_plan.id).all():
+        delete_response_plan_cascade(child.id)
+    response_plan.delete()

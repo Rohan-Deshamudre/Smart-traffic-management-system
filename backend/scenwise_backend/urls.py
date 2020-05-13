@@ -24,6 +24,7 @@ urlpatterns = [
     path('export/scenario', csrf_exempt(exporting.handle_scenario)),
     path('import/instrument', csrf_exempt(importing.handle_instrument)),
     path('export/instrument', csrf_exempt(exporting.handle_instrument)),
+    path('import/responseplan', csrf_exempt(importing.handle_response_plan)),
     path('export/responseplan', csrf_exempt(exporting.handle_response_plan)),
     path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
 ]
