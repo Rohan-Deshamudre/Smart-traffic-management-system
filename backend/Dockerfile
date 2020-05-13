@@ -6,4 +6,4 @@ RUN pip3 install django django-cors-headers django-channels django-graphql-jwt g
 
 COPY . .
 
-CMD [ "python3", "./manage.py", "runserver" ]
+CMD["python3", "./manage.py", "runserver"]

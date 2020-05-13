@@ -27,14 +27,14 @@ def simulation_id_to_json(simulation_scene_id):
                  'img': road_segment_type.img,
                  'description': road_segment_type.description,
              },
-            }
+             }
         road_condition_type = \
             {'id': simulation_scene_event.road_condition_type.id,
              'name': simulation_scene_event.road_condition_type.name,
-             'img':simulation_scene_event.road_condition_type.img,
+             'img': simulation_scene_event.road_condition_type.img,
              'description':
                  simulation_scene_event.road_condition_type.description,
-            }
+             }
         simulation_scene_event_object = \
             {'id': simulation_scene_event.id,
              'roadSegmentId': simulation_scene_event.road_segment_id,
@@ -44,13 +44,13 @@ def simulation_id_to_json(simulation_scene_id):
              'roadSegment': road_segment,
              'roadConditionType': road_condition_type,
              '__typename': 'SimulationSceneEvent',
-            }
+             }
         simulation_scene_event_array.append(simulation_scene_event_object)
     simulation_scene_object = \
-            {'id': simulation_scene.id,
-             'time': str(simulation_scene.time.isoformat()),
-             'simulationSceneEvents': simulation_scene_event_array,
-             '__typename': 'SimulationScene',
-            }
+        {'id': simulation_scene.id,
+         'time': str(simulation_scene.time.isoformat()),
+         'simulationSceneEvents': simulation_scene_event_array,
+         '__typename': 'SimulationScene',
+         }
 
     return simulation_scene_object

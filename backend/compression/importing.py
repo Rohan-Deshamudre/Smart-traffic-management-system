@@ -28,8 +28,8 @@ def handle_instrument(request):
 
 def handle_response_plan(request):
     if request.method == 'POST':
-        response = import_response_plan(json.loads(request.body.decode('utf-8')))
+        response = import_response_plan(
+            json.loads(request.body.decode('utf-8')))
         return JsonResponse(response)
     else:
         return HttpResponseNotAllowed(permitted_methods='POST')
-

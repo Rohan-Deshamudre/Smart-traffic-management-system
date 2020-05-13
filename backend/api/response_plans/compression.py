@@ -24,7 +24,7 @@ def to_json_response_plan(response_plan: ResponsePlan, first=True):
 
     for child in ResponsePlan.objects.filter(parent_id=response_plan.id).all():
         response_obj['children'].append(to_json_response_plan(child, False))
-    
+
     return response_obj
 
 
@@ -55,6 +55,7 @@ def import_child_response_plan(child, parent_id, road_segment_id):
                                              parent_id)
         if 'children' in child:
             for c in child['children']:
-                import_child_response_plan(c, response_plan.id, road_segment_id)
+                import_child_response_plan(
+                    c, response_plan.id, road_segment_id)
     else:
         raise InvalidInputException()

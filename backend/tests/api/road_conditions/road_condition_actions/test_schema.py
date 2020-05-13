@@ -41,8 +41,8 @@ class RoadConditionActionSchemaTest(TestCase):
             create_constraint_types([
                 'Type-1', 'Type-2', 'Type-3'])
         self.constraints = create_constraints([
-                'Constraint-1', 'Constraint-2', 'Constraint-3'],
-                self.constraint_types)
+            'Constraint-1', 'Constraint-2', 'Constraint-3'],
+            self.constraint_types)
 
     def test_query(self):
         client = Client(schema)
@@ -172,7 +172,7 @@ class RoadConditionActionSchemaTest(TestCase):
                                         roadConditionActionConstraintTypes
                                         (
                                             name: "%s",
-                                            desc: "%s"                                            
+                                            desc: "%s"
                                         )
                                         {
                                             name
