@@ -16,6 +16,7 @@ function displayInstruments(map: mb.Map, instruments: any) {
 	});
 }
 
+
 function displayLargeInstruments(map: mb.Map, visibleInstruments: [string, [number, number]][]) {
 	if (visibleInstruments.length === 0) {
 		map.setLayoutProperty('largeInstrumentsLayer', 'visibility', 'none');
