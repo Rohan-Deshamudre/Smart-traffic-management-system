@@ -15,8 +15,9 @@ import { READ_FOLDERS } from "../../components/CRUDFolders";
 import scenarioIcon from "../../assets/node_icons/scenario.svg";
 // @ts-ignore
 import instrumentsIcon from "../../assets/node_icons/instruments.svg";
+
 // @ts-ignore
-import insightsIcon from '../../assets/insights.svg';
+import destinationIcon from "../../assets/node_icons/destination.svg"
 
 interface State {
     leftPaneActive: boolean;
@@ -31,7 +32,7 @@ class Home extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            leftPaneActive: true,
+            leftPaneActive: false,
             rightPaneActive: true,
             routePaneActive: false
         };
@@ -99,7 +100,7 @@ class Home extends React.Component<Props, State> {
                                             boundingBox={data.boundingBox}
                                     />
 
-                                    <RoutePane icon={insightsIcon}
+                                    <RoutePane icon={destinationIcon}
                                                paneName = "Routes"
                                                toggle={this.toggleRoutePane}
                                                active = {this.state.routePaneActive}
