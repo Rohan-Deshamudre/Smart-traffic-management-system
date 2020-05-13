@@ -13,6 +13,8 @@ import home from "../assets/navbar_icons/home.svg";
 // @ts-ignore
 import location from "./../assets/location.svg";
 // @ts-ignore
+import logout from "./../assets/logout.svg";
+// @ts-ignore
 import simulationIcon from "./../assets/navbar_icons/play.svg";
 // @ts-ignore
 import designerIcon from "./../assets/navbar_icons/edit.svg";
@@ -105,7 +107,15 @@ const asNavBar = <P extends InjectedPNavBar>(WrappedComponent: React.ComponentTy
 						{({ data, client }) => (
 							<div className="top-bar">
 
+
+								<div className="username-wrap username">{Auth.getName()}</div>
+
 								{optionalButton}
+								<div className="nav-button">
+									<Link to="/login" onClick={() => this.signOut()}>
+										<img src={logout} alt="Sign Out" />
+									</Link>
+								</div>
 								<div className="nav-button">
 									<Link to="/">
 										<img src={home} alt="Home" />
@@ -132,12 +142,6 @@ const asNavBar = <P extends InjectedPNavBar>(WrappedComponent: React.ComponentTy
 												level={data.treeLevel} />
 										)
 								}
-								<div className="nav-button ">
-									<Link to="/login" onClick={() => this.signOut()}>
-										<img src={home} alt="Sign Out" />
-									</Link>
-								</div>
-								<div className="username-wrap username" >{Auth.getName()}</div>
 							</div>
 						)
 						}

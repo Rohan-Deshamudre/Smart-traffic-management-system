@@ -79,7 +79,7 @@ const asWorkspace = <P extends InjectedPWorkspace>(WrappedComponent: React.Compo
 
 			return (<Query query={GET_WORKSPACE_DATA}>
 				{({ loading, error, data, client }) => {
-					if (loading) return <div>Fetching</div>;
+					if (loading) return <div className="container-center"><div className="loader"></div></div>;
 					if (error) {
 						console.log(error)
 						return <div>Error</div>;
@@ -115,7 +115,7 @@ const asWorkspace = <P extends InjectedPWorkspace>(WrappedComponent: React.Compo
 						<div className="workspace-container">
 							<Query query={GET_TREE} variables={{ id }} skip={!id}>
 								{({ loading, error, data, client }) => {
-									if (loading) return <div>Fetching</div>;
+									if (loading) return <div className="container-center"><div className="loader"></div></div>;
 									if (error) {
 										console.log(error)
 										return <div>Error</div>;

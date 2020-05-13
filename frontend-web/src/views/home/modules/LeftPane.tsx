@@ -217,7 +217,7 @@ class LeftPane extends React.Component<PLeftPane, State> {
 				<Query query={READ_LABELS}>
 					{({ loading, error, data, client }) => {
 						let labels = []
-						if (loading) return <div>Fetching</div>;
+						if (loading) return <div className="container-center"><div className="loader"></div></div>;
 						if (!error) {
 							labels = data.labels
 						} else {

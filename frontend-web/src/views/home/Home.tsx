@@ -51,7 +51,7 @@ class Home extends React.Component<Props, State> {
 
     render() {
         if (!Auth.getToken()) {
-            return <Redirect to='/login' />
+            // return <Redirect to='/login' />
         }
 
         return (
@@ -70,7 +70,7 @@ class Home extends React.Component<Props, State> {
                                 }
                             });
 
-                            if (loading) return <div>Fetching</div>;
+                            if (loading) return <div className="container-center"><div className="loader"></div></div>;
                             if (error) {
                                 return <div>Error</div>;
                             }

@@ -49,7 +49,7 @@ class SimulationList extends React.Component<Props, State> {
 		const liveSimulation = (
 			<Query query={GET_TREE} variables={{ id }} skip={!id}>
 				{({ loading, error, data, client }) => {
-					if (loading) return <div>Fetching</div>;
+					if (loading) return <div className="container-center"><div className="loader"></div></div>;
 					if (error) {
 						console.log(error)
 						return <div>Error</div>;
@@ -79,7 +79,7 @@ class SimulationList extends React.Component<Props, State> {
 		const savedSimulations = (
 			<Query query={GET_SIMULATION_FROM_SCENARIO} variables={{ id }} skip={!id}>
 				{({ loading, error, data, client }) => {
-					if (loading) return <div>Fetching</div>;
+					if (loading) return <div className="container-center"><div className="loader"></div></div>;
 					if (error) {
 						console.log(error)
 						return <div>Error</div>;

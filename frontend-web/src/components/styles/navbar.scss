@@ -10,6 +10,7 @@
 
   // Input
   .top-bar {
+    width: auto;
     z-index: 5;
     margin: 15px;
     align-items: center;
@@ -47,6 +48,7 @@
       align-items: center;
       flex-direction: row;
       height: 100%;
+      margin-left: 5px;
 
       .username {
         font-weight: 400;
@@ -56,18 +58,14 @@
     .nav-wrap {
       width: auto;
       display: flex;
-      flex-direction: row;
       height: 100%;
 
       &.search-wrap {
         .form-control {
           border-radius: 5px;
-          position: absolute;
-          max-width: 230px;
-
-          margin: 2px;
+          margin-top: 2px;
+          text-align: left;
           display: inline-block;
-          padding-left: 35px;
           border: none;
         }
 
