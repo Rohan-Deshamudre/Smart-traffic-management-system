@@ -14,14 +14,10 @@ import { READ_FOLDERS } from "../../components/CRUDFolders";
 import scenarioIcon from "../../assets/node_icons/scenario.svg";
 // @ts-ignore
 import instrumentsIcon from "../../assets/node_icons/instruments.svg";
-import RoutePane from "./modules/RoutePane";
-// @ts-ignore
-import insightsIcon from '../../assets/insights.svg';
 
 interface State {
     leftPaneActive: boolean;
     rightPaneActive: boolean;
-    routePaneActive: boolean
 }
 
 interface Props {
@@ -31,25 +27,17 @@ class Home extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            leftPaneActive: false,
+            leftPaneActive: true,
             rightPaneActive: true,
-            routePaneActive: false
         };
 
         this.toggleLeftPane = this.toggleLeftPane.bind(this);
         this.toggleRightPane = this.toggleRightPane.bind(this);
-        this.toggleRoutePane = this.toggleRoutePane.bind(this);
     }
 
     toggleLeftPane() {
         this.setState({
             leftPaneActive: !this.state.leftPaneActive
-        })
-    }
-
-    toggleRoutePane() {
-        this.setState({
-            routePaneActive: !this.state.routePaneActive
         })
     }
 
@@ -97,12 +85,6 @@ class Home extends React.Component<Props, State> {
                                             folders={scenarioFolders}
                                             scenarios={scenariosWithoutFolders}
                                             boundingBox={data.boundingBox}
-                                    />
-
-                                    <RoutePane icon={insightsIcon}
-                                               paneName = "Routes"
-                                               toggle={this.toggleRoutePane}
-                                               active = {this.state.routePaneActive}
                                     />
 
                                     <Workspace
