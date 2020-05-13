@@ -119,17 +119,6 @@ class RoutePane extends React.Component<Props, State, any> {
                             )
                         }
                     </ApolloConsumer>
-
-                    {!this.props.readOnly && (
-                        <Button className={"opslaan-button" + disabled + success} onClick={() => {
-                            if (!this.state.saved && !this.state.disabled) {
-                                this.handleData();
-                                this.resetState()
-                            }
-                        }}>
-                            {this.state.saved ? "Opgeslagen!" : "Item opslaan"}
-                        </Button>
-				    )}
                 </div>
             </div>
         );
