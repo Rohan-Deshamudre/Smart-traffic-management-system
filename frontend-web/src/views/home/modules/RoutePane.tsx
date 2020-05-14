@@ -6,9 +6,9 @@ import Button from "react-bootstrap/Button";
 import Name from "../../../components/other/Name";
 
 type Props = {
-    id: number,
+    id?: number,
 	data?: any,
-	handleData: (newData: any) => void,
+	handleData?: (newData: any) => void,
 	readOnly?: boolean
 }
 
