@@ -11,10 +11,6 @@ import asLargeWorkspace from "../containers/LargeWorkspace";
 import { requests } from "../../helper/requests";
 import { mapSetup } from "../../helper/map/mapSetup";
 import { mapDisplay } from "../../helper/map/mapDisplay";
-import Col from "react-bootstrap/Col";
-import { ApolloConsumer } from "@apollo/react-components";
-import FormControl from "react-bootstrap/FormControl";
-
 
 
 type State = {
@@ -37,7 +33,7 @@ type Props = {
     instrumentActionRoutes: [number, number][][],
     selectedInstrumentActionRoutes: [number, number][][],
     selectedRoute: [number, number][],
-    selectedIcon: any,
+    // selectedIcon: any,
     visibleInstruments: any[]
 }
 
