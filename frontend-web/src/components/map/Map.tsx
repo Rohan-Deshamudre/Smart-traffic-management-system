@@ -37,6 +37,7 @@ type Props = {
     instrumentActionRoutes: [number, number][][],
     selectedInstrumentActionRoutes: [number, number][][],
     selectedRoute: [number, number][],
+    selectedIcon: any,
     visibleInstruments: any[]
 }
 
@@ -136,6 +137,7 @@ class Map extends React.PureComponent<Props, State> {
     configureSelectedRoute() {
         const selectedRoute = this.getRoutes([this.props.selectedRoute]);
         mapDisplay.displayRoutes(selectedRoute, 'selectedRouteSource', this.map);
+        //mapDisplay.displayIcons(selectedRoute, 'selectedRouteSource', this.map);
     }
 
     /*
