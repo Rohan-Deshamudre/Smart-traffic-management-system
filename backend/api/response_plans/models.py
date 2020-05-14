@@ -7,6 +7,7 @@ from ..abstract_model import *
 from ..road_segments.models import RoadSegment
 from ..road_conditions.models import RoadCondition
 
+
 class ResponsePlan(AbstractModel):
     id = models.AutoField(primary_key=True)
     road_segment = models.ForeignKey(RoadSegment,
@@ -26,4 +27,3 @@ class ResponsePlan(AbstractModel):
                                on_delete=models.DO_NOTHING,
                                blank=True,
                                null=True)
-

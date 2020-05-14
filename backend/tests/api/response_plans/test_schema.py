@@ -12,6 +12,7 @@ from tests.api.road_segments.methods import create_road_segment_types, \
 from tests.api.scenarios.methods import create_scenarios
 from api.response_plans.models import ResponsePlan
 
+
 class ResponsePlanSchemaTest(TestCase):
     databases = '__all__'
 
@@ -38,8 +39,7 @@ class ResponsePlanSchemaTest(TestCase):
 
     def test_query(self):
         client = Client(schema)
-        executed = client.execute(
-        '''
+        executed = client.execute('''
         query {
             responsePlans(operator: "%s") {
                 operator
@@ -51,8 +51,7 @@ class ResponsePlanSchemaTest(TestCase):
 
     def test_query_id(self):
         client = Client(schema)
-        executed = client.execute(
-        '''
+        executed = client.execute('''
         query {
             responsePlans(responsePlanId: %s) {
                 id
@@ -65,8 +64,7 @@ class ResponsePlanSchemaTest(TestCase):
     def test_create_response_plan(self):
         operator = 'OR'
         client = Client(schema)
-        executed = client.execute(
-        '''
+        executed = client.execute('''
         mutation {
             createResponsePlan(operator: "%s", roadSegmentId: %s) {
                 operator
@@ -74,13 +72,12 @@ class ResponsePlanSchemaTest(TestCase):
         }
         ''' % (operator, self.segments[0].id))
         self.assertEqual(executed['data']['createResponsePlan']['operator'],
-                         operator) 
+                         operator)
 
     def test_create_exception(self):
         operator = 'OR'
         client = Client(schema)
-        executed = client.execute(
-        '''
+        executed = client.execute('''
         mutation {
             createResponsePlan(operator: "%s", roadSegmentId: -99) {
                 operator
@@ -89,12 +86,11 @@ class ResponsePlanSchemaTest(TestCase):
         ''' % operator)
         self.assertEqual(executed['errors'][0]['message'],
                          "Roadsegment with id = -99 does not exist!")
-        
+
     def test_update(self):
         operator = 'OR'
         client = Client(schema)
-        executed = client.execute(
-        '''
+        executed = client.execute('''
         mutation {
             updateResponsePlan(id: %s, operator: "%s") {
                 id
@@ -109,8 +105,7 @@ class ResponsePlanSchemaTest(TestCase):
 
     def test_update_exception(self):
         client = Client(schema)
-        executed = client.execute(
-        '''
+        executed = client.execute('''
         mutation {
             updateResponsePlan(id: -99) {
                 id
@@ -122,8 +117,7 @@ class ResponsePlanSchemaTest(TestCase):
 
     def test_delete(self):
         client = Client(schema)
-        executed = client.execute(
-        '''
+        executed = client.execute('''
         mutation {
             deleteResponsePlan(id: %s) {
                 id
@@ -135,8 +129,7 @@ class ResponsePlanSchemaTest(TestCase):
 
     def test_delete_exception(self):
         client = Client(schema)
-        executed = client.execute(
-        '''
+        executed = client.execute('''
         mutation {
             deleteResponsePlan(id: -99) {
                 id

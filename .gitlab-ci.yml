@@ -16,7 +16,7 @@ build frontend-web:
       - frontend-web/build
     
 test backend:
-  image: python:3.6
+  image: python:3
   stage: test
   before_script:
     - pip3 install django graphene-django django-cors-headers django-channels django-graphql-jwt mysqlclient mapbox coverage
@@ -50,7 +50,7 @@ deploy frontend-web:
     - sshpass -e ssh -o StrictHostKeyChecking=no tudectree@172.104.250.55 bash /home/tudectree/stm/start_frontend.sh
 
 deploy backend:
-  image: python:3.6
+  image: python:3
   stage: production
   only:
     refs:

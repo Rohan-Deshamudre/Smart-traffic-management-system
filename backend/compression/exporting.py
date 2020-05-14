@@ -30,6 +30,7 @@ def handle_instrument(request):
     else:
         return HttpResponseNotAllowed(permitted_methods='POST')
 
+
 def handle_response_plan(request):
     if request.method == 'POST':
         response = {}

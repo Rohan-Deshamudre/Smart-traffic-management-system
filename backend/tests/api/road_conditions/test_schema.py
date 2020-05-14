@@ -30,13 +30,8 @@ class RoadConditionSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % condition.id)
-        """
-        TODO: Get the Objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('roadConditions', "
-                          "[OrderedDict([('name', '%s')])])])}"
-                          % condition.name)
+        self.assertEquals(executed['data']['roadConditions'][0]['name'],
+                          condition.name)
 
     def test_query_type(self):
         client = Client(schema)
@@ -56,10 +51,8 @@ class RoadConditionSchemaTest(TestCase):
                                     ''' % (
             condition_type.id, condition_type.name,
             condition_type.description))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('roadConditionTypes', "
-                          "[OrderedDict([('name', '%s')])])])}"
-                          % condition_type.name)
+        self.assertEquals(executed['data']['roadConditionTypes'][0]['name'],
+                          condition_type.name)
 
     def test_create_correct(self):
         client = Client(schema)
@@ -82,9 +75,8 @@ class RoadConditionSchemaTest(TestCase):
                                     }
                                     ''' % (
             name, condition_type.id, parent.id))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('createRoadCondition',"
-                          " OrderedDict([('name', '%s')]))])}" % name)
+        self.assertEquals(executed['data']['createRoadCondition']['name'],
+                          name)
 
     def test_update(self):
         client = Client(schema)
@@ -103,9 +95,8 @@ class RoadConditionSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % (condition.id, name))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('updateRoadCondition', "
-                          "OrderedDict([('name', '%s')]))])}" % name)
+        self.assertEquals(executed['data']['updateRoadCondition']['name'],
+                          name)
 
     def test_delete(self):
         client = Client(schema)
@@ -121,6 +112,4 @@ class RoadConditionSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % condition.id)
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('deleteRoadCondition',"
-                          " None)])}")
+        self.assertEquals(executed['data']['deleteRoadCondition'], None)

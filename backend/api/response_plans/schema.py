@@ -7,11 +7,12 @@ from api.exception.api_exception import ApiException
 from api.response_plans import methods
 from .models import *
 
+
 class ResponsePlanObjectType(DjangoObjectType):
     class Meta:
         model = ResponsePlan
 
-        
+
 class Query(graphene.ObjectType):
     response_plans = graphene.List(ResponsePlanObjectType,
                                    response_plan_id=graphene.Int(),
@@ -27,7 +28,7 @@ class Query(graphene.ObjectType):
             res = res.filter(Q(operator__icontains=operator))
         return res
 
-    
+
 class CreateResponsePlan(graphene.Mutation):
     id = graphene.Int()
     road_segment_id = graphene.Int()
@@ -48,7 +49,7 @@ class CreateResponsePlan(graphene.Mutation):
                 road_segment_id, operator, road_condition_id, parent_id)
 
             road_condition_id = response_plan.road_condition.id if road_condition_id else None
-            
+
             return CreateResponsePlan(
                 id=response_plan.id,
                 road_segment_id=response_plan.road_segment.id,
@@ -59,7 +60,7 @@ class CreateResponsePlan(graphene.Mutation):
         except ApiException as exc:
             raise GraphQLError(str(exc))
 
-        
+
 class UpdateResponsePlan(graphene.Mutation):
     id = graphene.Int()
     road_segment_id = graphene.Int()
@@ -94,7 +95,7 @@ class UpdateResponsePlan(graphene.Mutation):
             )
         except ApiException as exc:
             raise GraphQLError(str(exc))
-        
+
 
 class DeleteResponsePlan(graphene.Mutation):
     id = graphene.Int()
