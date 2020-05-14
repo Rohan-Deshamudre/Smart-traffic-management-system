@@ -1,22 +1,21 @@
 import * as React from "react";
 import asRoutesPane from "../../../components/RoutePane";
 import RouteToolbox from "../../scenario-designer/toolboxes/RouteToolbox";
-import {Mutation, Query, ApolloConsumer} from 'react-apollo';
-import Button from "react-bootstrap/Button";
+import {ApolloConsumer} from 'react-apollo';
 import Name from "../../../components/other/Name";
+
+type State = {
+	name: string,
+	route?: { id: number, lng: number, lat: number }[],
+	saved: boolean,
+	disabled: boolean
+}
 
 type Props = {
     id?: number,
 	data?: any,
 	handleData?: (newData: any) => void,
 	readOnly?: boolean
-}
-
-type State = {
-    name: string,
-    route?: { id: number, lng: number, lat: number }[],
-    saved: boolean,
-	disabled: boolean
 }
 
 class RoutePane extends React.Component<Props, State, any> {
@@ -46,27 +45,6 @@ class RoutePane extends React.Component<Props, State, any> {
         this.disabled = this.disabled.bind(this);
     }
 
-    componentDidUpdate(prevProps: Props) {
-		if (this.props.id !== prevProps.id && this.props.data === undefined) {
-			this.setState({
-				...this.baseState
-			})
-		}
-    }
-    
-    resetState() {
-		if (this.props.data === undefined) {
-			this.setState({
-				...this.baseState
-			})
-		} else {
-			this.setState({
-				saved: true,
-				disabled: true
-			})
-		}
-    }
-    
     handleData() {
 		this.props.handleData({
 			name: this.state.name,
@@ -80,14 +58,14 @@ class RoutePane extends React.Component<Props, State, any> {
 			saved: false,
 		}, () => this.disabled());
     }
-    
+
     handleRoute(newRoute: { id: number, lng: number, lat: number }[]) {
 		this.setState({
 			route: newRoute,
 			saved: false,
 		}, () => this.disabled());
     }
-    
+
     disabled() {
 		this.setState({
 			disabled: (
@@ -98,9 +76,7 @@ class RoutePane extends React.Component<Props, State, any> {
 	}
 
     render() {
-        const disabled = this.state.disabled ? ' disabled' : '';
-        const success = this.state.saved ? ' btn-success' : '';
-        
+
         return (
             <div className="pane left-pane designer">
                 <div className="pane-header">
