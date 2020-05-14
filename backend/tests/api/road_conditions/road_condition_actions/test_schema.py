@@ -58,13 +58,8 @@ class RoadConditionActionSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % action.id)
-        """
-        TODO: Get the folder objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('roadConditionActions', "
-                          "[OrderedDict([('actionName', '%s')])])])}"
-                          % action.action_name)
+        self.assertEquals(executed['data']['roadConditionActions'][0]['actionName'],
+                          action.action_name)
 
     def test_query_goal(self):
         client = Client(schema)
@@ -84,13 +79,8 @@ class RoadConditionActionSchemaTest(TestCase):
                                     }
                                     ''' % (action_goal.name,
                                            action_goal.description))
-        """
-        TODO: Get the folder objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('roadConditionActionGoals', "
-                          "[OrderedDict([('name', '%s')])])])}"
-                          % action_goal.name)
+        self.assertEquals(executed['data']['roadConditionActionGoals'][0]['name'],
+                          action_goal.name)
 
     def test_query_goal_id(self):
         client = Client(schema)
@@ -106,13 +96,8 @@ class RoadConditionActionSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % action_goal.id)
-        """
-        TODO: Get the folder objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('roadConditionActionGoals', "
-                          "[OrderedDict([('name', '%s')])])])}"
-                          % action_goal.name)
+        self.assertEquals(executed['data']['roadConditionActionGoals'][0]['name'],
+                          action_goal.name)
 
     def test_query_constraint(self):
         client = Client(schema)
@@ -130,14 +115,8 @@ class RoadConditionActionSchemaTest(TestCase):
                                     }
                                     ''' % (constraint.constraint_type.id,
                                            constraint.name))
-        """
-        TODO: Get the folder objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([("
-                          "'roadConditionActionConstraints', "
-                          "[OrderedDict([('name', '%s')])])])}"
-                          % constraint.name)
+        self.assertEquals(executed['data']['roadConditionActionConstraints'][0]['name'],
+                          constraint.name)
 
     def test_query_constraint_id(self):
         client = Client(schema)
@@ -153,14 +132,8 @@ class RoadConditionActionSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % constraint.id)
-        """
-        TODO: Get the folder objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([("
-                          "'roadConditionActionConstraints', "
-                          "[OrderedDict([('name', '%s')])])])}"
-                          % constraint.name)
+        self.assertEquals(executed['data']['roadConditionActionConstraints'][0]['name'],
+                          constraint.name)
 
     def test_query_constraint(self):
         client = Client(schema)
@@ -180,14 +153,8 @@ class RoadConditionActionSchemaTest(TestCase):
                                     }
                                     ''' % (constraint_type.name,
                                            constraint_type.description))
-        """
-        TODO: Get the folder objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([("
-                          "'roadConditionActionConstraintTypes', "
-                          "[OrderedDict([('name', '%s')])])])}"
-                          % constraint_type.name)
+        self.assertEquals(executed['data']['roadConditionActionConstraintTypes'][0]['name'],
+                          constraint_type.name)
 
     def test_query_constraint_id(self):
         client = Client(schema)
@@ -203,14 +170,8 @@ class RoadConditionActionSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % constraint_type.id)
-        """
-        TODO: Get the folder objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([("
-                          "'roadConditionActionConstraintTypes', "
-                          "[OrderedDict([('name', '%s')])])])}"
-                          % constraint_type.name)
+        self.assertEquals(executed['data']['roadConditionActionConstraintTypes'][0]['name'],
+                          constraint_type.name)
 
     def test_create_correct(self):
         client = Client(schema)
@@ -241,9 +202,8 @@ class RoadConditionActionSchemaTest(TestCase):
                                     ''' % (
             name, condition.id, system.id, goal.id, types.id, action.id))
         self.maxDiff = None
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('createRoadConditionAction',"
-                          " OrderedDict([('actionName', '%s')]))])}" % name)
+        self.assertEquals(executed['data']['createRoadConditionAction']['actionName'],
+                          name)
 
     def test_update(self):
         client = Client(schema)
@@ -261,10 +221,8 @@ class RoadConditionActionSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % (action.id, new_des))
-        self.assertEquals(
-            str(executed),
-            "{'data': OrderedDict([('updateRoadConditionAction', "
-            "OrderedDict([('description', '%s')]))])}" % new_des)
+        self.assertEquals(executed['data']['updateRoadConditionAction']['description'],
+                          new_des)
 
     def test_update_exception(self):
         client = Client(schema)
@@ -296,9 +254,7 @@ class RoadConditionActionSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % action.id)
-        self.assertEquals(
-            str(executed),
-            "{'data': OrderedDict([('deleteRoadConditionAction', None)])}")
+        self.assertEquals(executed['data']['deleteRoadConditionAction'], None)
 
     def test_delete_exception(self):
         client = Client(schema)
