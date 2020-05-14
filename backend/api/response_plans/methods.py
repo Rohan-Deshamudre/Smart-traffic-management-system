@@ -24,7 +24,8 @@ def get_response_plan_with_id(response_plan_id: int) -> ResponsePlan:
     raise ObjectNotFoundException("Response Plan", "id", response_plan_id)
 
 
-def get_response_plan_children(response_plan: ResponsePlan)-> List[ResponsePlan]:
+def get_response_plan_children(
+        response_plan: ResponsePlan) -> List[ResponsePlan]:
     children = []
     for child in ResponsePlan.objects.filter(parent_id=response_plan.id):
         children.append(child)
@@ -45,7 +46,7 @@ def create_response_plan(road_segment_id: int,
                 road_condition_id)
         if parent_id:
             response_plan.parent = get_response_plan_with_id(parent_id)
-            
+
         response_plan.save()
         return response_plan
     else:
@@ -57,13 +58,13 @@ def update_response_plan_road_segment(response_plan: ResponsePlan,
     road_segment = get_road_segment_with_id(road_segment_id)
     response_plan.road_segment = road_segment
 
-    
+
 def update_response_plan_road_condition(response_plan: ResponsePlan,
                                         road_condition_id: int):
     road_condition = get_road_condition_with_id(road_condition_id)
     response_plan.road_condition = road_condition
 
-    
+
 def update_response_plan_parent(response_plan: ResponsePlan,
                                 parent_id: int):
     if response_plan.id == parent_id:
@@ -73,10 +74,10 @@ def update_response_plan_parent(response_plan: ResponsePlan,
     if parent in get_response_plan_children(response_plan):
         raise ResponsePlanChildrenAsParentException(
             response_plan.id, parent_id)
-    
+
     response_plan.parent = parent
 
-    
+
 def update_response_plan(response_plan_id: int, road_segment_id: int,
                          operator: str, road_condition_id: int,
                          parent_id: int):
@@ -84,7 +85,7 @@ def update_response_plan(response_plan_id: int, road_segment_id: int,
     if road_segment_id:
         update_response_plan_road_segment(response_plan,
                                           road_segment_id)
-        
+
     if operator:
         response_plan.operator = operator
 
@@ -94,7 +95,7 @@ def update_response_plan(response_plan_id: int, road_segment_id: int,
 
     if parent_id:
         update_response_plan_parent(response_plan, parent_id)
-    
+
     response_plan.save()
     return response_plan
 
@@ -104,4 +105,11 @@ def delete_response_plan(response_plan_id: int):
     for child in ResponsePlan.objects.filter(parent_id=response_plan.id).all():
         child.parent = response_plan.parent
         child.save()
+    response_plan.delete()
+
+
+def delete_response_plan_cascade(response_plan_id: int):
+    response_plan = get_response_plan_with_id(response_plan_id)
+    for child in ResponsePlan.objects.filter(parent_id=response_plan.id).all():
+        delete_response_plan_cascade(child.id)
     response_plan.delete()

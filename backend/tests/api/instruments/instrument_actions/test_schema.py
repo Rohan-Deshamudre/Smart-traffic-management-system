@@ -39,10 +39,8 @@ class InstrumentActionSchemaTest(TestCase):
                                     }
                                     ''' % (instrument.id,
                                            instrument_action.description))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('instrumentActions', "
-                          "[OrderedDict([("
-                          "'id', '%s')])])])}" % instrument_action.id)
+        self.assertEquals(executed['data']['instrumentActions'][0]['id'],
+                          str(instrument_action.id))
 
     def test_query_id(self):
         client = Client(schema)
@@ -58,10 +56,8 @@ class InstrumentActionSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % instrument_action.id)
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('instrumentActions', "
-                          "[OrderedDict([("
-                          "'id', '%s')])])])}" % instrument_action.id)
+        self.assertEquals(executed['data']['instrumentActions'][0]['id'],
+                          str(instrument_action.id))
 
     def test_create_correct(self):
         client = Client(schema)
@@ -79,10 +75,8 @@ class InstrumentActionSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % (instrument.id, text))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('createInstrumentAction', "
-                          "OrderedDict([('instrumentId', %s)]))])}"
-                          % instrument.id)
+        self.assertEquals(executed['data']['createInstrumentAction']['instrumentId'],
+                          instrument.id)
 
     def test_update(self):
         client = Client(schema)
@@ -104,10 +98,8 @@ class InstrumentActionSchemaTest(TestCase):
                                     }
                                     ''' % (
             instrument_action.id, instrument.id))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('updateInstrumentAction', "
-                          "OrderedDict([('id', %s)]))])}"
-                          % instrument_action.id)
+        self.assertEquals(executed['data']['updateInstrumentAction']['id'],
+                          instrument_action.id)
 
     def test_update_exception(self):
         client = Client(schema)
@@ -139,9 +131,7 @@ class InstrumentActionSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % instrument_action.id)
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('deleteInstrumentAction',"
-                          " None)])}")
+        self.assertEquals(executed['data']['deleteInstrumentAction'], None)
 
     def test_delete_exception(self):
         client = Client(schema)

@@ -11,9 +11,9 @@ from tests.api.scenarios.methods import create_scenarios
 
 
 class ResponsePlanModelTest(TestCase):
-   databases = '__all__'
+    databases = '__all__'
 
-   def setUp(self):
+    def setUp(self):
         self.folder_types = create_folder_types(
             ['Test-Type-1', 'Test-Type-2', 'Test-Type-3'])
         self.folders = create_folders(['Test-1', 'Test-2', 'Test-3'],
@@ -34,5 +34,5 @@ class ResponsePlanModelTest(TestCase):
             ['AND', 'AND', 'AND'], self.segments, self.conditions
         )
 
-   def test_response_plan_created(self):
+    def test_response_plan_created(self):
         self.assertTrue(isinstance(self.response_plans[0], ResponsePlan))

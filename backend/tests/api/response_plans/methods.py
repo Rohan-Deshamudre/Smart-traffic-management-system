@@ -4,10 +4,11 @@ from api.response_plans.models import ResponsePlan
 from api.road_segments.models import RoadSegment
 from api.road_conditions.models import RoadCondition
 
+
 def create_response_plans(operators: List[str],
                           road_segments: List[RoadSegment],
                           road_conditions: List[RoadCondition]) \
-                          -> List[ResponsePlan]:
+        -> List[ResponsePlan]:
     """
     Structure being tested is
        AND
@@ -22,7 +23,7 @@ def create_response_plans(operators: List[str],
     response_plans.append(parent)
     for x in range(len(operators) - 1):
         child = ResponsePlan(road_segment=road_segments[x],
-                             operator=operators[x+1],
+                             operator=operators[x + 1],
                              road_condition=road_conditions[x],
                              parent=parent)
         child.save()

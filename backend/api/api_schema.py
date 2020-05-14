@@ -11,6 +11,7 @@ from .labels import schema as labels_schema
 from .folders import schema as folders_schema
 from .response_plans import schema as response_plan_schema
 
+
 class Query(
         routes_schema.Query,
         road_condition_schema.Query,
