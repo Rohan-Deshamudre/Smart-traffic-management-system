@@ -4,9 +4,11 @@ from api.road_conditions.input_object import RoadConditionDateInputObject
 from api.road_conditions.methods.delete import delete_parents
 from api.road_conditions.methods.getter import get_road_condition_with_id, \
     check_road_conditions, get_road_condition_type_with_id, \
-    has_road_condition_with_id, get_road_condition_date_with_id, has_road_condition_date_with_id
+    has_road_condition_with_id, get_road_condition_date_with_id, \
+    has_road_condition_date_with_id
 from api.road_conditions.models import RoadCondition, \
-    RoadConditionToRoadConditionAction, RoadConditionToRoadCondition, RoadConditionDate
+    RoadConditionToRoadConditionAction, RoadConditionToRoadCondition, \
+    RoadConditionDate
 from api.road_conditions.road_condition_actions.methods.getter import \
     get_road_condition_action_by_id, \
     has_road_condition_action_with_id
@@ -49,7 +51,8 @@ def update_parents(road_condition: RoadCondition, parent_rs: int,
 def update_road_condition_date(road_condition: RoadCondition,
                                date: RoadConditionDateInputObject):
     if has_road_condition_date_with_id(road_condition.id):
-        road_condition_date = get_road_condition_date_with_id(road_condition.id)
+        road_condition_date = get_road_condition_date_with_id(
+            road_condition.id)
     else:
         road_condition_date = RoadConditionDate(road_condition=road_condition)
     road_condition_date.start_date = date.start_date

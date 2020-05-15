@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'api.simulations',
     'api.folders',
     'api.labels',
+    'api.response_plans',
     # Cors
     'corsheaders',
 

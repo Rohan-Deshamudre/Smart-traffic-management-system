@@ -35,7 +35,7 @@ $node-height: $node-width / 3 * 2;
   }
 
   .deactivated {
-    opacity: 0.5 !important;
+    visibility: hidden !important;
   }
 
   .node {
@@ -142,7 +142,7 @@ $node-height: $node-width / 3 * 2;
 	  transform: translate($node-width, 0);
 
 	  rect {
-		fill: red;
+		  fill: red;
 	  }
 	}
 
@@ -356,7 +356,8 @@ $node-height: $node-width / 3 * 2;
 
   .link {
 	fill: none;
-	stroke: #000;
+	stroke: darkred;
+	stroke-width: 10;
 	transform: translate(calc(1 / 2 * (#{$node-width} + 1 / 3 * #{$node-width})), calc(1 / 2 * #{$node-width}));
   }
 }

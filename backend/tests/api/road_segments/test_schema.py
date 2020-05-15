@@ -46,12 +46,7 @@ class RoadSegmentSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % segment.id)
-        """
-        TODO: Get the Objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('roadSegments', "
-                          "[])])}")
+        self.assertEquals(executed['data']['roadSegments'], [])
 
     def test_query_children(self):
         client = Client(schema)
@@ -72,12 +67,8 @@ class RoadSegmentSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % (segment.id, child.id))
-        """
-        TODO: Get the Objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('roadSegments', "
-                          "[OrderedDict([('name', '%s')])])])}" % segment.name)
+        self.assertEquals(executed['data']['roadSegments'][0]['name'],
+                          segment.name)
 
     def test_query_types(self):
         client = Client(schema)
@@ -96,13 +87,8 @@ class RoadSegmentSchemaTest(TestCase):
                                     }
                                     ''' % (
             segment_type.id, segment_type.name, segment_type.description))
-        """
-        TODO: Get the Objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('roadSegmentTypes', "
-                          "[OrderedDict([('name', '%s')])])])}"
-                          % segment_type.name)
+        self.assertEquals(executed['data']['roadSegmentTypes'][0]['name'],
+                          segment_type.name)
 
     def test_create_correct(self):
         client = Client(schema)
@@ -125,9 +111,8 @@ class RoadSegmentSchemaTest(TestCase):
                                     }
                                     ''' % (
             name, scenario.id, segment.id))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('createRoadSegment',"
-                          " OrderedDict([('name', '%s')]))])}" % name)
+        self.assertEquals(executed['data']['createRoadSegment']['name'],
+                          name)
 
     def test_update(self):
         client = Client(schema)
@@ -145,9 +130,8 @@ class RoadSegmentSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % (segment.id, name))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('updateRoadSegment', "
-                          "OrderedDict([('name', '%s')]))])}" % name)
+        self.assertEquals(executed['data']['updateRoadSegment']['name'],
+                          name)
 
     def test_delete(self):
         client = Client(schema)
@@ -163,6 +147,4 @@ class RoadSegmentSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % segment.id)
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('deleteRoadSegment', "
-                          "None)])}")
+        self.assertEquals(executed['data']['deleteRoadSegment'], None)

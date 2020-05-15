@@ -30,14 +30,9 @@ class FolderSchemaTest(TestCase):
                                             name
                                         }
                                     }
-                                    ''' % (folder.name, folder.description)
-                                        )
-        """
-        TODO: Get the folder objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('folders', "
-                          "[OrderedDict([('name', '%s')])])])}" % folder.name)
+                                    ''' % (folder.name, folder.description))
+        self.assertEquals(executed['data']['folders'][0]['name'],
+                          folder.name)
 
     def test_query_id(self):
         client = Client(schema)
@@ -53,12 +48,8 @@ class FolderSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % folder.id)
-        """
-        TODO: Get the folder objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('folders', "
-                          "[OrderedDict([('name', '%s')])])])}" % folder.name)
+        self.assertEquals(executed['data']['folders'][0]['name'],
+                          folder.name)
 
     def test_create_correct(self):
         client = Client(schema)
@@ -81,9 +72,8 @@ class FolderSchemaTest(TestCase):
                                     }
                                     ''' % (
             new_name, new_desc, folder_type.id, folder.id))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('createFolder',"
-                          " OrderedDict([('name', '%s')]))])}" % new_name)
+        self.assertEquals(executed['data']['createFolder']['name'],
+                          new_name)
 
     def test_update(self):
         client = Client(schema)
@@ -103,9 +93,8 @@ class FolderSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % (folder1.id, new_des, folder3.id))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('updateFolder', "
-                          "OrderedDict([('description', '%s')]))])}" % new_des)
+        self.assertEquals(executed['data']['updateFolder']['description'],
+                          new_des)
 
     def test_update_exception(self):
         client = Client(schema)
@@ -137,8 +126,7 @@ class FolderSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % folder.id)
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('deleteFolder', None)])}")
+        self.assertEquals(executed['data']['deleteFolder'], None)
 
     def test_delete_exception(self):
         client = Client(schema)

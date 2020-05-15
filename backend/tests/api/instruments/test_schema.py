@@ -49,10 +49,8 @@ class InstrumentSchemaTest(TestCase):
                                            instrument.instrument_system.id,
                                            instrument.description,
                                            label.unique_label))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('instruments', "
-                          "[OrderedDict([("
-                          "'name', '%s')])])])}" % instrument.name)
+        self.assertEquals(executed['data']['instruments'][0]['name'],
+                          instrument.name)
 
     def test_query_id(self):
         client = Client(schema)
@@ -69,10 +67,8 @@ class InstrumentSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % instrument.id)
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('instruments', "
-                          "[OrderedDict([("
-                          "'name', '%s')])])])}" % instrument.name)
+        self.assertEquals(executed['data']['instruments'][0]['name'],
+                          instrument.name)
 
     def test_query_type(self):
         client = Client(schema)
@@ -92,10 +88,8 @@ class InstrumentSchemaTest(TestCase):
                                     }
                                     ''' % (instrument_type.name,
                                            instrument_type.description))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('instrumentTypes', "
-                          "[OrderedDict([("
-                          "'name', '%s')])])])}" % instrument_type.name)
+        self.assertEquals(executed['data']['instrumentTypes'][0]['name'],
+                          instrument_type.name)
 
     def test_query_type_id(self):
         client = Client(schema)
@@ -111,10 +105,8 @@ class InstrumentSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % instrument_type.id)
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('instrumentTypes', "
-                          "[OrderedDict([("
-                          "'name', '%s')])])])}" % instrument_type.name)
+        self.assertEquals(executed['data']['instrumentTypes'][0]['name'],
+                          instrument_type.name)
 
     def test_query_system_name(self):
         client = Client(schema)
@@ -130,10 +122,8 @@ class InstrumentSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % instrument_system.name)
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('instrumentSystems', "
-                          "[OrderedDict([("
-                          "'name', '%s')])])])}" % instrument_system.name)
+        self.assertEquals(executed['data']['instrumentSystems'][0]['name'],
+                          instrument_system.name)
 
     def test_query_system_id(self):
         client = Client(schema)
@@ -149,10 +139,8 @@ class InstrumentSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % instrument_system.id)
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('instrumentSystems', "
-                          "[OrderedDict([("
-                          "'name', '%s')])])])}" % instrument_system.name)
+        self.assertEquals(executed['data']['instrumentSystems'][0]['name'],
+                          instrument_system.name)
 
     def test_create_correct(self):
         client = Client(schema)
@@ -184,9 +172,8 @@ class InstrumentSchemaTest(TestCase):
                                            instrument_type.id,
                                            label.unique_label,
                                            label.description))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('createInstrument', "
-                          "OrderedDict([('name', '%s')]))])}" % new_name)
+        self.assertEquals(executed['data']['createInstrument']['name'],
+                          new_name)
 
     def test_update(self):
         client = Client(schema)
@@ -226,10 +213,8 @@ class InstrumentSchemaTest(TestCase):
                                            instrument_type.id,
                                            label.unique_label,
                                            label.description))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('updateInstrument', "
-                          "OrderedDict([('description', '%s')]))])}"
-                          % description)
+        self.assertEquals(executed['data']['updateInstrument']['description'],
+                          description)
 
     def test_update_exception(self):
         client = Client(schema)
@@ -261,9 +246,7 @@ class InstrumentSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % instrument.id)
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('deleteInstrument',"
-                          " None)])}")
+        self.assertEquals(executed['data']['deleteInstrument'], None)
 
     def test_delete_exception(self):
         client = Client(schema)

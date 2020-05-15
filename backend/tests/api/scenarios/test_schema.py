@@ -41,12 +41,7 @@ class ScenarioSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % scenario.id)
-        """
-        TODO: Get the Objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('scenarios', "
-                          "[OrderedDict([('name', '%s')])])])}" %
+        self.assertEquals(executed['data']['scenarios'][0]['name'],
                           scenario.name)
 
     def test_query(self):
@@ -77,13 +72,8 @@ class ScenarioSchemaTest(TestCase):
                                     ''' % (scenario.name,
                                            folder.id, segment.id,
                                            label.unique_label))
-        """
-        TODO: Get the Objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('scenarios', "
-                          "[OrderedDict([('name', '%s')])])])}"
-                          % scenario.name)
+        self.assertEquals(executed['data']['scenarios'][0]['name'],
+                          scenario.name)
 
     def test_create_correct(self):
         client = Client(schema)
@@ -112,9 +102,8 @@ class ScenarioSchemaTest(TestCase):
                                     ''' % (name, description, folder.id,
                                            label.unique_label,
                                            label.description))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('createScenario',"
-                          " OrderedDict([('name', '%s')]))])}" % name)
+        self.assertEquals(executed['data']['createScenario']['name'],
+                          name)
 
     def test_update(self):
         client = Client(schema)
@@ -145,9 +134,8 @@ class ScenarioSchemaTest(TestCase):
                                     ''' % (
             scenario.id, name, description, folder.id,
             label.unique_label, label.description))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('updateScenario', "
-                          "OrderedDict([('name', '%s')]))])}" % name)
+        self.assertEquals(executed['data']['updateScenario']['name'],
+                          name)
 
     def test_update_exception(self):
         client = Client(schema)
@@ -179,8 +167,7 @@ class ScenarioSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % scenario.id)
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('deleteScenario', None)])}")
+        self.assertEquals(executed['data']['deleteScenario'], None)
 
     def test_delete_exception(self):
         client = Client(schema)
