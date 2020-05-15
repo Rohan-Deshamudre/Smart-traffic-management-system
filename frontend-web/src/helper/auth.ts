@@ -16,8 +16,20 @@ export module Auth {
         sessionStorage.removeItem('token')
     }
 
-    export function setRoles(roles) {
-        sessionStorage.setItem('roles', roles)
+    export function isEngineer(): void {
+        if (getToken() && getToken().length > 0) {
+            const decoded = jwt(getToken());
+            console.log(decoded);
+            return decoded.groups;
+        }
+    }
+
+    export function isOperator(): void {
+        if (getToken() && getToken().length > 0) {
+            const decoded = jwt(getToken());
+            console.log(decoded);
+            return decoded.groups;
+        }
     }
 
     export function getName(): string {
