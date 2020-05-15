@@ -18,11 +18,14 @@ from compression import importing, exporting
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 from graphene_django.views import GraphQLView
+from graphql_jwt.decorators import jwt_cookie
 
 urlpatterns = [
     path('import/scenario', csrf_exempt(importing.handle_scenario)),
     path('export/scenario', csrf_exempt(exporting.handle_scenario)),
     path('import/instrument', csrf_exempt(importing.handle_instrument)),
     path('export/instrument', csrf_exempt(exporting.handle_instrument)),
-    path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
+    path('graphql/', csrf_exempt(jwt_cookie(GraphQLView.as_view(graphiql=True)))),
+    path('import/responseplan', csrf_exempt(importing.handle_response_plan)),
+    path('export/responseplan', csrf_exempt(exporting.handle_response_plan)),
 ]

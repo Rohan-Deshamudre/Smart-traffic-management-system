@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 import sys
 
+from datetime import timedelta
+from datetime import datetime
+
+from django.core import serializers
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -49,6 +54,7 @@ INSTALLED_APPS = [
     'api.simulations',
     'api.folders',
     'api.labels',
+    'api.response_plans',
     # Cors
     'corsheaders',
 
@@ -59,6 +65,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -195,6 +202,28 @@ GRAPHENE = {
     ],
 }
 
+def jwt_payload(user, context=None):
+    username = user.get_username()
+    groups = user.groups.all().values()
+
+    if hasattr(username, 'pk'):
+        username = username.pk
+
+    payload = {
+            user.USERNAME_FIELD: username,
+            'exp': datetime.utcnow() + timedelta(minutes=15),
+            'groups': list(groups)
+            }
+
+    return payload
+
+GRAPHQL_JWT = {
+        'JWT_VERIFY_EXPIRATION': True,
+        'JWT_EXPIRATION_DELTA': timedelta(minutes=15),
+        'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
+        'JWT_PAYLOAD_HANDLER': jwt_payload
+        }
+
 AUTHENTICATION_BACKENDS = [
     'graphql_jwt.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
@@ -217,3 +246,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+

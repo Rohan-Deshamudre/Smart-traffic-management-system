@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 
 
 import Button from "react-bootstrap/Button";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // @ts-ignore
 import sortAIcon from "./../../../assets/sortA.svg";
@@ -19,16 +19,16 @@ import sortNewAscIcon from "./../../../assets/sortNewAsc.svg"
 // @ts-ignore
 import geoFilterIcon from "./../../../assets/geoFilterIcon.svg"
 
-import asLeftPane, {InjectedPLeftPane} from "../../../components/LeftPane";
-import {default as Folder} from '../components/Folder';
+import asLeftPane, { InjectedPLeftPane } from "../../../components/LeftPane";
+import { default as Folder } from '../components/Folder';
 import AddFolder from '../components/AddFolder';
 import Search from "../../../components/other/Search";
 import AddScenario from "../components/AddScenario";
 import Item from "../components/Item";
 import ImportTree from "../components/ImportTree";
-import {Query} from 'react-apollo';
-import {READ_LABELS} from '../../../components/ReadOnlyLabels';
-import {mapHelper} from "../../../helper/map/mapHelper";
+import { Query } from 'react-apollo';
+import { READ_LABELS } from '../../../components/ReadOnlyLabels';
+import { mapHelper } from "../../../helper/map/mapHelper";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
@@ -82,11 +82,11 @@ class LeftPane extends React.Component<PLeftPane, State> {
 	}
 
 	handleList(list: List) {
-		this.setState({visibleFolders: list});
+		this.setState({ visibleFolders: list });
 	}
 
 	handleItems(list: any[]) {
-		this.setState({visibleScenario: list});
+		this.setState({ visibleScenario: list });
 	}
 
 	sort() {
@@ -163,7 +163,7 @@ class LeftPane extends React.Component<PLeftPane, State> {
 	render() {
 		const folders = this.state.visibleFolders.map((folder: any) =>
 			<Folder folder={folder} key={folder.id} folders={this.props.folders} boundingBox={this.props.boundingBox}
-					geoFilter={this.state.geoFilter}/>);
+				geoFilter={this.state.geoFilter} />);
 
 		const scenariosWithoutFolders = this.state.visibleScenario
 			.filter((scenario: any) => {
@@ -177,8 +177,8 @@ class LeftPane extends React.Component<PLeftPane, State> {
 			})
 			.map((scenario: any) => {
 				return <Item name={scenario.name} id={scenario.id} folderId={scenario.folderId} key={scenario.id}
-							 folders={this.props.folders} labels={scenario.labels} description={scenario.description}
-							 className="folder"/>
+					folders={this.props.folders} labels={scenario.labels} description={scenario.description}
+					className="folder" />
 
 			});
 
@@ -189,21 +189,21 @@ class LeftPane extends React.Component<PLeftPane, State> {
 					<div className="search-bar">
 						<div className="search-sort">
 							<Search list={this.props.folders} items={this.props.scenarios} handleList={this.handleList}
-									handleItems={this.handleItems}/>
+								handleItems={this.handleItems} />
 							<OverlayTrigger key='left' overlay={<Tooltip id='tooltip-top'>Sort by creation date</Tooltip>}>
 								<img src={this.state.newDesc ? sortNewIcon : sortNewAscIcon} onClick={() => this.sortNew()}
-									 alt="Sort new"
-									 className={this.state.onNew ? 'active' : ''}/>
+									alt="Sort new"
+									className={this.state.onNew ? 'active' : ''} />
 							</OverlayTrigger>
 							<OverlayTrigger key='middle' overlay={<Tooltip id='tooltip-top'>Sort alphabetically</Tooltip>}>
 								<img src={this.state.aDesc ? sortAIcon : sortAAscIcon} onClick={() => this.sort()}
-									 alt="Sort Icon"
-									 className={!this.state.onNew ? 'active' : ''}/>
+									alt="Sort Icon"
+									className={!this.state.onNew ? 'active' : ''} />
 							</OverlayTrigger>
 							<OverlayTrigger key='right' overlay={<Tooltip id='tooltip-top'>Geo-Filter</Tooltip>}>
-								<img src={geoFilterIcon} onClick={() => this.setState({geoFilter: !this.state.geoFilter})}
-									 alt="Geo Filter Icon"
-									 className={this.state.geoFilter ? 'active' : ''}/>
+								<img src={geoFilterIcon} onClick={() => this.setState({ geoFilter: !this.state.geoFilter })}
+									alt="Geo Filter Icon"
+									className={this.state.geoFilter ? 'active' : ''} />
 							</OverlayTrigger>
 						</div>
 					</div>
@@ -215,18 +215,20 @@ class LeftPane extends React.Component<PLeftPane, State> {
 				</div>
 
 				<Query query={READ_LABELS}>
-					{({loading, error, data, client}) => {
+					{({ loading, error, data, client }) => {
 						let labels = []
-						if (loading) return <div>Fetching</div>;
+						if (loading) return <div className="container-center"><div className="loader"></div></div>;
 						if (!error) {
 							labels = data.labels
+						} else {
+							console.log(error)
 						}
 						return (
 							<div className="d-flex justify-content-between pane-bottom-buttons">
 								<AddFolder
-									parentId={null}/>{/* TODO When folders-in-folders are implemented, change parentId */}
-								<AddScenario labels={labels}/>
-								<ImportTree client={client}/>
+									parentId={null} />{/* TODO When folders-in-folders are implemented, change parentId */}
+								<AddScenario labels={labels} />
+								<ImportTree client={client} />
 							</div>
 						);
 					}}
