@@ -56,7 +56,7 @@ def to_json_road_condition_action(road_condition_action: RoadConditionAction):
 
 def get_road_condition_constraint_input(
         constraint_object) -> RoadConstraintInputObject:
-    if constraint_object is not None and all((w in constraint_object for w in \
+    if constraint_object is not None and all((w in constraint_object for w in
                                               c_keys)):
         constraint_input = RoadConstraintInputObject()
         constraint_input.name = constraint_object[constraint_name_key]
@@ -71,7 +71,7 @@ def import_road_condition_action(json_object, road_condition_id):
         instrument_system_id = json_object[instrument_system_key]
         action_name = json_object[action_name_key]
         constraint = get_road_condition_constraint_input(json_object[
-                                                             constraint_key])
+            constraint_key])
         description = json_object[description_key]
         road_condition_action = \
             create_road_condition_action(road_condition_id,

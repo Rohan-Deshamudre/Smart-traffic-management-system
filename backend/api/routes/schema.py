@@ -2,6 +2,7 @@ import graphene
 from graphene_django import DjangoObjectType
 from .models import *
 
+from utils.auth import has_perms
 
 class RouteObjectType(DjangoObjectType):
     class Meta:
@@ -18,4 +19,5 @@ class RouteSegmentObjectType(DjangoObjectType):
 class Query(graphene.ObjectType):
 
     def resolve_routes(self, info, **kwargs):
+        has_perms(info, ['routes.view_route'])
         return Route.objects.all()

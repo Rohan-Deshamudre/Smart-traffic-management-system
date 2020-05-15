@@ -7,6 +7,7 @@ from api.exception.api_exception import ApiException
 from api.folders import methods
 from .models import *
 
+from utils.auth import has_perms
 
 class FolderObjectType(DjangoObjectType):
     class Meta:
@@ -33,6 +34,8 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) folders
         """
+        has_perms(info, ['folders.view_folder', 'folders.view_foldertype'])
+
         res = methods.get_all_folders()
         if folder_id:
             res = res.filter(Q(id__exact=folder_id))
@@ -58,6 +61,8 @@ class CreateFolder(graphene.Mutation):
 
     def mutate(self, info, folder_type_id, name, description="",
                parent_id=None):
+        has_perms(info, ['folders.add_folder', 'folders.add_foldertype'])
+
         try:
             folder = methods.create_folder(
                 name, folder_type_id, parent_id, description)
@@ -90,6 +95,8 @@ class UpdateFolder(graphene.Mutation):
         description = graphene.String()
 
     def mutate(self, info, id, name=None, parent_id=None, description=None):
+        has_perms(info, ['folders.change_folder', 'folders.change_foldertype'])
+
         try:
             folder = methods.update_folder(id, name, parent_id, description)
             return UpdateFolder(
@@ -117,6 +124,8 @@ class DeleteFolder(graphene.Mutation):
         :param kwargs:
         :return:
         """
+        has_perms(info, ['folders.delete_folder', 'folders.delete_foldertype'])
+
         try:
             methods.delete_folder(id)
         except ApiException as exc:

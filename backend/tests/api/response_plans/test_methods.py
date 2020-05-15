@@ -9,7 +9,7 @@ from api.response_plans.methods import has_response_plan_with_id, \
     get_response_plan_children, create_response_plan, \
     update_response_plan_road_segment, update_response_plan_road_condition, \
     update_response_plan_parent, update_response_plan, \
-    delete_response_plan
+    delete_response_plan, delete_response_plan_cascade
 from tests.api.response_plans.methods import create_response_plans
 from tests.api.folders.methods import create_folder_types, create_folders
 from tests.api.road_conditions.methods import create_road_condition_types, \
@@ -99,6 +99,7 @@ class ResponsePlanMethodTest(TestCase):
         with self.assertRaises(ResponsePlanIsSameAsParentException):
             update_response_plan_parent(self.response_plans[0],
                                         self.response_plans[0].id)
+
     def test_update_parent_with_child(self):
         with self.assertRaises(ResponsePlanChildrenAsParentException):
             update_response_plan_parent(self.response_plans[0],
@@ -107,17 +108,26 @@ class ResponsePlanMethodTest(TestCase):
     def test_update_response_plan(self):
         new_operator = "OR"
         updated = update_response_plan(self.response_plans[1].id,
-                             self.segments[2].id,
-                             new_operator,
-                             self.conditions[1].id,
-                             self.response_plans[2].id)
+                                       self.segments[2].id,
+                                       new_operator,
+                                       self.conditions[1].id,
+                                       self.response_plans[2].id)
 
         self.assertEqual(updated.operator, new_operator)
         self.assertEqual(updated.road_segment, self.segments[2])
         self.assertEqual(updated.road_condition, self.conditions[1])
         self.assertEqual(updated.parent, self.response_plans[2])
-            
+
     def test_delete(self):
+        create_response_plan(self.segments[0].id,
+                             'OR',
+                             self.conditions[1].id,
+                             self.response_plans[1].id)
         current_len = len(get_all_response_plans())
-        delete_response_plan(self.response_plans[0].id)
+        delete_response_plan(self.response_plans[1].id)
         self.assertEqual(len(get_all_response_plans()), current_len - 1)
+
+    def test_delete_cascade(self):
+        current_len = len(get_all_response_plans())
+        delete_response_plan_cascade(self.response_plans[0].id)
+        self.assertEqual(len(get_all_response_plans()), 0)

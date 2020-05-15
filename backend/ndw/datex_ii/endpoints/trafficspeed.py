@@ -18,9 +18,8 @@ def refresh():
 
 
 def store(road_store):
-    handle_measurement(
-        ET.parse(xml_zipper.getXML(meta.FILE_LOC, end_point)).getroot(),
-        road_store)
+    parsed = ET.parse(xml_zipper.getXML(meta.FILE_LOC, end_point))
+    handle_measurement(parsed.getroot(), road_store)
 
 
 def handle_measurement(root, status):
