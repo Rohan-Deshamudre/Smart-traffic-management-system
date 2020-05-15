@@ -15,6 +15,8 @@ from api.simulations.methods.update import update_simulation, \
 
 from .models import *
 
+from utils.auth import has_perms
+
 
 class SimulationTypeObject(DjangoObjectType):
     start_time = graphene.DateTime()
@@ -75,6 +77,7 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) simulations
         """
+        has_perms(info, ['simulations.view_simulation'])
         res = Simulation.objects.all()
         if scenario_id:
             rs = RoadSegment.objects.filter(
@@ -103,6 +106,7 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) simulation_scenes
         """
+        has_perms(info, ['simulations.view_simulationscene'])
         res = SimulationScene.objects.all()
         if scene_id:
             res = res.filter(Q(id__exact=scene_id))
@@ -122,6 +126,7 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) simulation_scene_events
         """
+        has_perms(info, ['simulations.view_simulationsceneevent'])
         res = SimulationSceneEvent.objects.all()
         if event_id:
             res = res.filter(Q(id__exact=event_id))
@@ -150,6 +155,7 @@ class CreateSimulation(graphene.Mutation):
                                           required=True)
 
     def mutate(self, info, name, simulation_scenes, description=""):
+        has_perms(info, ['simulations.add_simulation'])
         try:
             simulation = create_simulation(name, description,
                                            simulation_scenes)
@@ -176,6 +182,7 @@ class CreateSimulationScene(graphene.Mutation):
         scene_events = graphene.List(SimulationSceneEventInputObject)
 
     def mutate(self, info, simulation_id, time, scene_events=None):
+        has_perms(info, ['simulations.add_simulationscene'])
         try:
             simulation_scene = create_simulation_scene(simulation_id, time,
                                                        scene_events)
@@ -207,6 +214,7 @@ class CreateSimulationSceneEvent(graphene.Mutation):
 
     def mutate(self, info, simulation_scene_id, road_segment_id,
                road_condition_type_id, value):
+        has_perms(info, ['simulations.add_simulationsceneevent'])
         try:
             simulation_scene_event = create_simulation_scene_event(
                 simulation_scene_id, road_segment_id,
@@ -238,6 +246,7 @@ class UpdateSimulation(graphene.Mutation):
         description = graphene.String()
 
     def mutate(self, info, id, name=None, description=None):
+        has_perms(info, ['simulations.change_simulation'])
         try:
             simulation = update_simulation(id, name, description)
 
@@ -263,6 +272,7 @@ class UpdateSimulationScene(graphene.Mutation):
         time = graphene.DateTime()
 
     def mutate(self, info, id, time=None):
+        has_perms(info, ['simulations.change_simulationscene'])
         try:
             simulation_scene = update_simulation_scene(id, time)
 
@@ -293,6 +303,7 @@ class UpdateSimulationSceneEvent(graphene.Mutation):
 
     def mutate(self, info, id, road_segment_id=None,
                road_condition_type_id=None, value=None):
+        has_perms(info, ['simulations.change_simulationsceneevent'])
         try:
             event = \
                 update_simulation_scene_event(id,
@@ -323,6 +334,7 @@ class DeleteSimulation(graphene.Mutation):
         :param kwargs:
         :return:
         """
+        has_perms(info, ['simulations.delete_simulation'])
         try:
             delete_simulation(id)
         except ApiException as exc:
@@ -343,6 +355,7 @@ class DeleteSimulationScene(graphene.Mutation):
         :param kwargs:
         :return:
         """
+        has_perms(info, ['simulations.delete_simulationscene'])
         try:
             delete_simulation_scene(id)
         except ApiException as exc:
@@ -363,6 +376,7 @@ class DeleteSimulationSceneEvent(graphene.Mutation):
         :param kwargs:
         :return:
         """
+        has_perms(info, ['simulations.delete_simulationsceneevent'])
         try:
             delete_simulation_scene_event(id)
         except ApiException as exc:

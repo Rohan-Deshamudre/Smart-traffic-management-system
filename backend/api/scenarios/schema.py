@@ -10,6 +10,7 @@ from api.scenarios.methods.delete import delete_scenario
 from api.scenarios.methods.update import update_scenario
 from .models import *
 
+from utils.auth import has_perms
 
 class ScenarioObjectType(DjangoObjectType):
     class Meta:
@@ -39,6 +40,7 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) scenarios
         """
+        has_perms(info, ['scenarios.view_scenario'])
         res = Scenario.objects.all()
         if scenario_id:
             res = res.filter(Q(id__exact=scenario_id))
@@ -70,6 +72,7 @@ class CreateScenario(graphene.Mutation):
         labels = LabelArrayInputObject
 
     def mutate(self, info, name, description="", folder_id=None, labels=None):
+        has_perms(info, ['scenarios.add_scenario'])
         try:
             scenario = create_scenario(name, folder_id, description, False,
                                        labels)
@@ -99,6 +102,7 @@ class UpdateScenario(graphene.Mutation):
 
     def mutate(self, info, id, name=None, description=None, folder_id=None,
                labels=None):
+        has_perms(info, ['scenarios.change_scenario'])
         try:
             scenario = update_scenario(id, name, folder_id, description,
                                        labels)
@@ -125,6 +129,7 @@ class DeleteScenario(graphene.Mutation):
         :param id: The ID of the scenario
         :return:
         """
+        has_perms(info, ['scenarios.delete_scenario'])
         try:
             delete_scenario(id)
         except ApiException as exc:
