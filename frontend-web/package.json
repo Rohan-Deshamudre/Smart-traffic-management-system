@@ -4,7 +4,8 @@
   "description": "A scenwise project for managing and creating traffic scenarios on the dutch roads",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --env.ENVIRONMENT=development --mode development --open --content-base src --hot --inline",
+    "start": "webpack-dev-server --env.ENVIRONMENT=production --mode development --open --content-base src --hot --inline",
+    "start-dev": "webpack-dev-server --env.ENVIRONMENT=development --mode development --open --content-base src --hot --inline",
     "build": "webpack --env.ENVIRONMENT=production --mode production"
   },
   "repository": {
@@ -20,6 +21,8 @@
   "keywords": [],
   "dependencies": {
     "@mapbox/mapbox-gl-directions": "^4.0.2",
+    "@material-ui/core": "^4.9.13",
+    "@material-ui/icons": "^4.5.1",
     "@types/d3": "^5.7.2",
     "@types/mapbox-gl": "^1.5.2",
     "@types/react-map-gl": "^5.0.3",
@@ -43,7 +46,9 @@
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
     "history": "^4.10.1",
+    "jwt-decode": "^2.2.0",
     "lodash": "^4.17.15",
+    "material-ui": "^0.20.2",
     "moment": "^2.24.0",
     "postcss-loader": "^3.0.0",
     "precss": "^4.0.0",

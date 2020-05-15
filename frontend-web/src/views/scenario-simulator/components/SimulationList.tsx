@@ -1,10 +1,10 @@
 import * as React from 'react';
 import "../styles/simulationItem.scss"
 
-import {Query} from "react-apollo";
-import {GET_SIMULATION_FROM_SCENARIO} from "../SimulationQueries";
-import {GET_TREE} from "../../../components/workspaceData";
-import {treeUtils} from "../../../components/tree/treeUtils";
+import { Query } from "react-apollo";
+import { GET_SIMULATION_FROM_SCENARIO } from "../SimulationQueries";
+import { GET_TREE } from "../../../components/workspaceData";
+import { treeUtils } from "../../../components/tree/treeUtils";
 import SimulationItem from "./SimulationItem";
 
 type State = {
@@ -47,10 +47,13 @@ class SimulationList extends React.Component<Props, State> {
 	render() {
 		let id = this.props.scenarioId;
 		const liveSimulation = (
-			<Query query={GET_TREE} variables={{id}} skip={!id}>
-				{({loading, error, data, client}) => {
-					if (loading) return <div>Fetching</div>;
-					if (error) return <div>Error</div>;
+			<Query query={GET_TREE} variables={{ id }} skip={!id}>
+				{({ loading, error, data, client }) => {
+					if (loading) return <div className="container-center"><div className="loader"></div></div>;
+					if (error) {
+						console.log(error)
+						return <div>Error</div>;
+					}
 
 					let liveSimulation = <div>Kan Scenario(id:{id ? id : 'null'}) niet live simuleren</div>;
 					let roadSegments = [];
@@ -59,9 +62,9 @@ class SimulationList extends React.Component<Props, State> {
 						if ('children' in scenario) {
 							roadSegments = data.scenarios[0].children.map(x => x.id);
 							liveSimulation = <SimulationItem scenarioId={id} id={-1} live={true} key={0} title={"Live"}
-															 onStart={() => this.playSimulation(client, -1, roadSegments)}
-															 onStop={() => this.stopSimulation(client, -1)}
-															 active={-1 === this.state.currentlyPlaying}/>
+								onStart={() => this.playSimulation(client, -1, roadSegments)}
+								onStop={() => this.stopSimulation(client, -1)}
+								active={-1 === this.state.currentlyPlaying} />
 						}
 					}
 					return (
@@ -74,21 +77,24 @@ class SimulationList extends React.Component<Props, State> {
 		);
 
 		const savedSimulations = (
-			<Query query={GET_SIMULATION_FROM_SCENARIO} variables={{id}} skip={!id}>
-				{({loading, error, data, client}) => {
-					if (loading) return <div>Fetching</div>;
-					if (error) return <div>Error</div>;
+			<Query query={GET_SIMULATION_FROM_SCENARIO} variables={{ id }} skip={!id}>
+				{({ loading, error, data, client }) => {
+					if (loading) return <div className="container-center"><div className="loader"></div></div>;
+					if (error) {
+						console.log(error)
+						return <div>Error</div>;
+					}
 
 					let specificCongetion = <div className="nothing-found-message">Geen opgeslagen simulaties
 						gevonden</div>;
 					if (data !== undefined && data.simulations.length > 0) {
 						specificCongetion = data.simulations.map((x) =>
 							<SimulationItem scenarioId={id} live={false} key={x.id} id={x.id} title={'Simulatie ' + x.id}
-											startTime={x.startTime}
-											endTime={x.endTime}
-											onStart={() => this.playSimulation(client, x.id)}
-											onStop={() => this.stopSimulation(client, x.id)}
-											active={x.id === this.state.currentlyPlaying} />);
+								startTime={x.startTime}
+								endTime={x.endTime}
+								onStart={() => this.playSimulation(client, x.id)}
+								onStop={() => this.stopSimulation(client, x.id)}
+								active={x.id === this.state.currentlyPlaying} />);
 					}
 					return (
 						<div>

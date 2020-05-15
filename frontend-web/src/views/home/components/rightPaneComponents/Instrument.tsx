@@ -26,7 +26,7 @@ import {
 	READ_FOLDERS, DELETE_INSTRUMENT,
 	UPDATE_INSTRUMENT
 } from "../../../../components/CRUDFolders";
-import {Mutation, Query, ApolloConsumer} from 'react-apollo';
+import { Mutation, Query, ApolloConsumer } from 'react-apollo';
 import Button from "react-bootstrap/Button";
 import InstrumentAction from "./InstrumentAction";
 import MutateInstrumentAction from "./MutateInstrumentAction";
@@ -109,45 +109,48 @@ class Instrument extends React.Component<Props, State> {
 	render() {
 
 		const list = this.props.instrument.instrumentActions.map((item) => {
-				return (<div className="d-flex justify-content-end" key={item.id}>
-					{item.id === this.state.editInstrumentAction ?
-						<MutateInstrumentAction
-							handleInstrumentAction={() => this.setState({editInstrumentAction: undefined})}
-							instrumentId={this.props.instrument.id}
-							description={item.description}
-							text={item.text}
-							routes={item.routes.map(route => route.routePoints.map(routePoint => ({
-								lng: routePoint.lng,
-								lat: routePoint.lat
-							})))}
-							id={item.id}
-							type={this.props.instrument.type}
-						/>
-						:
-						<Query query={GET_INSTRUMENT_ACTION_ROUTES_LOCAL}>
-							{({loading, error, data, client}) => {
-								if (loading) return <div>Fetching</div>;
-								if (error) return <div>Error</div>;
+			return (<div className="d-flex justify-content-end" key={item.id}>
+				{item.id === this.state.editInstrumentAction ?
+					<MutateInstrumentAction
+						handleInstrumentAction={() => this.setState({ editInstrumentAction: undefined })}
+						instrumentId={this.props.instrument.id}
+						description={item.description}
+						text={item.text}
+						routes={item.routes.map(route => route.routePoints.map(routePoint => ({
+							lng: routePoint.lng,
+							lat: routePoint.lat
+						})))}
+						id={item.id}
+						type={this.props.instrument.type}
+					/>
+					:
+					<Query query={GET_INSTRUMENT_ACTION_ROUTES_LOCAL}>
+						{({ loading, error, data, client }) => {
+							if (loading) return <div className="container-center"><div className="loader"></div></div>;
+							if (error) {
+								console.log(error)
+								return <div>Error</div>;
+							}
 
-								const routes = item.routes.map(route => route.routePoints.map(routePoint => [routePoint.lng, routePoint.lat]));
-								const routesEqualToStore = _.isEqual(routes, data.instrumentActionRoutes) && routes.length > 0;
+							const routes = item.routes.map(route => route.routePoints.map(routePoint => [routePoint.lng, routePoint.lat]));
+							const routesEqualToStore = _.isEqual(routes, data.instrumentActionRoutes) && routes.length > 0;
 
-								return (
-									<InstrumentAction client={client}
-													  editInstrumentAction={this.handleEditAction}
-													  name={item.text}
-													  id={item.id}
-													  instrumentLocation={[this.props.instrument.lng, this.props.instrument.lat]}
-													  routes={routes}
-													  routesEqualToStore={routesEqualToStore}
-													  selectedRouteInStore={data.selectedRoute}
-									/>
-								)
-							}}
-						</Query>
-					}
-				</div>)
-			}
+							return (
+								<InstrumentAction client={client}
+									editInstrumentAction={this.handleEditAction}
+									name={item.text}
+									id={item.id}
+									instrumentLocation={[this.props.instrument.lng, this.props.instrument.lat]}
+									routes={routes}
+									routesEqualToStore={routesEqualToStore}
+									selectedRouteInStore={data.selectedRoute}
+								/>
+							)
+						}}
+					</Query>
+				}
+			</div>)
+		}
 		);
 
 		const item = <div className="instrument">
@@ -155,10 +158,10 @@ class Instrument extends React.Component<Props, State> {
 			<div className="d-flex pt-1 pb-1 instrument-title">
 
 				<div className="pl-3 pr-3 w-25 d-flex justify-content-between align-items-center"
-					 onClick={this.toggleInstrument}>
+					onClick={this.toggleInstrument}>
 					<img src={rightArrowIcon} alt="Right Arrow Icon"
-						 className={'mr-2 ' + (this.props.instrument.instrumentActions.length > 0 ? '' : 'hidden ') + (this.state.showItems ? 'open ' : '')}/>
-					<img src={this.getIcon()} alt="Folder Icon"/>
+						className={'mr-2 ' + (this.props.instrument.instrumentActions.length > 0 ? '' : 'hidden ') + (this.state.showItems ? 'open ' : '')} />
+					<img src={this.getIcon()} alt="Folder Icon" />
 				</div>
 
 				{this.state.editMode ?
@@ -167,7 +170,7 @@ class Instrument extends React.Component<Props, State> {
 						{(updateInstrument) => (
 							<input
 								value={this.state.text}
-								onChange={(e) => this.setState({text: e.target.value})}
+								onChange={(e) => this.setState({ text: e.target.value })}
 								onKeyDown={(e) => {
 									if (e.key === 'Enter') {
 										updateInstrument({
@@ -175,9 +178,9 @@ class Instrument extends React.Component<Props, State> {
 												newID: parseInt(this.props.instrument.id),
 												newName: this.state.text
 											},
-											refetchQueries: [{query: READ_FOLDERS}]
+											refetchQueries: [{ query: READ_FOLDERS }]
 										});
-										this.setState({editMode: false})
+										this.setState({ editMode: false })
 									}
 								}}
 							/>
@@ -203,29 +206,29 @@ class Instrument extends React.Component<Props, State> {
 
 				<div className="w-25 d-flex justify-content-end align-items-center pr-3 icons">
 
-							<span className="folder-edit-icon" onClick={() => this.setState({
-								creatingInstrumentAction: !this.state.creatingInstrumentAction,
-								showItems: false,
-								editInstrumentAction: undefined
-							})}>{this.state.creatingInstrumentAction ? 'x' : '+'}</span>
+					<span className="folder-edit-icon" onClick={() => this.setState({
+						creatingInstrumentAction: !this.state.creatingInstrumentAction,
+						showItems: false,
+						editInstrumentAction: undefined
+					})}>{this.state.creatingInstrumentAction ? 'x' : '+'}</span>
 
 					<img src={editIcon} alt="Edit Icon" className="ml-2 folder-edit-icon"
-						 onClick={() => this.setState({editMode: !this.state.editMode})}/>
+						onClick={() => this.setState({ editMode: !this.state.editMode })} />
 
 					<img src={deleteIcon} alt="Delete Icon" className="ml-2 folder-edit-icon"
-						 onClick={() => this.setState({openModal: true})}/>
+						onClick={() => this.setState({ openModal: true })} />
 					<Mutation mutation={DELETE_INSTRUMENT}>
 						{(deleteInstrument) => (
 							<DeleteModal show={this.state.openModal}
-										 onHide={() => this.setState({openModal: false})}
-										 name={this.state.text}
-										 canBeDeleted={this.props.instrument.instrumentActions.length === 0}
-										 deleteItem={() => {
-											 deleteInstrument({
-												 variables: {id: parseInt(this.props.instrument.id)},
-												 refetchQueries: [{query: READ_FOLDERS}]
-											 });
-										 }}/>
+								onHide={() => this.setState({ openModal: false })}
+								name={this.state.text}
+								canBeDeleted={this.props.instrument.instrumentActions.length === 0}
+								deleteItem={() => {
+									deleteInstrument({
+										variables: { id: parseInt(this.props.instrument.id) },
+										refetchQueries: [{ query: READ_FOLDERS }]
+									});
+								}} />
 						)}
 					</Mutation>
 
@@ -239,9 +242,9 @@ class Instrument extends React.Component<Props, State> {
 			{/* Showing the Create Instrument Action Form */}
 			{
 				this.state.creatingInstrumentAction ? <MutateInstrumentAction
-					handleInstrumentAction={() => this.setState({creatingInstrumentAction: false})}
+					handleInstrumentAction={() => this.setState({ creatingInstrumentAction: false })}
 					instrumentId={this.props.instrument.id}
-					type={this.props.instrument.type}/> : null
+					type={this.props.instrument.type} /> : null
 			}
 		</div>
 
@@ -249,11 +252,11 @@ class Instrument extends React.Component<Props, State> {
 
 		return (
 			(description !== null && description !== undefined && description.length > 0 ?
-					<OverlayTrigger placement='auto' delay={{show: 1000, hide: 0}}
-									overlay={<Tooltip id='tooltip'>{description}</Tooltip>}>
-						{item}
-					</OverlayTrigger> :
-					item
+				<OverlayTrigger placement='auto' delay={{ show: 1000, hide: 0 }}
+					overlay={<Tooltip id='tooltip'>{description}</Tooltip>}>
+					{item}
+				</OverlayTrigger> :
+				item
 			)
 		);
 	}

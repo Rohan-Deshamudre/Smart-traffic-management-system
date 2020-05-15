@@ -11,13 +11,69 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { resolvers } from './local_store/resolvers';
 import { schema } from './local_store/schema';
 import { defaultStore } from "./local_store/default";
-import {Cache} from "apollo-cache/lib/types";
+import { ApolloLink } from 'apollo-link';
 
+import { Auth } from './helper/auth';
+import gql from "graphql-tag";
 
+const REFRESH = gql`
+    mutation RefreshToken($token: String!) {
+        refreshToken(token: $token) {
+            token
+        }
+    }
+`;
+
+// https://hasura.io/blog/best-practices-of-using-jwt-with-graphql/
 // Add the correct link
 const httpLink = createHttpLink({
-    uri: process.env.API_URL
+    uri: process.env.API_URL,
 });
+
+let isRefreshing = false;
+
+const authMiddleware = new ApolloLink((operation, forward) => {
+
+    if (Auth.getToken() && !Auth.hasValidToken() && !isRefreshing) {
+
+        isRefreshing = true;
+
+        client.mutate({
+            mutation: REFRESH,
+            variables: {
+                token: Auth.getToken()
+            }
+        }).then(
+            (response) => {
+                Auth.saveToken(response.data.refreshToken.token);
+                isRefreshing = false;
+            },
+            () => {
+                // TODO say session expired navigate back to login.
+                Auth.eraseToken();
+                isRefreshing = false;
+            }
+        );
+    }
+
+    if (Auth.getToken()) {
+
+        operation.setContext({
+            headers: {
+                Authorization: `JWT ${Auth.getToken()}`
+            }
+        });
+
+        return forward(operation)
+    } else {
+        return forward(operation)
+    }
+});
+
+const link = ApolloLink.from([
+    authMiddleware,
+    httpLink
+]);
 
 const cache = new InMemoryCache();
 
@@ -25,12 +81,13 @@ const cache = new InMemoryCache();
 const client = new ApolloClient({
     resolvers: resolvers,
     typeDefs: schema,
-    link: httpLink,
-    cache: cache,
+    //TODO: add logout call on token expiration
+    link,
+    cache
 });
 
 // Set default local state
-cache.writeData({data: defaultStore});
+cache.writeData({ data: defaultStore });
 client.onResetStore(() => cache.writeData({ data })); // If client.resetStore is called
 
 // Render the app
