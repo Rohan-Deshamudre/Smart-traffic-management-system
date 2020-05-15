@@ -20,10 +20,10 @@ class SimulationSchemaTest(TestCase):
             'Test-Type-1', 'Test-Type-2', 'Test-Type-3'])
         self.scenarios = create_scenarios([
             'Test-Scenario-1', 'Test-Scenario-2', 'Test-Scenario-3'],
-            [None, None, None])
+                                          [None, None, None])
         self.segments = create_road_segments([
             'Test-Name-1', 'Test-Name-2', 'Test-Name-3'], self.scenarios,
-            self.segment_types)
+                                             self.segment_types)
         self.simulations = create_simulations([
             'Test-Simulation-1', 'Test-Simulation-2', 'Test-Simulation-3'])
         self.scenes = create_simulation_scenes(self.simulations)
@@ -45,13 +45,8 @@ class SimulationSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % simulation.id)
-        """
-        TODO: Get the Objects instead of a string
-        """
-        self.assertEquals(
-            str(executed),
-            "{'data': OrderedDict([('simulations', "
-            "[OrderedDict([('name', '%s')])])])}" % simulation.name)
+        self.assertEquals(executed['data']['simulations'][0]['name'],
+                          simulation.name)
 
     def test_query_simulation(self):
         client = Client(schema)
@@ -73,13 +68,8 @@ class SimulationSchemaTest(TestCase):
                                     }
                                     ''' % (scenario.id, simulation.name,
                                            simulation.description, scene.id))
-        """
-        TODO: Get the Objects instead of a string
-        """
-        self.assertEquals(
-            str(executed),
-            "{'data': OrderedDict([('simulations', "
-            "[OrderedDict([('name', '%s')])])])}" % simulation.name)
+        self.assertEquals(executed['data']['simulations'][0]['name'],
+                          simulation.name)
 
     def test_query_simulation_scenes_id(self):
         client = Client(schema)
@@ -95,12 +85,8 @@ class SimulationSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % scene.id)
-        """
-        TODO: Get the Objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('simulationScenes', "
-                          "[OrderedDict([('id', '%s')])])])}" % scene.id)
+        self.assertEquals(executed['data']['simulationScenes'][0]['id'],
+                          str(scene.id))
 
     def test_query_simulation_scenes_time(self):
         client = Client(schema)
@@ -116,12 +102,8 @@ class SimulationSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % scene.time)
-        """
-        TODO: Get the Objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('simulationScenes', "
-                          "[OrderedDict([('id', '%s')])])])}" % scene.id)
+        self.assertEquals(executed['data']['simulationScenes'][0]['id'],
+                          str(scene.id))
 
     def test_query_simulation_scenes_events_id(self):
         client = Client(schema)
@@ -137,12 +119,8 @@ class SimulationSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % event.id)
-        """
-        TODO: Get the Objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('simulationSceneEvents', "
-                          "[OrderedDict([('id', '%s')])])])}" % event.id)
+        self.assertEquals(executed['data']['simulationSceneEvents'][0]['id'],
+                          str(event.id))
 
     def test_query_simulation_scenes_events(self):
         client = Client(schema)
@@ -161,12 +139,8 @@ class SimulationSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % (segment.id, condition_type.id))
-        """
-        TODO: Get the Objects instead of a string
-        """
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('simulationSceneEvents', "
-                          "[OrderedDict([('id', '%s')])])])}" % event.id)
+        self.assertEquals(executed['data']['simulationSceneEvents'][0]['id'],
+                          str(event.id))
 
     def test_create_simulation(self):
         client = Client(schema)
@@ -197,9 +171,8 @@ class SimulationSchemaTest(TestCase):
                                     ''' % (name, description, time,
                                            segment.id, condition_type.id,
                                            value))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('createSimulation', "
-                          "OrderedDict([('name', '%s')]))])}" % name)
+        self.assertEquals(executed['data']['createSimulation']['name'],
+                          name)
 
     def test_create_simulation_scene(self):
         client = Client(schema)
@@ -225,10 +198,8 @@ class SimulationSchemaTest(TestCase):
                                     }
                                     ''' % (simulation.id, time, segment.id,
                                            condition_type.id, value))
-        self.assertEquals(
-            str(executed),
-            "{'data': OrderedDict([('createSimulationScene', "
-            "OrderedDict([('simulationId', %s)]))])}" % simulation.id)
+        self.assertEquals(executed['data']['createSimulationScene']['simulationId'],
+                          simulation.id)
 
     def test_create_simulation_scene_event(self):
         client = Client(schema)
@@ -250,10 +221,8 @@ class SimulationSchemaTest(TestCase):
                                     }
                                     ''' % (scene.id, segment.id,
                                            condition_type.id, value))
-        self.assertEquals(
-            str(executed),
-            "{'data': OrderedDict([('createSimulationEvent', "
-            "OrderedDict([('simulationSceneId', %s)]))])}" % scene.id)
+        self.assertEquals(executed['data']['createSimulationEvent']['simulationSceneId'],
+                          scene.id)
 
     def test_update_simulation(self):
         client = Client(schema)
@@ -273,11 +242,10 @@ class SimulationSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % (simulation.id, name, description))
-        self.assertEquals(
-            str(executed),
-            "{'data': OrderedDict([('updateSimulation', "
-            "OrderedDict([('name', '%s'), ('description', '%s')]))])}" %
-            (name, description))
+        self.assertEquals(executed['data']['updateSimulation']['name'],
+                          name)
+        self.assertEquals(executed['data']['updateSimulation']['description'],
+                          description)
 
     def test_update_simulation_exception(self):
         client = Client(schema)
@@ -298,7 +266,7 @@ class SimulationSchemaTest(TestCase):
     def test_update_simulation_scene(self):
         client = Client(schema)
         scene = self.scenes[0]
-        time = "2020-10-10T20:20:20Z"
+        time = "2020-10-10T20:20:20"
         executed = client.execute('''
                                     mutation {
                                         updateSimulationScene (
@@ -310,10 +278,8 @@ class SimulationSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % (scene.id, time))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('updateSimulationScene', "
-                          "OrderedDict([('time', '%s+00:00')]))])}" % time[
-                                                                      :-1])
+        self.assertEquals(executed['data']['updateSimulationScene']['time'],
+                          time)
 
     def test_update_simulation_scene_exception(self):
         client = Client(schema)
@@ -352,17 +318,17 @@ class SimulationSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % (
-            event.id, segment.id, condition_type.id, value))
-        self.assertEquals(str(executed),
-                          "{'data': OrderedDict([('updateSimulationEvent', "
-                          "OrderedDict([('roadSegmentId', %s), "
-                          "('roadConditionTypeId', %s), "
-                          "('value', %s)]))])}" %
-                          (segment.id, condition_type.id, value))
+                                        event.id, segment.id, condition_type.id, value))
+        self.assertEquals(executed['data']['updateSimulationEvent']['roadSegmentId'],
+                          segment.id)
+        self.assertEquals(executed['data']['updateSimulationEvent']['value'],
+                          value)
+        self.assertEquals(executed['data']['updateSimulationEvent']['roadConditionTypeId'],
+                          condition_type.id)
 
-    def test_update_simulation_scene_event_exception(self):
-        client = Client(schema)
-        executed = client.execute('''
+        def test_update_simulation_scene_event_exception(self):
+            client = Client(schema)
+            executed = client.execute('''
                                     mutation {
                                         updateSimulationEvent
                                         (
@@ -373,8 +339,8 @@ class SimulationSchemaTest(TestCase):
                                         }
                                     }
                                     ''')
-        self.assertEqual(executed['errors'][0]['message'],
-                         "Simulationsceneevent with id = -99 does not exist!")
+            self.assertEqual(executed['errors'][0]['message'],
+                             "Simulationsceneevent with id = -99 does not exist!")
 
     def test_delete_simulation(self):
         client = Client(schema)
@@ -390,9 +356,7 @@ class SimulationSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % simulation.id)
-        self.assertEquals(
-            str(executed),
-            "{'data': OrderedDict([('deleteSimulation', None)])}")
+        self.assertEquals(executed['data']['deleteSimulation'], None)
 
     def test_delete_simulation_exception(self):
         client = Client(schema)
@@ -424,9 +388,7 @@ class SimulationSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % scene.id)
-        self.assertEquals(
-            str(executed),
-            "{'data': OrderedDict([('deleteSimulationScene', None)])}")
+        self.assertEquals(executed['data']['deleteSimulationScene'], None)
 
     def test_delete_scene_exception(self):
         client = Client(schema)
@@ -458,9 +420,7 @@ class SimulationSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % event.id)
-        self.assertEquals(
-            str(executed),
-            "{'data': OrderedDict([('deleteSimulationEvent', None)])}")
+        self.assertEquals(executed['data']['deleteSimulationEvent'], None)
 
     def test_delete_event_exception(self):
         client = Client(schema)

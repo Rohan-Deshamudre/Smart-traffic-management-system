@@ -16,6 +16,93 @@ $open-button-width: 200px;
   border-right: 1px solid black;
 }
 
+.insightspane-container {
+  height: 100%;
+  width: $insightspane-width;
+  display: inline;
+  position: absolute;
+  background-color: white;
+  z-index: 10;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+  overflow-y: scroll;
+
+  a {
+    text-decoration: underline;
+    color: orange;
+
+    h3 {
+      height: 35px;
+      width: 35px;
+    }
+  }
+
+  .stats {
+    margin-top: 25px;
+    color: #CCC;
+  }
+
+  .stats .box {
+    background-color: #313348;
+    padding: 15px;
+    overflow: hidden;
+  }
+
+  .statistics .box > i {
+    float: left;
+    color: #FFF;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 22px;
+  }
+
+  .stats .box .log-info-message {
+    float: left;
+    width: auto;
+    margin-left: 10px;
+  }
+
+  .button {
+    border: 0 none;
+    border-radius: 2px 2px 2px 2px;
+    background: #c0392b;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Arial,sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 20px;
+    margin-left: 10px;
+    margin-top: 3px;
+    padding: 7px 10px;
+    text-transform: none;
+    transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
+    width: 150px;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+  }
+
+  .button:hover {
+    background: #e74c3c;
+  }
+
+  .button:active {
+    --webkit-box-shadow: 0px 0px 53px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 53px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 53px 0px rgba(0,0,0,0.75);
+  }
+
+  i {
+    margin-right: 10px;
+  }
+}
+
 .pane {
   display: flex;
   flex-direction: column;
@@ -26,7 +113,17 @@ $open-button-width: 200px;
   transition: 700ms;
 }
 
+.inactive-insights-pane {
+  left: -$insightspane-width;
+  transition: 700ms;
+}
+
 .active-left-pane {
+  left: 0;
+  transition: 700ms;
+}
+
+.active-insights-pane {
   left: 0;
   transition: 700ms;
 }
@@ -99,6 +196,23 @@ $open-button-width: 200px;
     text-decoration: underline;
     right: -140px;
   }
+
+  &.insights {
+    justify-content: flex-end;
+    left: -140px;
+    z-index: 5;
+    border-radius: 0px 10px 10px 0px;
+    top: 100px;
+  }
+
+  &.insights:hover {
+    left: 0;
+  }
+
+  &.insights:active {
+    text-decoration: underline;
+    right: -140px;
+  }
 }
 
 .close-pane-button {
@@ -127,6 +241,11 @@ $open-button-width: 200px;
     img {
       transform: rotate(180deg);
     }
+  }
+
+  &.insights {
+    margin: 10px 0 0 0;
+    left: $insightspane-width - $close-button-width - 20px;
   }
 }
 

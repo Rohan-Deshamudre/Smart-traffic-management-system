@@ -9,6 +9,7 @@ from .simulations import schema as simulation_schema
 from .routes import schema as routes_schema
 from .labels import schema as labels_schema
 from .folders import schema as folders_schema
+from .response_plans import schema as response_plan_schema
 
 
 class Query(
@@ -20,6 +21,7 @@ class Query(
         simulation_schema.Query,
         folders_schema.Query,
         labels_schema.Query,
+        response_plan_schema.Query,
         graphene.ObjectType):
     pass
 
@@ -31,6 +33,7 @@ class Mutation(instrument_schema.Mutation,
                simulation_schema.Mutation,
                folders_schema.Mutation,
                labels_schema.Mutation,
+               response_plan_schema.Mutation,
                graphene.ObjectType):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()

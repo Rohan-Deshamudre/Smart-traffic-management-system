@@ -11,6 +11,7 @@ from api.road_conditions.methods.update import update_road_condition
 from .models import *
 from .road_condition_actions import schema as actions_schema
 
+from utils.auth import has_perms
 
 class RoadConditionObjectType(DjangoObjectType):
     class Meta:
@@ -49,6 +50,7 @@ class Query(actions_schema.Query, graphene.ObjectType):
         :param condition_id: The condition ID to filter on
         :return: All (filtered) road_conditions
         """
+        has_perms(info, ['road_conditions.view_roadcondition'])
         res = RoadCondition.objects.all()
         if condition_id:
             res = res.filter(Q(id__exact=condition_id))
@@ -66,6 +68,7 @@ class Query(actions_schema.Query, graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) road_condition_types
         """
+        has_perms(info, ['road_conditions.view_roadconditiontypes'])
         res = RoadConditionType.objects.all()
         if type_id:
             res = res.filter(Q(id__exact=type_id))
@@ -94,6 +97,7 @@ class CreateRoadCondition(graphene.Mutation):
 
     def mutate(self, info, name, value, road_condition_type_id, date=None,
                road_condition_actions=[], parent_rc=None, parent_rs=None):
+        has_perms(info, ['road_conditions.add_roadcondition'])
         try:
             road_condition = create_road_condition(name, date, value,
                                                    road_condition_type_id,
@@ -129,6 +133,7 @@ class UpdateRoadCondition(graphene.Mutation):
     def mutate(self, info, id, name=None, date=None, value=None,
                road_condition_type_id=None, road_condition_actions=None,
                parent_rc=None, parent_rs=None):
+        has_perms(info, ['road_conditions.change_roadcondition']);
         try:
             road_condition = update_road_condition(id, name, date, value,
                                                    road_condition_type_id,
@@ -158,6 +163,7 @@ class DeleteRoadCondition(graphene.Mutation):
         :param id: The ID of the road_condition
         :return:
         """
+        has_perms(info, ['road_conditions.delete_roadcondition']);
         try:
             delete_road_condition(id)
         except ApiException as exc:
