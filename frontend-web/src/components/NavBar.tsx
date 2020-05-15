@@ -114,7 +114,6 @@ const asNavBar = <P extends InjectedPNavBar>(WrappedComponent: React.ComponentTy
 
 								<div className="username-wrap username">{Auth.getName()}</div>
 
-								{optionalButton}
 								<div className="nav-button">
 									<Link to="/login" onClick={() => this.signOut()}>
 										<img src={logout} alt="Sign Out" />
@@ -146,6 +145,9 @@ const asNavBar = <P extends InjectedPNavBar>(WrappedComponent: React.ComponentTy
 												level={data.treeLevel} />
 										)
 								}
+
+								{optionalButton}
+								
 							</div>
 						)
 						}
