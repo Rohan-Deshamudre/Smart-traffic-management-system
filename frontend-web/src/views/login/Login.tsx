@@ -15,9 +15,7 @@ const LOGIN = gql`
     mutation PostMutation($username: String!, $password: String!) {
         tokenAuth(username: $username, password: $password) {
             token
-            group {
-                id
-            }
+            payload
         }
     }
 `;

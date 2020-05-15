@@ -19,6 +19,7 @@ export module Auth {
     export function isEngineer(): boolean {
         if (getToken() && getToken().length > 0) {
             const decoded = jwt(getToken());
+            console.log(decoded)
             return decoded.groups.includes(1);
         } else {
             return false;
