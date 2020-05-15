@@ -16,19 +16,22 @@ export module Auth {
         sessionStorage.removeItem('token')
     }
 
-    export function isEngineer(): void {
+    export function isEngineer(): boolean {
         if (getToken() && getToken().length > 0) {
             const decoded = jwt(getToken());
-            console.log(decoded);
-            return decoded.groups;
+            return decoded.groups.includes(1);
+        } else {
+            return false;
         }
     }
 
-    export function isOperator(): void {
+    export function isOperator(): boolean {
         if (getToken() && getToken().length > 0) {
             const decoded = jwt(getToken());
             console.log(decoded);
-            return decoded.groups;
+            return decoded.groups.includes(2);
+        } else {
+            return false;
         }
     }
 
