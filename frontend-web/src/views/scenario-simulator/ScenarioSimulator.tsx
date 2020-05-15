@@ -13,6 +13,7 @@ import simulationIcon from '../../assets/node_icons/simulations.svg';
 // @ts-ignore
 import editorIcon from "./../../assets/node_icons/designer.svg";
 import { GET_DESIGNER_DATA } from "../scenario-designer/ScenarioDesigner";
+import { Auth } from '../../helper/auth';
 
 interface State {
 	leftPaneActive: boolean;
@@ -116,20 +117,21 @@ class ScenarioSimulator extends React.Component<Props, State> {
 				<NavBar mode="ScenarioSimulator" />
 
 				<div className="home-container structure-container">
-					<Query query={GET_DESIGNER_DATA}>
-						{
-							({ data }) => (
-								<LeftPane paneName="Designer"
-									readOnly
-									icon={editorIcon}
-									toggle={this.toggleLeftPane}
-									data={data}
-									active={this.state.leftPaneActive}
-								/>
-							)
-						}
-					</Query>
-
+					{Auth.isEngineer() ?
+						<Query query={GET_DESIGNER_DATA}>
+							{
+								({ data }) => (
+									<LeftPane paneName="Designer"
+										readOnly
+										icon={editorIcon}
+										toggle={this.toggleLeftPane}
+										data={data}
+										active={this.state.leftPaneActive}
+									/>
+								)
+							}
+						</Query>
+						: null}
 					<ApolloConsumer>
 						{client =>
 							<Workspace rightPaneActive={this.state.rightPaneActive}

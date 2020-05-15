@@ -86,13 +86,17 @@ const asNavBar = <P extends InjectedPNavBar>(WrappedComponent: React.ComponentTy
 						</div>
 					);
 				case "ScenarioSimulator":
-					return (
-						<div className="nav-button">
-							<Link to="/designer">
-								<img src={designerIcon} alt="Designer" />
-							</Link>
-						</div>
-					);
+					if (Auth.isEngineer()) {
+						return (
+							<div className="nav-button">
+								<Link to="/designer">
+									<img src={designerIcon} alt="Designer" />
+								</Link>
+							</div>
+						);
+					} else {
+						return null;
+					}
 				default:
 					return null
 			}

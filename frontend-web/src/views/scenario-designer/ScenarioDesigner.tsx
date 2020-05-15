@@ -12,6 +12,8 @@ import gql from "graphql-tag";
 import instrumentsIcon from "./../../assets/node_icons/instruments.svg";
 // @ts-ignore
 import editorIcon from "./../../assets/node_icons/designer.svg";
+import { Redirect } from 'react-router-dom';
+import { Auth } from '../../helper/auth';
 
 interface State {
 	leftPaneActive: boolean;
@@ -55,6 +57,9 @@ class ScenarioDesigner extends React.Component<Props, State> {
 	}
 
 	render() {
+		if (!Auth.isEngineer()) {
+			return <Redirect to="/" />
+		}
 		return (
 			<div className="view scenario-designer-view">
 				<NavBar mode="ScenarioDesigner" />

@@ -104,12 +104,7 @@ class Login extends React.Component<Props, State> {
                                                         }).then((res) => {
                                                             if (res.data.tokenAuth.token) {
                                                                 // TODO: go to map
-                                                                console.log(res.data.tokenAuth)
                                                                 Auth.saveToken(res.data.tokenAuth.token);
-                                                                Auth.isEngineer();
-                                                                Auth.isOperator();
-
-                                                                Auth.role = res.data.tokenAuth.group[0]?.id;
 
                                                                 this.setState(() => ({
                                                                     valid: true
