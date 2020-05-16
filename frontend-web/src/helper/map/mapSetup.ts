@@ -205,7 +205,7 @@ function setupRoutes(map: mb.Map) {
 		});
 
 		['roadSegmentRoutes', 'instrumentActionRoutes'].forEach((name, index) => {
-			map.addLayer({
+			 map.addLayer({
 				'id': name + 'Layer',
 				'type': 'line',
 				'source': name + 'Source',
@@ -213,9 +213,9 @@ function setupRoutes(map: mb.Map) {
 					'line-join': 'round',
 					'line-cap': 'round'
 				},
-				'paint': {
+				'paint':  {
 					'line-opacity': 0.4,
-					'line-color': (index === 0 ? '#001bff' : '#00FF4F'), //(isRoadSegment ? randomColors.roadSegment[index] : randomColors.instrumentAction[index]),
+					'line-color': '#00FF00', //(isRoadSegment ? randomColors.roadSegment[index] : randomColors.instrumentAction[index]),
 					'line-width': 4
 				}
 			});
@@ -261,7 +261,7 @@ function setupSelectedRoutes(map: mb.Map) {
 				},
 				'paint': {
 					'line-opacity': 1,
-					'line-color': (index === 0 ? '#ff00da' : '#00761a'),
+					'line-color': '#FF0000',
 					'line-width': 6
 				}
 			});

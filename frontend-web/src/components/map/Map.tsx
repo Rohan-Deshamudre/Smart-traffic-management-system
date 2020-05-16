@@ -103,7 +103,6 @@ class Map extends React.PureComponent<Props, State> {
             center: [lng, lat],
             zoom: zoom
         });
-        new mb.Marker().setLngLat([lng, lat]).addTo(this.map);
         const that = this;
         this.map.loadImage(
             '../../assets/right-arrow.png',
