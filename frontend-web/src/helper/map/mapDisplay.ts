@@ -84,8 +84,8 @@ function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
 					"type": 'FeatureCollection',
 					"features": geoJson
 				});
-				new mb.Marker().setLngLat([4.447, 51.934]).addTo(map);
 			});
+
 		});
 	} else {
 		map.on("idle", function () {

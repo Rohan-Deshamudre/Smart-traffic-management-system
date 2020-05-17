@@ -5,7 +5,6 @@ import '../styles/tree.scss';
 import {hierarchy, tree, select, linkHorizontal, zoom} from 'd3';
 import * as d3 from 'd3';
 import {DefaultLinkObject, Link} from "d3-shape";
-import TreeLevelButton from "../buttons/TreeLevelButton";
 import * as _ from 'lodash';
 import {treeDraw} from "../../helper/tree/treeDraw";
 import {selectAll} from "d3-selection";
