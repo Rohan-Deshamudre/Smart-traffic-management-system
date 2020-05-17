@@ -294,6 +294,7 @@ function setupSelectedRoutes(map: mb.Map) {
 			popup.remove();
 		});
 
+
 		['selectedRoute', 'selectedInstrumentActionRoutes'].forEach((name, index) => {
 			map.addLayer({
 				'id': name + 'Layer',
@@ -322,6 +323,16 @@ function setupSelectedRoutes(map: mb.Map) {
 					'icon-size': 0.4,
 					'icon-image': 'arrows',
 					'visibility': 'visible'
+				}
+			});
+
+			map.addLayer({
+				'id': 'places',
+				'type': 'symbol',
+				'source':  name + 'Source',
+				'layout': {
+					'icon-image': '{icon}-15',
+					'icon-allow-overlap': true
 				}
 			});
 		});
