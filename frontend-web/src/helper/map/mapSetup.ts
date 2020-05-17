@@ -204,6 +204,7 @@ function setupRoutes(map: mb.Map) {
 			'data': null
 		});
 
+
 		['roadSegmentRoutes', 'instrumentActionRoutes'].forEach((name, index) => {
 			 map.addLayer({
 				'id': name + 'Layer',
@@ -234,6 +235,7 @@ function setupRoutes(map: mb.Map) {
 					'visibility': 'visible'
 				}
 			});
+
 		});
 	});
 }
@@ -242,13 +244,64 @@ function setupSelectedRoutes(map: mb.Map) {
 	map.on("load", function () {
 		map.addSource('selectedRouteSource', {
 			'type': 'geojson',
-			'data': null
+			'data': {
+				'type': 'FeatureCollection',
+				'features': [
+					{
+						'type': 'Feature',
+						'properties': {
+							'description':
+								'<strong>Congestion</strong>' +
+								'<p>Display congestion data</p>',
+							'icon': 'theatre'
+						},
+						'geometry': {
+							'type': 'Point',
+							'coordinates': [4.447, 51.934]
+						}
+					}
+				]
+			}
 		});
 
 		map.addSource('selectedInstrumentActionRoutesSource', {
 			'type': 'geojson',
 			'data': null
 		});
+
+		var popup = new mb.Popup({
+			closeButton: false,
+			closeOnClick: false
+		});
+
+		map.on('mouseenter', 'places', function(e) {
+// Change the cursor style as a UI indicator.
+			map.getCanvas().style.cursor = 'pointer';
+
+			var coordinates = [4.447, 51.934];
+			var description = e.features[0].properties.description;
+
+// Ensure that if the map is zoomed out such that multiple
+// copies of the feature are visible, the popup appears
+// over the copy being pointed to.
+			while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+				coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+			}
+
+// Populate the popup and set its coordinates
+// based on the feature found.
+			popup
+				.setLngLat([4.447, 51.934])
+				.setHTML(description)
+				.addTo(map);
+		});
+
+		map.on('mouseleave', 'places', function() {
+			map.getCanvas().style.cursor = '';
+			popup.remove();
+		});
+
+
 
 		['selectedRoute', 'selectedInstrumentActionRoutes'].forEach((name, index) => {
 			map.addLayer({
@@ -278,6 +331,16 @@ function setupSelectedRoutes(map: mb.Map) {
 					'icon-size': 0.4,
 					'icon-image': 'arrows',
 					'visibility': 'visible'
+				}
+			});
+
+			map.addLayer({
+				'id': 'places',
+				'type': 'symbol',
+				'source':  name + 'Source',
+				'layout': {
+					'icon-image': '{icon}-15',
+					'icon-allow-overlap': true
 				}
 			});
 		});
