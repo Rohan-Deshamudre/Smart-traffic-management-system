@@ -6,65 +6,61 @@ import * as MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-d
  */
 function setupInstruments(map: mb.Map, client: any) {
 
-	map.on("load", function () {
+	map.on("load", function() {
 		map.addSource("drips", {
 			type: "geojson",
 			data: null
 		});
 
-		map.loadImage(
-			'../../assets/drip.png',
-			function (error, image) {
-				if (error) throw error;
-				map.addImage('dripImage', image);
-				map.addLayer({
-					id: "dripLarge",
-					type: "symbol",
-					source: "drips",
-					minzoom: 15,
-					layout: {
-						'text-field': ['get', 'name'],
-						'icon-image': 'dripImage',
-						'icon-text-fit': 'both',
-						'icon-text-fit-padding': [6, 9, 6, 9],
-						'text-size': 10
-					},
-					paint: {
-						"icon-opacity": 0.8,
-						"text-color": "#ffffff"
+		map.loadImage('../../assets/drip.png', function(error, image) {
+			if (error) throw error;
 
-					}
-				});
-			}
-		);
+			map.addImage('dripImage', image);
 
-		map.loadImage(
-			'../../assets/dripSmall.png',
-			function (error, image) {
-				map.addImage('dripSmallImage', image);
-				map.addLayer({
-					id: "dripSmall",
-					type: "symbol",
-					source: "drips",
-					minzoom: 10,
-					maxzoom: 15,
-					layout: {
-						'icon-image': 'dripSmallImage',
-						'icon-size': 0.5,
-						'icon-rotate': ['get', 'bearing'],
-						'icon-anchor': 'top-left',
-						'icon-offset': [7, 0],
-						'icon-allow-overlap': true,
-						'icon-ignore-placement': true
-					},
-					paint: {
-						"icon-opacity": 0.5,
-						"text-color": "#ffffff"
+			map.addLayer({
+				id: "dripLarge",
+				type: "symbol",
+				source: "drips",
+				minzoom: 15,
+				layout: {
+					'text-field': ['get', 'name'],
+					'icon-image': 'dripImage',
+					'icon-text-fit': 'both',
+					'icon-text-fit-padding': [6, 9, 6, 9],
+					'text-size': 10
+				},
+				paint: {
+					"icon-opacity": 0.8,
+					"text-color": "#ffffff"
 
-					}
-				});
-			}
-		);
+				}
+			});
+		});
+
+		map.loadImage('../../assets/dripSmall.png', function(error, image) {
+			map.addImage('dripSmallImage', image);
+
+			map.addLayer({
+				id: "dripSmall",
+				type: "symbol",
+				source: "drips",
+				minzoom: 10,
+				maxzoom: 15,
+				layout: {
+					'icon-image': 'dripSmallImage',
+					'icon-size': 0.5,
+					'icon-rotate': ['get', 'bearing'],
+					'icon-anchor': 'top-left',
+					'icon-offset': [7, 0],
+					'icon-allow-overlap': true,
+					'icon-ignore-placement': true
+				},
+				paint: {
+					"icon-opacity": 0.5,
+					"text-color": "#ffffff"
+				}
+			});
+		});
 
 		map.on("mouseenter", "dripLarge", function () {
 			map.getCanvas().style.cursor = "crosshair";
@@ -89,53 +85,50 @@ function setupInstruments(map: mb.Map, client: any) {
  */
 function setupLargeInstruments(map: mb.Map) {
 	map.on('load', function () {
-		map.loadImage(
-			'../../assets/drip.png',
-			function (error, image) {
-				if (error) throw error;
-				map.addImage('largeDripImage', image);
+		map.loadImage('../../assets/drip.png', function(error, image) {
+			if (error) throw error;
+			map.addImage('largeDripImage', image);
 
-				map.addSource("largeInstrumentsSource", {
-					"type": "geojson",
-					"data": null
-				});
+			map.addSource("largeInstrumentsSource", {
+				"type": "geojson",
+				"data": null
+			});
 
-				map.addLayer({
-					id: "largeInstrumentsLayer",
-					type: "symbol",
-					maxzoom: 15,
-					source: "largeInstrumentsSource",
-					layout: {
-						'icon-image': 'largeDripImage',
-						'icon-text-fit': 'both',
-						'icon-size': [
-							'interpolate', ['linear'], ['zoom'],
-							10, 0.5,
-							15, 1,
-						],
-						'icon-anchor': 'top-left',
-						'icon-text-fit-padding': [10, 10, 10, 10],
-						'text-offset': [5, 2],
-						'text-size': [
-							'interpolate', ['linear'], ['zoom'],
-							10, 1,
-							15, 16,
-						],
-						'icon-allow-overlap': true,
-						'icon-ignore-placement': true,
-						'text-allow-overlap': true,
-						'text-ignore-placement': true,
-						'text-field': ['get', 'text'],
-						'visibility': 'visible'
-					},
-					paint: {
-						"icon-opacity": 0.5,
-						"text-color": "#ffffff"
+			map.addLayer({
+				id: "largeInstrumentsLayer",
+				type: "symbol",
+				maxzoom: 15,
+				source: "largeInstrumentsSource",
+				layout: {
+					'icon-image': 'largeDripImage',
+					'icon-text-fit': 'both',
+					'icon-size': [
+						'interpolate', ['linear'], ['zoom'],
+						10, 0.5,
+						15, 1,
+					],
+					'icon-anchor': 'top-left',
+					'icon-text-fit-padding': [10, 10, 10, 10],
+					'text-offset': [5, 2],
+					'text-size': [
+						'interpolate', ['linear'], ['zoom'],
+						10, 1,
+						15, 16,
+					],
+					'icon-allow-overlap': true,
+					'icon-ignore-placement': true,
+					'text-allow-overlap': true,
+					'text-ignore-placement': true,
+					'text-field': ['get', 'text'],
+					'visibility': 'visible'
+				},
+				paint: {
+					"icon-opacity": 0.5,
+					"text-color": "#ffffff"
 
-					}
-				});
-			}
-		);
+				}
+			});
+		});
 	});
 }
 
@@ -188,12 +181,11 @@ function setupDirections(accessToken: string, dirContainer: any) {
 			instructions: false,
 			profileSwitcher: false
 		}
-
 	});
 }
 
 function setupRoutes(map: mb.Map) {
-	map.on("load", function () {
+	map.on("load", function() {
 		map.addSource('roadSegmentRoutesSource', {
 			'type': 'geojson',
 			'data': null
@@ -205,7 +197,7 @@ function setupRoutes(map: mb.Map) {
 		});
 
 		['roadSegmentRoutes', 'instrumentActionRoutes'].forEach((name, index) => {
-			 map.addLayer({
+			map.addLayer({
 				'id': name + 'Layer',
 				'type': 'line',
 				'source': name + 'Source',
@@ -248,6 +240,38 @@ function setupSelectedRoutes(map: mb.Map) {
 		map.addSource('selectedInstrumentActionRoutesSource', {
 			'type': 'geojson',
 			'data': null
+		});
+
+		['preferredRoute', 'selectedInstrumentActionRoutes'].forEach((name, index) => {
+			map.addLayer({
+				'id': name + 'Layer',
+				'type': 'line',
+				'source': name + 'Source',
+				'layout': {
+					'line-join': 'round',
+					'line-cap': 'round'
+				},
+				'paint': {
+					'line-opacity': 1,
+					'line-color': '#2200ff',
+					'line-width': 6
+				}
+			});
+
+			map.addLayer({
+				'id': name + 'ArrowsLayer',
+				'type': 'symbol',
+				'source': name + 'Source',
+				'layout': {
+					'symbol-placement': 'line',
+					'symbol-spacing': 150,
+					'icon-allow-overlap': true,
+					'icon-ignore-placement': true,
+					'icon-size': 0.4,
+					'icon-image': 'arrows',
+					'visibility': 'visible'
+				}
+			});
 		});
 
 		['selectedRoute', 'selectedInstrumentActionRoutes'].forEach((name, index) => {
