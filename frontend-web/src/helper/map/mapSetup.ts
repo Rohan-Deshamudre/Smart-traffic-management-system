@@ -268,21 +268,21 @@ function setupSelectedRoutes(map: mb.Map) {
 		});
 
 		map.on('mouseenter', 'places', function(e) {
-// Change the cursor style as a UI indicator.
+			// Change the cursor style as a UI indicator.
 			map.getCanvas().style.cursor = 'pointer';
 
 			var coordinates = [4.447, 51.934];
 			var description = e.features[0].properties.description;
 
-// Ensure that if the map is zoomed out such that multiple
-// copies of the feature are visible, the popup appears
-// over the copy being pointed to.
+			// Ensure that if the map is zoomed out such that multiple
+			// copies of the feature are visible, the popup appears
+			// over the copy being pointed to.
 			while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
 				coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
 			}
 
-// Populate the popup and set its coordinates
-// based on the feature found.
+			// Populate the popup and set its coordinates
+			// based on the feature found.
 			popup
 				.setLngLat([4.447, 51.934])
 				.setHTML(description)
@@ -293,40 +293,6 @@ function setupSelectedRoutes(map: mb.Map) {
 			map.getCanvas().style.cursor = '';
 			popup.remove();
 		});
-
-
-		['preferredRoute', 'selectedInstrumentActionRoutes'].forEach((name, index) => {
-			map.addLayer({
-				'id': name + 'Layer',
-				'type': 'line',
-				'source': name + 'Source',
-				'layout': {
-					'line-join': 'round',
-					'line-cap': 'round'
-				},
-				'paint': {
-					'line-opacity': 1,
-					'line-color': '#2200ff',
-					'line-width': 6
-				}
-			});
-
-			map.addLayer({
-				'id': name + 'ArrowsLayer',
-				'type': 'symbol',
-				'source': name + 'Source',
-				'layout': {
-					'symbol-placement': 'line',
-					'symbol-spacing': 150,
-					'icon-allow-overlap': true,
-					'icon-ignore-placement': true,
-					'icon-size': 0.4,
-					'icon-image': 'arrows',
-					'visibility': 'visible'
-				}
-			});
-		});
-
 
 		['selectedRoute', 'selectedInstrumentActionRoutes'].forEach((name, index) => {
 			map.addLayer({
@@ -356,16 +322,6 @@ function setupSelectedRoutes(map: mb.Map) {
 					'icon-size': 0.4,
 					'icon-image': 'arrows',
 					'visibility': 'visible'
-				}
-			});
-
-			map.addLayer({
-				'id': 'places',
-				'type': 'symbol',
-				'source':  name + 'Source',
-				'layout': {
-					'icon-image': '{icon}-15',
-					'icon-allow-overlap': true
 				}
 			});
 		});
