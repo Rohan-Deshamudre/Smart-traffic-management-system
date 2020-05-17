@@ -244,8 +244,8 @@ function setupSelectedRoutes(map: mb.Map) {
 						'properties': {
 							'description':
 								'<strong>Congestion</strong>' +
-								'<p>Display congestion data</p>',
-							'icon': 'theatre'
+								'<p>This road has congestion!</p>',
+							'icon': 'car'
 						},
 						'geometry': {
 							'type': 'Point',
@@ -267,7 +267,7 @@ function setupSelectedRoutes(map: mb.Map) {
 			closeOnClick: false
 		});
 
-		map.on('mouseenter', 'places', function(e) {
+		map.on('mouseenter', 'selectedRoutepopup', function(e) {
 			// Change the cursor style as a UI indicator.
 			map.getCanvas().style.cursor = 'pointer';
 
@@ -289,7 +289,7 @@ function setupSelectedRoutes(map: mb.Map) {
 				.addTo(map);
 		});
 
-		map.on('mouseleave', 'places', function() {
+		map.on('mouseleave', 'selectedRoutepopup', function() {
 			map.getCanvas().style.cursor = '';
 			popup.remove();
 		});
@@ -326,8 +326,9 @@ function setupSelectedRoutes(map: mb.Map) {
 				}
 			});
 
+			// @ts-ignore
 			map.addLayer({
-				'id': 'places',
+				'id': name + 'popup',
 				'type': 'symbol',
 				'source':  name + 'Source',
 				'layout': {
@@ -335,6 +336,7 @@ function setupSelectedRoutes(map: mb.Map) {
 					'icon-allow-overlap': true
 				}
 			});
+
 		});
 
 	});
