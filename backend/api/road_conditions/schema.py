@@ -68,7 +68,7 @@ class Query(actions_schema.Query, graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) road_condition_types
         """
-        has_perms(info, ['road_conditions.view_roadconditiontypes'])
+        has_perms(info, ['road_conditions.view_roadconditiontype'])
         res = RoadConditionType.objects.all()
         if type_id:
             res = res.filter(Q(id__exact=type_id))
