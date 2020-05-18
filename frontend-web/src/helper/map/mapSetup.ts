@@ -267,6 +267,11 @@ function setupSelectedRoutes(map: mb.Map) {
 			closeOnClick: false
 		});
 
+		var marker = new mb.Marker();
+		marker
+			.setLngLat([4.461, 51.938])
+			.addTo(map);
+
 		map.on('mouseenter', 'selectedRoutepopup', function(e) {
 			// Change the cursor style as a UI indicator.
 			map.getCanvas().style.cursor = 'pointer';
@@ -326,7 +331,6 @@ function setupSelectedRoutes(map: mb.Map) {
 				}
 			});
 
-			// @ts-ignore
 			map.addLayer({
 				'id': name + 'popup',
 				'type': 'symbol',
