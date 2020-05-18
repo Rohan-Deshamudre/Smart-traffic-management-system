@@ -31,6 +31,7 @@ import { READ_LABELS } from '../../../components/ReadOnlyLabels';
 import { mapHelper } from "../../../helper/map/mapHelper";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import {Auth} from "../../../helper/auth";
 
 
 type List = { id: number, name: string, folderType: { id: number }, items: { id: number, name: string }[] }[];
@@ -225,10 +226,19 @@ class LeftPane extends React.Component<PLeftPane, State> {
 						}
 						return (
 							<div className="d-flex justify-content-between pane-bottom-buttons">
-								<AddFolder
-									parentId={null} />{/* TODO When folders-in-folders are implemented, change parentId */}
-								<AddScenario labels={labels} />
-								<ImportTree client={client} />
+
+								{/* TODO When folders-in-folders are implemented, change parentId */}
+								{ Auth.isEngineer() ?
+									<AddFolder parentId={null} />
+									: null }
+
+								{ Auth.isEngineer() ?
+									<AddScenario labels={labels} />
+									: null }
+
+								{ Auth.isEngineer() ?
+									<ImportTree client={client} />
+									: null }
 							</div>
 						);
 					}}

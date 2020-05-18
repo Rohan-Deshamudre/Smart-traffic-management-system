@@ -17,6 +17,7 @@ import {
 } from "../../../../components/CRUDFolders";
 import {GET_WORKSPACE_DATA} from "../../../../components/workspaceData";
 import DeleteModal from "../../../../components/other/DeleteModal";
+import {Auth} from "../../../../helper/auth";
 
 type Props = {
 	name: string,
@@ -93,13 +94,19 @@ class InstrumentAction extends React.Component<Props, State> {
 
 					<div
 						className="w-25 d-flex align-items-center">
+						{ Auth.isEngineer() ?
 						<img
 							src={editIcon}
 							alt="Edit Icon"
 							className="edit-icon"
 							onClick={() => this.props.editInstrumentAction(this.props.id)}
 						/>
+						: null }
+
+						{ Auth.isEngineer() ?
 						<img src={deleteIcon} alt="Delete Icon" className="ml-2 edit-icon" onClick={() => this.setState({openModal: true})}/>
+						: null }
+
 						<Mutation mutation={DELETE_INSTRUMENT_ACTION}>
 							{(deleteInstrumentAction) => (
 								<DeleteModal show={this.state.openModal}

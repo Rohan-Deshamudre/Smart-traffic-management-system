@@ -18,6 +18,7 @@ import {Query, ApolloConsumer} from 'react-apollo';
 import {mapHelper} from "../../../helper/map/mapHelper";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import {Auth} from "../../../helper/auth";
 
 interface PRightPane extends InjectedPRightPane {
 	instruments: any,
@@ -151,12 +152,17 @@ class RightPane extends React.Component<PRightPane, State, any> {
 					{({data, client}) => (
 						<div className="d-flex justify-content-between pane-bottom-buttons">
 							<ExportInstruments client={client} instruments={this.props.instruments}/>
-							<ImportInstruments client={client}/>
-							<CreateInstrument instrumentTypeId={this.state.currentInstrumentTypeId}
-											  instrumentTypeName={this.currentInstrumentTypeName()}
-											  pointerLng={data.longitude}
-											  pointerLat={data.latitude}
-							/>
+							{ Auth.isEngineer() ?
+								<ImportInstruments client={client}/>
+								: null }
+
+							{ Auth.isEngineer() ?
+								<CreateInstrument instrumentTypeId={this.state.currentInstrumentTypeId}
+												  instrumentTypeName={this.currentInstrumentTypeName()}
+												  pointerLng={data.longitude}
+												  pointerLat={data.latitude}
+								/>
+								: null }
 						</div>
 
 					)}
