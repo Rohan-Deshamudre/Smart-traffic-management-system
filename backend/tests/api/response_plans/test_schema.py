@@ -23,18 +23,18 @@ class ResponsePlanSchemaTest(TestCase):
                                       self.folder_types)
         self.scenarios = create_scenarios([
             'Test-Scenario-1', 'Test-Scenario-2', 'Test-Scenario-3'],
-                                          self.folders)
+            self.folders)
         self.segment_types = create_road_segment_types([
             'Test-Type-1', 'Test-Type-2', 'Test-Type-3'])
         self.segments = create_road_segments([
             'Test-Name-1', 'Test-Name-2', 'Test-Name-3'], self.scenarios,
-                                             self.segment_types)
+            self.segment_types)
         self.condition_types = create_road_condition_types([
             'Test-Type-1', 'Test-Type-2'])
         self.conditions = create_road_conditions([
             'Test-Condition-1', 'Test-Condition-2'], self.condition_types)
         self.response_plans = create_response_plans(
-            ['AND', 'AND', 'AND'], self.segments, self.conditions
+            ['AND', 'AND', 'AND'], self.segments, self.conditions, self.scenarios
         )
 
     def test_query(self):

@@ -31,7 +31,7 @@ class ResponsePlanModelTest(TestCase):
         self.conditions = create_road_conditions([
             'Test-Condition-1', 'Test-Condition-2'], self.condition_types)
         self.response_plans = create_response_plans(
-            ['AND', 'AND', 'AND'], self.segments, self.conditions
+            ['AND', 'AND', 'AND'], self.segments, self.conditions, self.scenarios
         )
 
     def test_response_plan_created(self):

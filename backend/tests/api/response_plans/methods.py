@@ -3,11 +3,13 @@ from typing import List
 from api.response_plans.models import ResponsePlan
 from api.road_segments.models import RoadSegment
 from api.road_conditions.models import RoadCondition
+from api.scenarios.models import Scenario
 
 
 def create_response_plans(operators: List[str],
                           road_segments: List[RoadSegment],
-                          road_conditions: List[RoadCondition]) \
+                          road_conditions: List[RoadCondition],
+                          scenarios: List[Scenario]) \
         -> List[ResponsePlan]:
     """
     Structure being tested is
@@ -18,13 +20,15 @@ def create_response_plans(operators: List[str],
     response_plans = []
 
     parent = ResponsePlan(road_segment=road_segments[0],
-                          operator=operators[0])
+                          operator=operators[0],
+                          scenario=scenarios[0])
     parent.save()
     response_plans.append(parent)
     for x in range(len(operators) - 1):
         child = ResponsePlan(road_segment=road_segments[x],
                              operator=operators[x + 1],
                              road_condition=road_conditions[x],
+                             scenario=scenarios[x],
                              parent=parent)
         child.save()
         response_plans.append(child)
