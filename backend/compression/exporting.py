@@ -37,7 +37,7 @@ def handle_response_plan(request):
     if request.method == 'POST':
         response = {}
         body = json.loads(request.body.decode('utf-8'))
-        if body['id']:
+        if 'id' in body:
             response = to_json_response_plan_by_id(body['id'])
         if 'xml' in body and body['xml']:
             return HttpResponse(dicttoxml(response), content_type='text/html')
