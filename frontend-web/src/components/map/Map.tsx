@@ -132,6 +132,7 @@ class Map extends React.PureComponent<Props, State> {
     configureSelectedRoute() {
         const selectedRoute = this.getRoutes([this.props.selectedRoute]);
         mapDisplay.displayRoutes(selectedRoute, 'selectedRouteSource', this.map);
+        // mapDisplay.displayAlternate(selectedRoute, 'selectedRouteSource', this.map)
     }
 
     /*
@@ -161,6 +162,7 @@ class Map extends React.PureComponent<Props, State> {
         const roadSegmentWayPoints = this.getRoadSegmentWayPoints(this.props.scenario, true);
         const roadSegmentRoutes = this.getRoutes(roadSegmentWayPoints);
         mapDisplay.displayRoutes(roadSegmentRoutes, 'roadSegmentRoutesSource', this.map);
+        // mapDisplay.displayAlternate(roadSegmentRoutes, 'roadSegmentRoutesSource', this.map);
     }
 
     /*
@@ -189,6 +191,7 @@ class Map extends React.PureComponent<Props, State> {
             return wayPoints.filter((route) => route !== undefined && route.length >= 2).map(async (route) => requests.getRoute(route, 'full'));
         }
     }
+
 
     /*
             Update the map to the corresponding center
@@ -256,6 +259,7 @@ class Map extends React.PureComponent<Props, State> {
         if (!_.isEqual(currentRoadSegmentWayPoints, this.getRoadSegmentWayPoints(prevProps.scenario, false))) {
             const currentRoadSegmentRoutes = this.getRoutes(currentRoadSegmentWayPoints);
             mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
+            // mapDisplay.displayAlternate(currentRoadSegmentRoutes, 'selectedRouteSource', this.map)
         }
     }
 
@@ -284,6 +288,7 @@ class Map extends React.PureComponent<Props, State> {
         if (!_.isEqual(this.props.selectedRoute, prevProps.selectedRoute)) {
             this.configureSelectedRoute();
         }
+
 
         if (!_.isEqual(this.props.selectedInstrumentActionRoutes, prevProps.selectedInstrumentActionRoutes)) {
             this.configureSelectedInstrumentActionRoutes();

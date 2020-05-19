@@ -76,6 +76,7 @@ function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
 						'type': 'LineString',
 						'coordinates': route.data.routes[0].geometry.coordinates
 					}
+
 				}
 			});
 
@@ -94,9 +95,40 @@ function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
 	}
 }
 
+
+function displayAlternate(routes: any, sourceId: string, map: mb.Map) {
+	if (routes != undefined) {
+		Promise.all(routes).then((result: any) => {
+			const geoJson: any = result.map((route) => {
+				console.log(route.data.routes)
+				return {
+					'type': 'Feature',
+					'properties': {},
+					'geometry': {
+						'type': 'LineString',
+						'coordinates': route.data.routes[1].geometry.coordinates
+					}
+				}
+			});
+
+			map.on("idle", function () {
+				(map.getSource(sourceId) as GeoJSONSource).setData({
+					"type": 'FeatureCollection',
+					"features": geoJson
+				});
+			});
+		});
+	} else {
+		map.on("idle", function () {
+			(map.getSource(sourceId) as GeoJSONSource).setData(null);
+		});
+	}
+}
+
 export const mapDisplay = {
 	displayInstruments: displayInstruments,
 	displayLargeInstruments: displayLargeInstruments,
 	displayOneMarker: displayOneMarker,
 	displayRoutes: displayRoutes,
+	displayAlternate: displayAlternate
 };
