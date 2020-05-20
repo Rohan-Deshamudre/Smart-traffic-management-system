@@ -244,35 +244,6 @@ function setupSelectedRoutes(map: mb.Map) {
 			'data': null
 		});
 
-		/*
-		var popup = new mb.Popup({
-			closeButton: false,
-			closeOnClick: false
-		});
-
-		var marker = new mb.Marker();
-		marker
-			.setLngLat([4.461, 51.938])
-			.addTo(map);
-
-		map.on('mouseenter', 'selectedRoutepopup', function(e) {
-			// Change the cursor style as a UI indicator.
-			map.getCanvas().style.cursor = 'pointer';
-
-			var description = e.features[0].properties.description;
-
-			popup
-				.setLngLat([4.447, 51.934])
-				.setHTML(description)
-				.addTo(map);
-		});
-
-		map.on('mouseleave', 'selectedRoutepopup', function() {
-			map.getCanvas().style.cursor = '';
-			popup.remove();
-		});
-		*/
-
 		['selectedRoute', 'selectedInstrumentActionRoutes'].forEach((name, index) => {
 			map.addLayer({
 				'id': name + 'Layer',

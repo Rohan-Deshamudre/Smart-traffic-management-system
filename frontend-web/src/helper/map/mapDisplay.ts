@@ -152,11 +152,50 @@ function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
 	}
 }
 
+function displayDestination(routes: any, sourceId: string, map: mb.Map) {
+	if (routes != undefined) {
+		Promise.all(routes).then((result: any) => {
+			const geoJson: any = result.map((route) => {
+				//console.log(route.data.routes)
+				var loc = route.data.routes[0]
+					.geometry.coordinates[
+						route.data.routes[0].geometry.coordinates.length - 1
+					];
+
+				return {
+					'type': 'Feature',
+					'properties': {},
+					'geometry': {
+						'type': 'Point',
+						'coordinates': loc
+					}
+				}
+			});
+
+			map.on("idle", function() {
+				geoJson.map(function(marker) {
+					new mb.Marker()
+						.setLngLat(marker.geometry.coordinates)
+						.addTo(map);
+				});
+
+				(map.getSource(sourceId) as GeoJSONSource).setData({
+					"type": 'FeatureCollection',
+					"features": geoJson
+				});
+			});
+		})
+	} else {
+		map.on("idle", function() {
+			(map.getSource(sourceId) as GeoJSONSource).setData(null);
+		});
+	}
+}
+
 function displayAlternate(routes: any, sourceId: string, map: mb.Map) {
 	if (routes != undefined) {
 		Promise.all(routes).then((result: any) => {
 			const geoJson: any = result.map((route) => {
-				console.log(route.data.routes)
 				return {
 					'type': 'Feature',
 					'properties': {},
@@ -187,5 +226,6 @@ export const mapDisplay = {
 	displayOneMarker: displayOneMarker,
 	displayRoutes: displayRoutes,
 	displayConditionIcon: displayConditionIcon,
+	displayDestination: displayDestination,
 	displayAlternate: displayAlternate
 };
