@@ -97,7 +97,8 @@ function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
 	if (routes != undefined) {
 		Promise.all(routes).then((result: any) => {
 			const geoJson: any = result.map((route) => {
-				var loc = route.data.routes[0].geometry.coordinates[0];
+				var mid_pt = Math.ceil(route.data.routes[0].geometry.coordinates.length / 2);
+				var loc = route.data.routes[0].geometry.coordinates[mid_pt];
 
 				return {
 					'type': 'Feature',
