@@ -275,16 +275,6 @@ function setupSelectedRoutes(map: mb.Map) {
 				}
 			});
 
-			map.addLayer({
-				'id': name + 'popup',
-				'type': 'symbol',
-				'source':  name + 'Source',
-				'layout': {
-					'icon-image': '{icon}-15',
-					'icon-allow-overlap': true
-				}
-			});
-
 		});
 
 	});

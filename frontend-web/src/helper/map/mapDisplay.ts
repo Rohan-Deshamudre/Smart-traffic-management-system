@@ -121,29 +121,46 @@ function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
 					"features": geoJson
 				});
 
+				var name = sourceId.slice(0, sourceId.length - 6);
+				var mapLayer = map.getLayer(name + 'popup');
+				if (typeof mapLayer !== 'undefined') {
+					map.removeLayer(name + 'popup');
+				}
+
+				// Add a layer showing the popup.
+				map.addLayer({
+					'id': name + 'popup',
+					'type': 'symbol',
+					'source': sourceId,
+					'layout': {
+						'icon-image': '{icon}-15',
+						'icon-allow-overlap': true
+					}
+				});
+
 				var popup = new mb.Popup({
 					closeButton: false,
 					closeOnClick: false
 				});
 		
-				map.on('mouseenter', sourceId + 'popup', function(e) {
+				map.on('mouseenter', name + 'popup', function(e) {
 					// Change the cursor style as a UI indicator.
 					map.getCanvas().style.cursor = 'pointer';
 		
 					var description = e.features[0].properties.description;
-		
-					popup
-						.setLngLat(geoJson.geometry.coordinates)
-						.setHTML(description)
-						.addTo(map);
+
+					geoJson.map(function(pop) {
+						popup
+							.setLngLat(pop.geometry.coordinates)
+							.setHTML(description)
+							.addTo(map);
+					})
 				});
 		
-				map.on('mouseleave', sourceId + 'popup', function() {
+				map.on('mouseleave', name + 'popup', function() {
 					map.getCanvas().style.cursor = '';
 					popup.remove();
 				});
-
-				//
 			});
 		});
 	} else {
