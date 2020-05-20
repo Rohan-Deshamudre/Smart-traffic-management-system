@@ -66,7 +66,6 @@ function displayOneMarker(directions: any, client: any) {
 
 function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
 	if (routes !== undefined) {
-
 		Promise.all(routes).then((result: any) => {
 			const geoJson: any = result.map((route) => {
 				return {
@@ -76,7 +75,6 @@ function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
 						'type': 'LineString',
 						'coordinates': route.data.routes[0].geometry.coordinates
 					}
-
 				}
 			});
 
@@ -86,7 +84,6 @@ function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
 					"features": geoJson
 				});
 			});
-
 		});
 	} else {
 		map.on("idle", function () {
@@ -95,6 +92,65 @@ function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
 	}
 }
 
+
+function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
+	if (routes != undefined) {
+		Promise.all(routes).then((result: any) => {
+			const geoJson: any = result.map((route) => {
+				var loc = route.data.routes[0].geometry.coordinates[0];
+
+				return {
+					'type': 'Feature',
+					'properties': {
+						'description':
+							'<strong>Congestion</strong>' +
+							'<p>This road has congestion!</p>',
+						'icon': 'car'
+					},
+					'geometry': {
+						'type': 'Point',
+						'coordinates': loc
+					}
+				}
+			});
+
+			map.on("idle", function() {
+				(map.getSource(sourceId) as GeoJSONSource).setData({
+					"type": 'FeatureCollection',
+					"features": geoJson
+				});
+
+				var popup = new mb.Popup({
+					closeButton: false,
+					closeOnClick: false
+				});
+		
+				map.on('mouseenter', sourceId + 'popup', function(e) {
+					// Change the cursor style as a UI indicator.
+					map.getCanvas().style.cursor = 'pointer';
+		
+					var description = e.features[0].properties.description;
+		
+					popup
+						.setLngLat(geoJson.geometry.coordinates)
+						.setHTML(description)
+						.addTo(map);
+				});
+		
+				map.on('mouseleave', sourceId + 'popup', function() {
+					map.getCanvas().style.cursor = '';
+					popup.remove();
+				});
+
+				//
+			});
+		});
+	} else {
+		map.on("idle", function() {
+			(map.getSource(sourceId) as GeoJSONSource).setData(null);
+		});
+	}
+}
 
 function displayAlternate(routes: any, sourceId: string, map: mb.Map) {
 	if (routes != undefined) {
@@ -130,5 +186,6 @@ export const mapDisplay = {
 	displayLargeInstruments: displayLargeInstruments,
 	displayOneMarker: displayOneMarker,
 	displayRoutes: displayRoutes,
+	displayConditionIcon: displayConditionIcon,
 	displayAlternate: displayAlternate
 };

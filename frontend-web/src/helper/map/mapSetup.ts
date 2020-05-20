@@ -236,24 +236,7 @@ function setupSelectedRoutes(map: mb.Map) {
 	map.on("load", function () {
 		map.addSource('selectedRouteSource', {
 			'type': 'geojson',
-			'data': {
-				'type': 'FeatureCollection',
-				'features': [
-					{
-						'type': 'Feature',
-						'properties': {
-							'description':
-								'<strong>Congestion</strong>' +
-								'<p>This road has congestion!</p>',
-							'icon': 'car'
-						},
-						'geometry': {
-							'type': 'Point',
-							'coordinates': [4.447, 51.934]
-						}
-					}
-				]
-			}
+			'data': null
 		});
 
 		map.addSource('selectedInstrumentActionRoutesSource', {
@@ -261,7 +244,7 @@ function setupSelectedRoutes(map: mb.Map) {
 			'data': null
 		});
 
-
+		/*
 		var popup = new mb.Popup({
 			closeButton: false,
 			closeOnClick: false
@@ -288,7 +271,7 @@ function setupSelectedRoutes(map: mb.Map) {
 			map.getCanvas().style.cursor = '';
 			popup.remove();
 		});
-
+		*/
 
 		['selectedRoute', 'selectedInstrumentActionRoutes'].forEach((name, index) => {
 			map.addLayer({

@@ -131,8 +131,9 @@ class Map extends React.PureComponent<Props, State> {
      */
     configureSelectedRoute() {
         const selectedRoute = this.getRoutes([this.props.selectedRoute]);
-        mapDisplay.displayRoutes(selectedRoute, 'selectedRouteSource', this.map);
-        // mapDisplay.displayAlternate(selectedRoute, 'selectedRouteSource', this.map)
+        // mapDisplay.displayRoutes(selectedRoute, 'selectedRouteSource', this.map);
+        mapDisplay.displayConditionIcon(selectedRoute, 'selectedRouteSource', this.map);
+        // mapDisplay.displayAlternate(selectedRoute, 'selectedRouteSource', this.map);
     }
 
     /*
@@ -161,7 +162,8 @@ class Map extends React.PureComponent<Props, State> {
     configureRoadSegment() {
         const roadSegmentWayPoints = this.getRoadSegmentWayPoints(this.props.scenario, true);
         const roadSegmentRoutes = this.getRoutes(roadSegmentWayPoints);
-        mapDisplay.displayRoutes(roadSegmentRoutes, 'roadSegmentRoutesSource', this.map);
+        // mapDisplay.displayRoutes(roadSegmentRoutes, 'roadSegmentRoutesSource', this.map);
+        mapDisplay.displayConditionIcon(roadSegmentRoutes, 'roadSegmentRoutesSource', this.map);
         // mapDisplay.displayAlternate(roadSegmentRoutes, 'roadSegmentRoutesSource', this.map);
     }
 
@@ -258,7 +260,8 @@ class Map extends React.PureComponent<Props, State> {
         const currentRoadSegmentWayPoints = this.getRoadSegmentWayPoints(this.props.scenario, false);
         if (!_.isEqual(currentRoadSegmentWayPoints, this.getRoadSegmentWayPoints(prevProps.scenario, false))) {
             const currentRoadSegmentRoutes = this.getRoutes(currentRoadSegmentWayPoints);
-            mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
+            // mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
+            mapDisplay.displayConditionIcon(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
             // mapDisplay.displayAlternate(currentRoadSegmentRoutes, 'selectedRouteSource', this.map)
         }
     }
