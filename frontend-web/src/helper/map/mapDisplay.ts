@@ -64,6 +64,13 @@ function displayOneMarker(directions: any, client: any) {
 	});
 }
 
+function display(routes: any, sourceId: string, map: mb.Map) {
+	displayRoutes(routes, sourceId, map);
+	displayConditionIcon(routes, sourceId, map);
+	displayDestination(routes, sourceId, map);
+	displayAlternate(routes, sourceId, map);
+}
+
 function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
 	if (routes !== undefined) {
 		Promise.all(routes).then((result: any) => {
@@ -242,8 +249,6 @@ export const mapDisplay = {
 	displayInstruments: displayInstruments,
 	displayLargeInstruments: displayLargeInstruments,
 	displayOneMarker: displayOneMarker,
-	displayRoutes: displayRoutes,
-	displayConditionIcon: displayConditionIcon,
-	displayDestination: displayDestination,
-	displayAlternate: displayAlternate
+	display: display,
+	displayRoutes: displayRoutes
 };
