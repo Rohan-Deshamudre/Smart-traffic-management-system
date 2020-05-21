@@ -99,7 +99,7 @@ function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
 			map.on("idle", function () {
 				(map.getSource(sourceId) as GeoJSONSource).setData({
 					"type": 'FeatureCollection',
-					"features": [geoJson,geoJson2]
+					"features": [geoJson]
 				});
 			});
 		});
