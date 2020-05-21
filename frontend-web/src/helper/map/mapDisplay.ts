@@ -68,7 +68,7 @@ function display(routes: any, sourceId: string, map: mb.Map) {
 	displayRoutes(routes, sourceId, map);
 	displayConditionIcon(routes, sourceId, map);
 	displayDestination(routes, sourceId, map);
-	displayAlternate(routes, sourceId, map);
+	// displayAlternate(routes, sourceId, map);
 }
 
 function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
@@ -85,10 +85,21 @@ function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
 				}
 			});
 
+			const geoJson2: any = result.map((route) => {
+				return {
+					'type': 'Feature',
+					'properties': {},
+					'geometry': {
+						'type': 'LineString',
+						'coordinates': route.data.routes[1].geometry.coordinates
+					}
+				}
+			});
+
 			map.on("idle", function () {
 				(map.getSource(sourceId) as GeoJSONSource).setData({
 					"type": 'FeatureCollection',
-					"features": geoJson
+					"features": [geoJson,geoJson2]
 				});
 			});
 		});
@@ -250,5 +261,6 @@ export const mapDisplay = {
 	displayLargeInstruments: displayLargeInstruments,
 	displayOneMarker: displayOneMarker,
 	display: display,
-	displayRoutes: displayRoutes
+	displayRoutes: displayRoutes,
+	displayAlternate: displayAlternate
 };
