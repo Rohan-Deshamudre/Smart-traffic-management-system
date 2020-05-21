@@ -114,7 +114,6 @@ def live_messenger(subscriber_obj):
     """
     Matches RoadSegments with the current NDW data model.
     """
-    print("live")
     road_segments = get_road_segments(subscriber_obj)
     sim_id = get_live_id(subscriber_obj)
     scene = create_simulation_scene(sim_id, datetime.now(pytz.utc).isoformat(), None)
@@ -147,7 +146,6 @@ def find(scene_id, road_segment_id, poly_lines):
     for road_condition_type_id, ndw_status in road_status.items():
         hits = 0
         road_condition_value = 0
-        print(ndw_status)
         for i in ndw_status:
             if match(i[loc_key], poly_lines, 0.5):
                 road_condition_value += i[val_key]

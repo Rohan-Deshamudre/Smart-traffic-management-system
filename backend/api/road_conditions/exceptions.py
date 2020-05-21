@@ -13,12 +13,17 @@ class ExceededRoadConditionChildDepth(ApiException):
 
 class ExceededRoadConditionChildNumbers(ApiException):
     def __init__(self, from_id):
-        self.message = \
-            "Road condition %s already has a child road condition" % from_id
+        self.message = "Road condition %s already has a child road condition" % from_id
 
 
 class CircularRoadCondition(ApiException):
     def __init__(self, from_id, to_id):
-        self.message = \
-            ("Road condition %s is a child of road condition %s" % (
-                from_id, to_id))
+        self.message = "Road condition %s is a child of road condition %s" % (
+            from_id,
+            to_id,
+        )
+
+
+class InvalidValueException(ApiException):
+    def __init__(self, value):
+        self.message = "Invalid symbol: %s " % (condition_id, value,)

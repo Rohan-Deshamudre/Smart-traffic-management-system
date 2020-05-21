@@ -87,11 +87,12 @@ def match(point, polylines, max_dist_meters=1):
         dist_end = distance_meters(point, end)
         dist_total = dist_start + dist_end
         if dist_total - L < max_dist_meters:
-            matches.append({'index': i, 'polyline': polylines[i],
-                            'offset': dist_total - L})
+            matches.append(
+                {"index": i, "polyline": polylines[i], "offset": dist_total - L}
+            )
             break
 
-    matches.sort(key=lambda x: x['offset'])
+    matches.sort(key=lambda x: x["offset"])
     return matches
 
 
@@ -116,8 +117,10 @@ class Vector:
         return acos(self.dot(other) / (self.length * other.length))
 
     def rotate_ccw(self, radians):
-        return Vector(self.x * cos(radians) - self.y * sin(radians),
-                      self.x * sin(radians) + self.y * cos(radians))
+        return Vector(
+            self.x * cos(radians) - self.y * sin(radians),
+            self.x * sin(radians) + self.y * cos(radians),
+        )
 
     def scale(self, s):
         return Vector(self.x * s, self.y * s)
