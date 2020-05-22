@@ -34,27 +34,40 @@ class CreateResponsePlan(graphene.Mutation):
     road_segment_id = graphene.Int()
     operator = graphene.String()
     road_condition_id = graphene.Int()
+    scenario_id = graphene.Int()
     parent_id = graphene.Int()
 
     class Arguments:
-        road_segment_id = graphene.Int(required=True)
         operator = graphene.String(required=True)
+        scenario_id = graphene.Int()
+        road_segment_id = graphene.Int()
         road_condition_id = graphene.Int()
         parent_id = graphene.Int()
 
-    def mutate(self, info, road_segment_id, operator,
-               road_condition_id=None, parent_id=None):
+    def mutate(self, info, operator,
+               road_segment_id=None,
+               road_condition_id=None,
+               scenario_id=None,
+               parent_id=None):
         try:
             response_plan = methods.create_response_plan(
-                road_segment_id, operator, road_condition_id, parent_id)
+                road_segment_id,
+                operator,
+                road_condition_id,
+                scenario_id,
+                parent_id
+            )
 
             road_condition_id = response_plan.road_condition.id if road_condition_id else None
+            road_segment_id = response_plan.road_segment.id if road_segment_id else None
+            scenario_id = response_plan.scenario.id if scenario_id else None
 
             return CreateResponsePlan(
                 id=response_plan.id,
-                road_segment_id=response_plan.road_segment.id,
+                road_segment_id=road_segment_id,
                 operator=response_plan.operator,
                 road_condition_id=road_condition_id,
+                scenario_id=scenario_id,
                 parent_id=response_plan.parent_id
             )
         except ApiException as exc:
@@ -66,6 +79,7 @@ class UpdateResponsePlan(graphene.Mutation):
     road_segment_id = graphene.Int()
     operator = graphene.String()
     road_condition_id = graphene.Int()
+    scenario_id = graphene.Int()
     parent_id = graphene.Int()
 
     class Arguments:
@@ -73,24 +87,29 @@ class UpdateResponsePlan(graphene.Mutation):
         road_segment_id = graphene.Int()
         operator = graphene.String()
         road_condition_id = graphene.Int()
+        scenario_id = graphene.Int()
         parent_id = graphene.Int()
 
     def mutate(self, info, id, road_segment_id=None, operator=None,
-               road_condition_id=None, parent_id=None):
+               road_condition_id=None, scenario_id=None, parent_id=None):
         try:
             response_plan = methods.update_response_plan(id,
                                                          road_segment_id,
                                                          operator,
                                                          road_condition_id,
+                                                         scenario_id,
                                                          parent_id)
 
             road_condition_id = response_plan.road_condition.id if response_plan.road_condition else None
+            road_segment_id = response_plan.road_segment.id if road_segment_id else None
+            scenario_id = response_plan.scenario.id if scenario_id else None
 
             return UpdateResponsePlan(
                 id=response_plan.id,
-                road_segment_id=response_plan.road_segment.id,
+                road_segment_id=road_segment_id,
                 operator=response_plan.operator,
                 road_condition_id=road_condition_id,
+                scenario_id=scenario_id,
                 parent_id=response_plan.parent_id
             )
         except ApiException as exc:
