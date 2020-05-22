@@ -50,6 +50,11 @@ function drawIcon(node: any) {
 					return d.data.roadConditionType.img ? '../../assets/tree_icons/road_condition/' + d.data.roadConditionType.img + '.svg' : '';
 				case 'RoadConditionActionObjectType':
 					break;
+				case 'ResponsePlanObjectType':
+					return '../../assets/tree_icons/response-plan.svg';
+				case 'GateObjectType':
+					// TODO check AND or OR.
+					return '../../assets/tree_icons/gate-or.svg';
 				default:
 					return '../../assets/tree_icons/constraint.svg';
 			}

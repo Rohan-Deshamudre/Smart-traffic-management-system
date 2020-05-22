@@ -2,10 +2,9 @@ import * as React from 'react';
 import asSmallWorkspace from "../containers/SmallWorkspace";
 import asLargeWorkspace from "../containers/LargeWorkspace";
 import '../styles/tree.scss';
-import {hierarchy, tree, select, linkHorizontal, zoom} from 'd3';
+import {hierarchy, tree, select, linkHorizontal} from 'd3';
 import * as d3 from 'd3';
 import {DefaultLinkObject, Link} from "d3-shape";
-import TreeLevelButton from "../buttons/TreeLevelButton";
 import * as _ from 'lodash';
 import {treeDraw} from "../../helper/tree/treeDraw";
 import {selectAll} from "d3-selection";
@@ -231,13 +230,19 @@ class Tree extends React.Component<Props, State> {
 						className += 'scenario';
 						break;
 					case 'RoadSegmentObjectType':
-						className += 'roadsegment';
+						className += 'road-segment';
 						break;
 					case 'RoadConditionObjectType':
 						className += 'condition';
 						break;
 					case 'RoadConditionActionObjectType':
 						className += 'action';
+						break;
+					case 'ResponsePlanObjectType':
+						className += 'response-plan';
+						break;
+					case 'GateObjectType':
+						className += 'gate';
 						break;
 					default:
 						className += 'constraint';
