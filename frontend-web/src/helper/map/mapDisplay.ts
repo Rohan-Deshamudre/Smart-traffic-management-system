@@ -152,24 +152,24 @@ function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
                     closeOnClick: false
                 });
 
-                map.on('mouseenter', name + 'popup', function (e) {
+                map.on('mouseenter', name + 'popup', function(e) {
                     // Change the cursor style as a UI indicator.
-                    map.getCanvas().style.cursor = 'pointer';
+					map.getCanvas().style.cursor = 'pointer';
 
-                    var description = e.features[0].properties.description;
+					//@ts-ignore
+					var coordinates = e.features[0].geometry.coordinates;
+					var description = e.features[0].properties.description;
 
-                    geoJson.map(function (pop) {
-                        popup
-                            .setLngLat(pop.geometry.coordinates)
-                            .setHTML(description)
-                            .addTo(map);
-                    })
+					popup
+						.setLngLat(coordinates)
+						.setHTML(description)
+						.addTo(map);
                 });
 
-                map.on('mouseleave', name + 'popup', function () {
+                map.on('mouseleave', name + 'popup', function() {
                     map.getCanvas().style.cursor = '';
                     popup.remove();
-                });
+				});
             });
         });
     } else {
@@ -183,12 +183,8 @@ function displayDestination(routes: any, sourceId: string, map: mb.Map) {
     if (routes != undefined) {
         Promise.all(routes).then((result: any) => {
             const geoJson: any = result.map((route) => {
-                //console.log(route.data.routes)
                 var end_pt = route.data.routes[0].geometry.coordinates.length - 1;
                 var loc = route.data.routes[0].geometry.coordinates[end_pt];
-
-                var mid_pt = Math.ceil(route.data.routes[0].geometry.coordinates.length / 2);
-                var loc_mid = route.data.routes[0].geometry.coordinates[mid_pt];
 
                 return {
                     'type': 'Feature',
@@ -211,49 +207,6 @@ function displayDestination(routes: any, sourceId: string, map: mb.Map) {
                     "type": 'FeatureCollection',
                     "features": geoJson
                 });
-
-                /*
-                var name = sourceId.slice(0, sourceId.length - 6);
-                var mapLayer = map.getLayer(name + 'popup');
-                if (typeof mapLayer !== 'undefined') {
-                        map.removeLayer(name + 'popup');
-                }
-
-                // Add a layer showing the popup.
-                map.addLayer({
-                        'id': name + 'popup',
-                        'type': 'symbol',
-                        'source': sourceId,
-                        'layout': {
-                                'icon-image': '{icon}-15',
-                                'icon-allow-overlap': true
-                        }
-                });
-
-                var popup = new mb.Popup({
-                        closeButton: false,
-                        closeOnClick: false
-                });
-	
-                map.on('mouseenter', name + 'popup', function(e) {
-                        // Change the cursor style as a UI indicator.
-                        map.getCanvas().style.cursor = 'pointer';
-	
-                        var description = e.features[0].properties.description;
-
-                        geoJson.map(function(pop) {
-                                popup
-                                        .setLngLat(pop.geometry.coordinates)
-                                        .setHTML(description)
-                                        .addTo(map);
-                        })
-                });
-	
-                map.on('mouseleave', name + 'popup', function() {
-                        map.getCanvas().style.cursor = '';
-                        popup.remove();
-                });
-                */
             });
         })
     } else {
