@@ -47,7 +47,7 @@ class Map extends React.PureComponent<Props, State> {
 
         this.state = {
             input: '',
-            mapboxApiToken: 'pk.eyJ1Ijoia2FhbjU4IiwiYSI6ImNqcTczNWczZzI3a3o0M3FudnNqdjJrbHAifQ.FZWwVCNOkDdifgGxn3_D-Q',
+            mapboxApiToken: 'pk.eyJ1IjoiYWduaXZjIiwiYSI6ImNrYWt5NTgzNjA0d2cycXF3ZjRneno0ZWIifQ.H_wVlOqQkVF4yJfYuOTiAw',
             lng: this.props.lng,
             lat: this.props.lat,
             zoom: this.props.zoom
