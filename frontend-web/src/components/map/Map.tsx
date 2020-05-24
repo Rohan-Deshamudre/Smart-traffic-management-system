@@ -131,7 +131,10 @@ class Map extends React.PureComponent<Props, State> {
      */
     configureSelectedRoute() {
         const selectedRoute = this.getRoutes([this.props.selectedRoute]);
-        mapDisplay.display(selectedRoute, 'selectedRouteSource', this.map);
+        mapDisplay.displayRoutes(selectedRoute, 'selectedRouteSource', this.map);
+        mapDisplay.displayAlternate(selectedRoute, 'alternativeRouteSource', this.map);
+        mapDisplay.displayDestination(selectedRoute, 'destinationIconSource', this.map);
+        mapDisplay.displayConditionIcon(selectedRoute, 'conditionIconSource', this.map);
         // mapDisplay.displayRoutes(selectedRoute, 'selectedRouteSource', this.map);
     }
 
@@ -258,7 +261,11 @@ class Map extends React.PureComponent<Props, State> {
         const currentRoadSegmentWayPoints = this.getRoadSegmentWayPoints(this.props.scenario, false);
         if (!_.isEqual(currentRoadSegmentWayPoints, this.getRoadSegmentWayPoints(prevProps.scenario, false))) {
             const currentRoadSegmentRoutes = this.getRoutes(currentRoadSegmentWayPoints);
-            mapDisplay.display(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
+            mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
+            mapDisplay.displayAlternate(currentRoadSegmentRoutes, 'alternativeRouteSource', this.map);
+            mapDisplay.displayDestination(currentRoadSegmentRoutes, 'destinationIconSource', this.map);
+            mapDisplay.displayConditionIcon(currentRoadSegmentRoutes, 'conditionIconSource', this.map);
+
             // mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
         }
     }
