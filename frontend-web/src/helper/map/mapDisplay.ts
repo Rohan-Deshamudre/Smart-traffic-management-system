@@ -87,20 +87,6 @@ function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
                 }
             });
 
-            /*
-            const geoJson2: any = result.map((route) => {
-                    console.log(route.data.routes[1]);
-                    return {
-                            'type': 'Feature',
-                            'properties': {},
-                            'geometry': {
-                                    'type': 'LineString',
-                                    'coordinates': route.data.routes[1].geometry.coordinates
-                            }
-                    }
-            });
-            */
-
             map.on("idle", function () {
                 (map.getSource(sourceId) as GeoJSONSource).setData({
                     "type": 'FeatureCollection',
