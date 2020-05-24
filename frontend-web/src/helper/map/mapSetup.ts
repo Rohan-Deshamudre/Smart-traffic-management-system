@@ -276,7 +276,7 @@ function setupSelectedRoutes(map: mb.Map) {
                 },
                 'paint': {
                     'line-opacity': 1,
-                    'line-color': '#FF0000',
+                    'line-color': (name === 'alternativeRoute') ? '#00FF00' : '#FF0000',
                     'line-width': 6
                 }
             });
