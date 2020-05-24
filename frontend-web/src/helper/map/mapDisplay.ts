@@ -68,13 +68,15 @@ function display(routes: any, sourceId: string, map: mb.Map) {
 	displayRoutes(routes, sourceId, map);
 	displayConditionIcon(routes, sourceId, map);
 	displayDestination(routes, sourceId, map);
-	// displayAlternate(routes, sourceId, map);
+	displayAlternate(routes, sourceId, map);
 }
 
 function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
 	if (routes !== undefined) {
 		Promise.all(routes).then((result: any) => {
 			const geoJson: any = result.map((route) => {
+				console.log(route.data.routes);
+				
 				return {
 					'type': 'Feature',
 					'properties': {},
@@ -84,8 +86,10 @@ function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
 					}
 				}
 			});
-
+			
+			/*
 			const geoJson2: any = result.map((route) => {
+				console.log(route.data.routes[1]);
 				return {
 					'type': 'Feature',
 					'properties': {},
@@ -95,11 +99,12 @@ function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
 					}
 				}
 			});
+			*/
 
 			map.on("idle", function () {
 				(map.getSource(sourceId) as GeoJSONSource).setData({
 					"type": 'FeatureCollection',
-					"features": [geoJson]
+					"features": geoJson
 				});
 			});
 		});
@@ -193,10 +198,11 @@ function displayDestination(routes: any, sourceId: string, map: mb.Map) {
 		Promise.all(routes).then((result: any) => {
 			const geoJson: any = result.map((route) => {
 				//console.log(route.data.routes)
-				var loc = route.data.routes[0]
-					.geometry.coordinates[
-						route.data.routes[0].geometry.coordinates.length - 1
-					];
+				var end_pt = route.data.routes[0].geometry.coordinates.length - 1;
+				var loc = route.data.routes[0].geometry.coordinates[end_pt];
+
+				var mid_pt = Math.ceil(route.data.routes[0].geometry.coordinates.length / 2);
+				var loc_mid = route.data.routes[0].geometry.coordinates[mid_pt];
 
 				return {
 					'type': 'Feature',
@@ -219,6 +225,49 @@ function displayDestination(routes: any, sourceId: string, map: mb.Map) {
 					"type": 'FeatureCollection',
 					"features": geoJson
 				});
+
+				/*
+				var name = sourceId.slice(0, sourceId.length - 6);
+				var mapLayer = map.getLayer(name + 'popup');
+				if (typeof mapLayer !== 'undefined') {
+					map.removeLayer(name + 'popup');
+				}
+
+				// Add a layer showing the popup.
+				map.addLayer({
+					'id': name + 'popup',
+					'type': 'symbol',
+					'source': sourceId,
+					'layout': {
+						'icon-image': '{icon}-15',
+						'icon-allow-overlap': true
+					}
+				});
+
+				var popup = new mb.Popup({
+					closeButton: false,
+					closeOnClick: false
+				});
+		
+				map.on('mouseenter', name + 'popup', function(e) {
+					// Change the cursor style as a UI indicator.
+					map.getCanvas().style.cursor = 'pointer';
+		
+					var description = e.features[0].properties.description;
+
+					geoJson.map(function(pop) {
+						popup
+							.setLngLat(pop.geometry.coordinates)
+							.setHTML(description)
+							.addTo(map);
+					})
+				});
+		
+				map.on('mouseleave', name + 'popup', function() {
+					map.getCanvas().style.cursor = '';
+					popup.remove();
+				});
+				*/
 			});
 		})
 	} else {
