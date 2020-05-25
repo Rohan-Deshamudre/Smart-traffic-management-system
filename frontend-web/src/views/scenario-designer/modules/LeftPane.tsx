@@ -12,6 +12,7 @@ import UpdateRoadCondition from "../toolboxes/road-condition/UpdateRoadCondition
 import UpdateRoadConditionAction from "../toolboxes/road-condition-action/UpdateRoadCondtionAction";
 import AddRoadCondition from "../toolboxes/road-condition/AddRoadCondition";
 import AddRoadConditionAction from "../toolboxes/road-condition-action/AddRoadConditionAction";
+import asDesignerPane from "../../../components/DesignerPane";
 
 type State = {
 	type: string,
@@ -99,4 +100,4 @@ class LeftPane extends React.Component<Props, State, any> {
 	}
 }
 
-export default asLeftPane(LeftPane);
+export default asDesignerPane(LeftPane);

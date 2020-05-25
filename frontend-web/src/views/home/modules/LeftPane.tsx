@@ -4,10 +4,6 @@ import '../styles/pane.scss';
 import '../../../components/buttons/styles/paneBottomButtons.scss';
 import * as _ from 'lodash';
 
-
-import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
-
 // @ts-ignore
 import sortAIcon from "./../../../assets/sortA.svg";
 // @ts-ignore
