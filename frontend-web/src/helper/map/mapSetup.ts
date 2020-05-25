@@ -234,38 +234,17 @@ function setupRoutes(map: mb.Map) {
 
 function setupSelectedRoutes(map: mb.Map) {
     map.on("load", function () {
-        map.addSource('selectedRouteSource', {
-            'type': 'geojson',
-            'data': null
-        });
-
-        map.addSource('alternativeRouteSource', {
-            'type': 'geojson',
-            'data': null
-        });
-
-        map.addSource('destinationIconSource', {
-            'type': 'geojson',
-            'data': null
-        });
-
-        map.addSource('conditionIconSource', {
-            'type': 'geojson',
-            'data': null
-        });
-
-        map.addSource('selectedInstrumentActionRoutesSource', {
-            'type': 'geojson',
-            'data': null
-        });
-
         [
             'selectedRoute',
             'selectedInstrumentActionRoutes',
             'alternativeRoute',
-            'destinationIcon',
             'conditionIcon'
         ].forEach((name, index) => {
+            map.addSource(name + 'Source', {
+                'type': 'geojson',
+                'data': null
+            });
+
             map.addLayer({
                 'id': name + 'Layer',
                 'type': 'line',

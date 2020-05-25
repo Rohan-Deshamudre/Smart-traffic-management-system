@@ -152,24 +152,24 @@ function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
                     closeOnClick: false
                 });
 
-                map.on('mouseenter', name + 'popup', function(e) {
+                map.on('mouseenter', name + 'popup', function (e) {
                     // Change the cursor style as a UI indicator.
-					map.getCanvas().style.cursor = 'pointer';
+                    map.getCanvas().style.cursor = 'pointer';
 
-					//@ts-ignore
-					var coordinates = e.features[0].geometry.coordinates;
-					var description = e.features[0].properties.description;
+                    //@ts-ignore
+                    var coordinates = e.features[0].geometry.coordinates;
+                    var description = e.features[0].properties.description;
 
-					popup
-						.setLngLat(coordinates)
-						.setHTML(description)
-						.addTo(map);
+                    popup
+                        .setLngLat(coordinates)
+                        .setHTML(description)
+                        .addTo(map);
                 });
 
-                map.on('mouseleave', name + 'popup', function() {
+                map.on('mouseleave', name + 'popup', function () {
                     map.getCanvas().style.cursor = '';
                     popup.remove();
-				});
+                });
             });
         });
     } else {
@@ -179,40 +179,23 @@ function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
     }
 }
 
+let marker = undefined;
 function displayDestination(routes: any, sourceId: string, map: mb.Map) {
     if (routes != undefined) {
         Promise.all(routes).then((result: any) => {
-            const geoJson: any = result.map((route) => {
+            result.forEach((route) => {
                 var end_pt = route.data.routes[0].geometry.coordinates.length - 1;
                 var loc = route.data.routes[0].geometry.coordinates[end_pt];
 
-                return {
-                    'type': 'Feature',
-                    'properties': {},
-                    'geometry': {
-                        'type': 'Point',
-                        'coordinates': loc
-                    }
+                if (marker) {
+                    marker.remove();
                 }
-            });
 
-            map.on("idle", function () {
-                geoJson.map(function (marker) {
-                    new mb.Marker()
-                        .setLngLat(marker.geometry.coordinates)
-                        .addTo(map);
-                });
-
-                (map.getSource(sourceId) as GeoJSONSource).setData({
-                    "type": 'FeatureCollection',
-                    "features": geoJson
-                });
+                marker = new mb.Marker()
+                    .setLngLat(loc);
+                marker.addTo(map);
             });
         })
-    } else {
-        map.on("idle", function () {
-            (map.getSource(sourceId) as GeoJSONSource).setData(null);
-        });
     }
 }
 
