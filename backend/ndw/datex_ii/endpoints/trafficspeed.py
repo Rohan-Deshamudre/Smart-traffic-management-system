@@ -46,4 +46,3 @@ def handle_measurement(root, status):
             speeds.append(create_message_object(loc, int(site_value / hits)))
 
     status[get_road_condition_type_with_name("Congestion").id] = speeds
-    print(status)

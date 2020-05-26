@@ -6,26 +6,32 @@ from api.road_segments.methods.getter import (
 from subscription.object.methods import create_road_segments
 from utils.route import match
 from .exceptions import NoMeasurementAvailableException
-from ndw.opendata import get_status
+from ndw import opendata
 from ndw.datex_ii.endpoints.message_object import loc_key, val_key
 
 
 def is_road_condition_active(road_condition: RoadCondition):
+    # TODO: replace with multiple db columns?
     symbol = road_condition.value[0]
-    target = road_condition.value[1:]
+    target = road_condition.value[1:-1]
+    con_type = road_condition.value[-1]
 
-    _, measurements = get_status().items()
+    measurements = opendata.get_status()[road_condition.road_condition_type.id]
 
     closest_measurement = find_closest_measurement_for_road_condition(
         measurements, road_condition.id
     )
 
+    print(closest_measurement)
+
     return interp(closest_measurement[val_key], symbol, target)
 
-    # >120
+    # <120s
 
-    # [0] -> either < or >
-    # [1] -> speed in km/h
+    # i -> intensity
+    # s -> speed
+    # w -> weekend?
+    # t -> time (format: ?)
 
 
 def interp(speed, symbol, target):
@@ -43,9 +49,12 @@ def find_closest_measurement_for_road_condition(measurements, road_condition_id)
 
     closest_measurement = None
     distance = -1
+    i = 0
 
     for measurement in measurements:
-        matches = match(measurement[loc_key], polylines, 10)
+        i = i + 1
+        print(closest_measurement, i)
+        matches = match(measurement[loc_key], polylines)
         if matches:
             offset = matches[0]["offset"]
             if not closest_measurement:
@@ -57,5 +66,7 @@ def find_closest_measurement_for_road_condition(measurements, road_condition_id)
 
     if distance == -1:
         raise NoMeasurementAvailableException(road_condition_id)
+
+    print(closest_measurement)
 
     return closest_measurement
