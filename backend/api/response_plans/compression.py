@@ -12,6 +12,29 @@ def to_json_response_plan_by_id(response_plan_id: int):
         return {"msg": str(exc)}
 
 
+def to_json_response_plan_by_scenario(scenario_id: int):
+    response_plans = ResponsePlan.objects.filter(
+        scenario_id=scenario_id
+    ).filter(
+        parent_id=None
+    ).all()
+    response = []
+    for resp in response_plans:
+        response.append(to_json_response_plan(resp))
+    return response
+
+def to_json_response_plan_by_road_segment(road_segment_id: int):
+    response_plans = ResponsePlan.objects.filter(
+        road_segment_id=road_segment_id
+    ).filter(
+        parent_id=None
+    ).all()
+    response = []
+    for resp in response_plans:
+        response.append(to_json_response_plan(resp))
+    return response
+    
+
 def to_json_response_plan(response_plan: ResponsePlan):
     response_obj = {}
     response_obj['operator'] = response_plan.operator
