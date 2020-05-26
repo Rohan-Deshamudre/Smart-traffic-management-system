@@ -8,7 +8,7 @@ import {DefaultLinkObject, Link} from "d3-shape";
 import * as _ from 'lodash';
 import {treeDraw} from "../../helper/tree/treeDraw";
 import {selectAll} from "d3-selection";
-
+import Popup from "reactjs-popup";
 
 type Props = {
 	treeTransform: any,
@@ -25,7 +25,8 @@ type State = {
 	treeHeight: number,
 	treeLevel: number,
 	curNodeId: number,
-	curNodeType: string
+	curNodeType: string,
+	open: boolean
 }
 
 class Tree extends React.Component<Props, State> {
@@ -40,7 +41,8 @@ class Tree extends React.Component<Props, State> {
 			zoom: 0.5,
 			minimizedNodes: [],
 			treeHeight: 1,
-			treeLevel: -1
+			treeLevel: -1,
+			open: false
 		};
 
 		this.createTree = this.createTree.bind(this);
@@ -53,10 +55,12 @@ class Tree extends React.Component<Props, State> {
 		this.editNode = this.editNode.bind(this);
 		this.addNode = this.addNode.bind(this);
 		this.getVisibleTree = this.getVisibleTree.bind(this);
-		this.minimizeChildrenLevel = this.minimizeChildrenLevel.bind(this)
+		this.minimizeChildrenLevel = this.minimizeChildrenLevel.bind(this);
 		this.updateMinimizedNodes = this.updateMinimizedNodes.bind(this);
-		this.handleLevel = this.handleLevel.bind(this)
-
+		this.handleLevel = this.handleLevel.bind(this);
+		this.openModalWithRoadSegment = this.openModalWithRoadSegment.bind(this);
+		this.openModalWithScenario = this.openModalWithScenario.bind(this);
+		this.closeModal = this.closeModal.bind(this);
 	}
 
 	componentDidMount() {
@@ -501,12 +505,49 @@ class Tree extends React.Component<Props, State> {
 		});
 	}
 
+	openModalWithRoadSegment(id: number) {
+		this.setState({ open: true });
+		console.log(id);
+		// TODO Fetch data
+	}
+
+	openModalWithScenario(id: number) {
+		this.setState({ open: true });
+		console.log(id);
+		// TODO Fetch data
+	}
+
+	closeModal() {
+		this.setState({ open: false });
+		console.log('Close');
+		// TODO discard data
+	}
+
 	render() {
 		return (
-			<div className="tree">
-				<div ref={this.chartRef} className="treeLayout">
+			<div>
+				<div className="tree">
+					<div ref={this.chartRef} className="treeLayout">
+					</div>
 				</div>
+				<Popup
+					open={this.state.open}
+					closeOnDocumentClick
+					onClose={this.closeModal}
+				>
+					<div className="custom-modal">
+						<a className="close" onClick={this.closeModal}>
+							&times;
+						</a>
+						<h1>TODO This should display the tree with the ors and ands.</h1>
+						<div className="tree">
+							<div ref={this.chartRef} className="treeLayout">
+							</div>
+						</div>
+					</div>
+				</Popup>
 			</div>
+
 		);
 	}
 }

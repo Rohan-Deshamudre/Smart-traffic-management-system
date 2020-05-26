@@ -320,17 +320,36 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 			} else {
 				return '-'
 			}
-		})
+		});
+
 
 	// -- Response plan button
-	let responsePlanButton = buttons.append('g')
+	// TODO Check in this filter if the thing actually has a response plan, so make the request.
+	let responsePlanButtonRoadSegment = buttons.filter((d: any) => d.data.__typename === 'RoadSegmentObjectType').append('g')
 		.on('click', function (d: any, i) {
-			that.toggleVisibilityButtonFunctionality(that, d);
+			that.openModalWithScenario(d.data.id);
 		})
 		.attr('class', 'button response-plan-button');
 
-	responsePlanButton.append('rect').attr('class', 'button-rect');
-	responsePlanButton.append('text').attr('class', 'button-text')
+	responsePlanButtonRoadSegment.append('rect').attr('class', 'button-rect');
+	responsePlanButtonRoadSegment.append('text').attr('class', 'button-text')
+		.text(function (d: any, i) {
+			if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
+				return 'RP+';
+			} else {
+				return 'RP-'
+			}
+		});
+
+	// TODO Check in this filter if the thing actually has a response plan, so make the request.
+	let responsePlanButtonScenario = buttons.filter((d: any) => d.data.__typename === 'ScenarioObjectType').append('g')
+		.on('click', function (d: any, i) {
+			that.openModalWithRoadSegment(d.data.id);
+		})
+		.attr('class', 'button response-plan-button');
+
+	responsePlanButtonScenario.append('rect').attr('class', 'button-rect');
+	responsePlanButtonScenario.append('text').attr('class', 'button-text')
 		.text(function (d: any, i) {
 			if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
 				return 'RP+';
