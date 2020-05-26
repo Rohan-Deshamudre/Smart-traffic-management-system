@@ -74,7 +74,7 @@ class RoadConditionMethodsTest(TestCase):
         json = to_json_road_condition(condition)
         expected = (
             "{'name': '%s', 'time': {}, "
-            "'value': '%s', "
+            "'value': %s, "
             "'type': %s, "
             "'actions': [{'goal_type': %s, "
             "'instrument_system': %s, "
@@ -83,7 +83,7 @@ class RoadConditionMethodsTest(TestCase):
             "'description': %s, "
             "'instrument_actions': []}], "
             "'road_conditions': [{'name': '%s', 'time': {}, "
-            "'value': %s, "
+            "'value': '%s', "
             "'type': %s, "
             "'actions': [], "
             "'road_conditions': []}]}"
