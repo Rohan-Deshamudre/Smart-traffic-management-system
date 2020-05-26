@@ -1,9 +1,10 @@
 import * as React from 'react';
 import '../styles/locationSelector.scss';
 import Button from "react-bootstrap/Button";
-import FormControl from "react-bootstrap/FormControl";
 import gql from "graphql-tag";
 import {Query} from 'react-apollo';
+import * as mb from 'mapbox-gl';
+
 
 type Props = {
 	handleLocation: ((a: [number, number]) => void),

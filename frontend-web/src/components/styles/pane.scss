@@ -27,6 +27,19 @@ $open-button-width: 200px;
   border-bottom: 1px solid black;
   overflow-y: scroll;
 
+.routepane-container {
+    height: 100%;
+    width: $routepane-width;
+    display: inline;
+    position: absolute;
+    background-color: white;
+    z-index: 10;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    overflow-y: scroll;
+  }
+
+
   a {
     text-decoration: underline;
     color: orange;
@@ -118,6 +131,11 @@ $open-button-width: 200px;
   transition: 700ms;
 }
 
+.inactive-route-pane {
+  left: -$routepane-width;
+  transition: 700ms;
+}
+
 .active-left-pane {
   left: 0;
   transition: 700ms;
@@ -127,6 +145,12 @@ $open-button-width: 200px;
   left: 0;
   transition: 700ms;
 }
+
+.active-route-pane {
+  left: 0;
+  transition: 700ms;
+}
+
 
 .rightpane-container {
   z-index: 10;
@@ -171,6 +195,13 @@ $open-button-width: 200px;
     z-index: 5;
     border-radius: 0px 10px 10px 0px;
   }
+  &.des {
+    justify-content: flex-end;
+    left: -140px;
+    z-index: 5;
+    border-radius: 0px 10px 10px 0px;
+    top: 100px;
+  }
 
   &.left:hover {
     left: 0;
@@ -213,6 +244,24 @@ $open-button-width: 200px;
     text-decoration: underline;
     right: -140px;
   }
+
+  &.route {
+    justify-content: flex-end;
+    left: -140px;
+    z-index: 5;
+    border-radius: 0px 10px 10px 0px;
+    top: 100px;
+  }
+
+  &.route:hover {
+    left: 0;
+  }
+
+  &.route:active {
+    text-decoration: underline;
+    right: -140px;
+  }
+
 }
 
 .close-pane-button {
@@ -235,6 +284,11 @@ $open-button-width: 200px;
     left: $pane-width - $close-button-width - 20px;
   }
 
+  &.des {
+    margin: 10px 0 0 0;
+    left: $pane-width - $close-button-width - 20px;
+  }
+
   &.right {
     margin: 10px 0 0 0;
     right: $pane-width - $close-button-width - 20px;
@@ -247,5 +301,11 @@ $open-button-width: 200px;
     margin: 10px 0 0 0;
     left: $insightspane-width - $close-button-width - 20px;
   }
+
+  &.route {
+    margin: 10px 0 0 0;
+    left: $routepane-width - $close-button-width - 20px;
+  }
+
 }
 

@@ -3,14 +3,8 @@ import * as React from 'react';
 import '../styles/leftPane.scss';
 import '../styles/rightPane.scss';
 import asInsightsPane from "../../../components/InsightsPane";
-import SimulationItem from '../components/SimulationItem';
-import { Query } from 'react-apollo';
-import { GET_TREE } from '../../../components/workspaceData';
-import { treeUtils } from "../../../components/tree/treeUtils";
 import InsightsLog from "../components/InsightsLog";
-import * as moment from 'moment';
-import { GET_SIMULATION_FROM_SCENARIO } from "../SimulationQueries";
-import SimulationList from "../components/SimulationList";
+
 
 type Props = {
     messageSocket: Function;
