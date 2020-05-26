@@ -3,9 +3,7 @@ import Name from "../../../../components/other/Name";
 import Button from "react-bootstrap/Button";
 import RouteToolbox from "../RouteToolbox";
 import Type from "../../../../components/other/Type";
-import {Mutation, Query, ApolloConsumer} from 'react-apollo';
-import gql from "graphql-tag";
-import {GET_WORKSPACE_DATA} from "../../../../components/workspaceData";
+import {Query, ApolloConsumer} from 'react-apollo';
 import {GET_ROAD_SEGMENT_TYPES} from "./RoadSegmentToolboxQueries";
 
 type Props = {

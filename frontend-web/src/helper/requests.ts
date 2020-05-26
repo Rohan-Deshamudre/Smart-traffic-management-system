@@ -15,9 +15,8 @@ function getRoute(roadSegment, overview) {
 				string = string + roadSegment[i][0] + ',' + roadSegment[i][1] + ';';
 			}
 		}
-		resolve(axios.get(SERVER_ADDRESS + string + '?overview=' + overview + '&geometries=geojson&access_token=' + process.env.MAPBOX_TOKEN));
+		resolve(axios.get(SERVER_ADDRESS + string + '?overview=' + overview + '&alternatives=true' + '&geometries=geojson&access_token=' + process.env.MAPBOX_TOKEN));
 	});
-
 }
 
 

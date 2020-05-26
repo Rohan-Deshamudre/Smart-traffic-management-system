@@ -163,13 +163,13 @@ $node-height: $node-width / 3 * 2;
 	}
   }
 
-  .roadsegment {
+  .road-segment {
 	.rect {
 	  fill: #afafaf;
 	}
   }
 
-  .roadsegment:hover {
+  .road-segment:hover {
 	.rect {
 	  stroke: #00ff59;
 	}

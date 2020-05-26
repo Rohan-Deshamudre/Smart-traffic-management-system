@@ -1,9 +1,7 @@
 import * as React from 'react';
-import * as moment from 'moment';
 import { Query } from "react-apollo";
 import { GET_ROAD_CONDITION_TYPES } from "../../scenario-designer/toolboxes/road-condition/RoadConditionToolboxQueries";
-import Type from "../../../components/other/Type";
-import * as _ from 'lodash';
+
 
 type State = {}
 

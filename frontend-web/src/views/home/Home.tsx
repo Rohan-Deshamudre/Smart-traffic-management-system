@@ -5,6 +5,7 @@ import NavBar from "./modules/NavBar";
 import Workspace from "./modules/Workspace";
 import LeftPane from "./modules/LeftPane";
 import RightPane from "./modules/RightPane";
+import RoutePane from "./modules/RoutePane";
 
 import "./../../components/styles/structure.scss"
 import { Query } from 'react-apollo';
@@ -17,9 +18,13 @@ import instrumentsIcon from "../../assets/node_icons/instruments.svg";
 import { Auth } from '../../helper/auth';
 import { Redirect } from 'react-router-dom';
 
+// @ts-ignore
+import destinationIcon from "../../assets/node_icons/destination.svg"
+
 interface State {
     leftPaneActive: boolean;
     rightPaneActive: boolean;
+    routePaneActive: boolean;
 }
 
 interface Props {
@@ -29,12 +34,14 @@ class Home extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            leftPaneActive: true,
+            leftPaneActive: false,
             rightPaneActive: true,
+            routePaneActive: false
         };
 
         this.toggleLeftPane = this.toggleLeftPane.bind(this);
         this.toggleRightPane = this.toggleRightPane.bind(this);
+        this.toggleRoutePane = this.toggleRoutePane.bind(this);
     }
 
     toggleLeftPane() {
@@ -46,6 +53,12 @@ class Home extends React.Component<Props, State> {
     toggleRightPane() {
         this.setState({
             rightPaneActive: !this.state.rightPaneActive
+        })
+    }
+
+    toggleRoutePane() {
+        this.setState({
+            routePaneActive: !this.state.routePaneActive
         })
     }
 
@@ -93,6 +106,12 @@ class Home extends React.Component<Props, State> {
                                         folders={scenarioFolders}
                                         scenarios={scenariosWithoutFolders}
                                         boundingBox={data.boundingBox}
+                                    />
+
+                                    <RoutePane icon={destinationIcon}
+                                               paneName = "Routes"
+                                               toggle={this.toggleRoutePane}
+                                               active = {this.state.routePaneActive}
                                     />
 
                                     <Workspace
