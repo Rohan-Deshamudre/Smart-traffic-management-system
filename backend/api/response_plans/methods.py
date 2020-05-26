@@ -7,6 +7,7 @@ from api.response_plans.exceptions import ResponsePlanIsSameAsParentException, \
 from api.response_plans.models import ResponsePlan
 from api.road_conditions.methods.getter import get_road_condition_with_id
 from api.road_segments.methods.getter import get_road_segment_with_id
+from api.scenarios.methods.getter import get_scenario_with_id
 
 
 def has_response_plan_with_id(response_plan_id: int) -> bool:
@@ -36,14 +37,20 @@ def get_response_plan_children(
 def create_response_plan(road_segment_id: int,
                          operator: str,
                          road_condition_id: int,
+                         scenario_id: int,
                          parent_id: int) -> ResponsePlan:
-    if road_segment_id and operator:
-        road_segment = get_road_segment_with_id(road_segment_id)
-        response_plan = ResponsePlan(road_segment=road_segment,
-                                     operator=operator)
+    if operator:
+        response_plan = ResponsePlan(operator=operator)
+
+        if road_segment_id:
+            response_plan.road_segment = get_road_segment_with_id(
+                road_segment_id)
         if road_condition_id:
             response_plan.road_condition = get_road_condition_with_id(
                 road_condition_id)
+        if scenario_id:
+            response_plan.scenario = get_scenario_with_id(
+                scenario_id)
         if parent_id:
             response_plan.parent = get_response_plan_with_id(parent_id)
 
@@ -65,6 +72,12 @@ def update_response_plan_road_condition(response_plan: ResponsePlan,
     response_plan.road_condition = road_condition
 
 
+def update_response_plan_scenario(response_plan: ResponsePlan,
+                                  scenario_id: int):
+    scenario = get_scenario_with_id(scenario_id)
+    response_plan.scenario = scenario
+
+
 def update_response_plan_parent(response_plan: ResponsePlan,
                                 parent_id: int):
     if response_plan.id == parent_id:
@@ -80,8 +93,9 @@ def update_response_plan_parent(response_plan: ResponsePlan,
 
 def update_response_plan(response_plan_id: int, road_segment_id: int,
                          operator: str, road_condition_id: int,
-                         parent_id: int):
+                         scenario_id: int, parent_id: int):
     response_plan = get_response_plan_with_id(response_plan_id)
+
     if road_segment_id:
         update_response_plan_road_segment(response_plan,
                                           road_segment_id)
@@ -92,6 +106,10 @@ def update_response_plan(response_plan_id: int, road_segment_id: int,
     if road_condition_id:
         update_response_plan_road_condition(response_plan,
                                             road_condition_id)
+
+    if scenario_id:
+        update_response_plan_scenario(response_plan,
+                                      scenario_id)
 
     if parent_id:
         update_response_plan_parent(response_plan, parent_id)

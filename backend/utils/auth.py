@@ -1,6 +1,9 @@
 import sys
+import os
+
+
 def has_perms(info, permissionsArray, requireLogin=True):
-    if 'test' in sys.argv:
+    if 'test' in sys.argv or os.getenv('ENV', 'production') == 'development':
         return
 
     user = info.context.user
