@@ -54,14 +54,12 @@ def handle_measurement(root, status):
                         int_hits += 1
 
         if spd_hits > 0:
-            print("sped")
             # take the average speed of average speeds of location
             values.append(
                 create_message_object(loc, int(spd_site_value / spd_hits), spd_typ)
             )
 
         if int_hits > 0:
-            print("int")
             # take the average intensity
             values.append(
                 create_message_object(loc, int(int_site_value / int_hits), int_typ)
