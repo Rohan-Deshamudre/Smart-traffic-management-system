@@ -7,6 +7,8 @@ from api.instruments.compression import export_instruments
 from api.scenarios.compression import to_json_scenario_by_id
 from api.response_plans.compression import to_json_response_plan_by_id
 
+from dicttoxml import dicttoxml
+
 
 def handle_scenario(request):
     response = {}
@@ -35,8 +37,11 @@ def handle_response_plan(request):
     if request.method == 'POST':
         response = {}
         body = json.loads(request.body.decode('utf-8'))
-        if body['id']:
+        if 'id' in body:
             response = to_json_response_plan_by_id(body['id'])
-        return JsonResponse(response)
+        if 'xml' in body and body['xml']:
+            return HttpResponse(dicttoxml(response), content_type='text/html')
+        else:
+            return JsonResponse(response)
     else:
         return HttpResponseNotAllowed(permitted_methods='POST')

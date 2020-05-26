@@ -8,8 +8,8 @@ from api.response_plans.methods import has_response_plan_with_id, \
     get_all_response_plans, get_response_plan_with_id, \
     get_response_plan_children, create_response_plan, \
     update_response_plan_road_segment, update_response_plan_road_condition, \
-    update_response_plan_parent, update_response_plan, \
-    delete_response_plan, delete_response_plan_cascade
+    update_response_plan_scenario, update_response_plan_parent, \
+    update_response_plan, delete_response_plan, delete_response_plan_cascade
 from tests.api.response_plans.methods import create_response_plans
 from tests.api.folders.methods import create_folder_types, create_folders
 from tests.api.road_conditions.methods import create_road_condition_types, \
@@ -41,7 +41,7 @@ class ResponsePlanMethodTest(TestCase):
         self.conditions = create_road_conditions([
             'Test-Condition-1', 'Test-Condition-2'], self.condition_types)
         self.response_plans = create_response_plans(
-            ['AND', 'AND', 'AND'], self.segments, self.conditions
+            ['AND', 'AND', 'AND'], self.segments, self.conditions, self.scenarios
         )
 
     def test_has_and_get_response_plan(self):
@@ -66,7 +66,8 @@ class ResponsePlanMethodTest(TestCase):
         response_plan = create_response_plan(self.segments[0].id,
                                              'OR',
                                              self.conditions[1].id,
-                                             self.response_plans[2].id)
+                                             self.scenarios[0].id,
+                                             self.response_plans[2].id,)
         created = get_response_plan_with_id(response_plan.id)
 
         self.assertTrue(len(ResponsePlan.objects.all()),
@@ -75,7 +76,7 @@ class ResponsePlanMethodTest(TestCase):
 
     def test_create_response_plan_exception(self):
         with self.assertRaises(InvalidInputException):
-            create_response_plan(None, None, None, None)
+            create_response_plan(None, None, None, None, None)
 
     def test_update_road_segment(self):
         update_response_plan_road_segment(self.response_plans[0],
@@ -88,6 +89,12 @@ class ResponsePlanMethodTest(TestCase):
                                             self.conditions[1].id)
         self.assertEqual(self.response_plans[0].road_condition,
                          self.conditions[1])
+
+    def test_update_scenario(self):
+        update_response_plan_scenario(self.response_plans[0],
+                                 self.scenarios[1].id)
+        self.assertEqual(self.response_plans[0].scenario,
+                         self.scenarios[1])
 
     def test_update_prent(self):
         update_response_plan_parent(self.response_plans[2],
@@ -111,17 +118,20 @@ class ResponsePlanMethodTest(TestCase):
                                        self.segments[2].id,
                                        new_operator,
                                        self.conditions[1].id,
+                                       self.scenarios[2].id,
                                        self.response_plans[2].id)
 
         self.assertEqual(updated.operator, new_operator)
         self.assertEqual(updated.road_segment, self.segments[2])
         self.assertEqual(updated.road_condition, self.conditions[1])
+        self.assertEqual(updated.scenario, self.scenarios[2])
         self.assertEqual(updated.parent, self.response_plans[2])
 
     def test_delete(self):
         create_response_plan(self.segments[0].id,
                              'OR',
                              self.conditions[1].id,
+                             self.scenarios[0].id,
                              self.response_plans[1].id)
         current_len = len(get_all_response_plans())
         delete_response_plan(self.response_plans[1].id)

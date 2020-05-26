@@ -34,6 +34,7 @@ import gql from "graphql-tag";
 import DeleteModal from "../../../../components/other/DeleteModal";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import {Auth} from "../../../../helper/auth";
 
 type Props = {
 	instrument: any,
@@ -206,17 +207,24 @@ class Instrument extends React.Component<Props, State> {
 
 				<div className="w-25 d-flex justify-content-end align-items-center pr-3 icons">
 
+					{ Auth.isEngineer() ?
 					<span className="folder-edit-icon" onClick={() => this.setState({
 						creatingInstrumentAction: !this.state.creatingInstrumentAction,
 						showItems: false,
 						editInstrumentAction: undefined
 					})}>{this.state.creatingInstrumentAction ? 'x' : '+'}</span>
+						: null }
 
+					{ Auth.isEngineer() ?
 					<img src={editIcon} alt="Edit Icon" className="ml-2 folder-edit-icon"
 						onClick={() => this.setState({ editMode: !this.state.editMode })} />
+						: null }
 
+					{ Auth.isEngineer() ?
 					<img src={deleteIcon} alt="Delete Icon" className="ml-2 folder-edit-icon"
 						onClick={() => this.setState({ openModal: true })} />
+					: null }
+
 					<Mutation mutation={DELETE_INSTRUMENT}>
 						{(deleteInstrument) => (
 							<DeleteModal show={this.state.openModal}

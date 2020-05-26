@@ -4,6 +4,7 @@ import NavBar from "./modules/NavBar";
 import Workspace from "./modules/Workspace";
 import LeftPane from "./modules/LeftPane";
 import RightPane from "./../home/modules/RightPane";
+import ScenarioPane from "./../home/modules/LeftPane";
 import { Query } from 'react-apollo';
 import { READ_FOLDERS } from "../../components/CRUDFolders";
 import gql from "graphql-tag";
@@ -14,10 +15,13 @@ import instrumentsIcon from "./../../assets/node_icons/instruments.svg";
 import editorIcon from "./../../assets/node_icons/designer.svg";
 import { Redirect } from 'react-router-dom';
 import { Auth } from '../../helper/auth';
+// @ts-ignore
+import scenarioIcon from "../../assets/node_icons/scenario.svg";
 
 interface State {
 	leftPaneActive: boolean;
 	rightPaneActive: boolean;
+	scenarioPaneActive: boolean;
 }
 
 interface Props {
@@ -39,10 +43,13 @@ class ScenarioDesigner extends React.Component<Props, State> {
 		this.state = {
 			leftPaneActive: false,
 			rightPaneActive: false,
+			scenarioPaneActive: false
 		};
 
 		this.toggleLeftPane = this.toggleLeftPane.bind(this);
 		this.toggleRightPane = this.toggleRightPane.bind(this);
+		this.toggleScenarioPane = this.toggleScenarioPane.bind(this);
+
 	}
 
 	toggleLeftPane() {
@@ -57,6 +64,12 @@ class ScenarioDesigner extends React.Component<Props, State> {
 		})
 	}
 
+	toggleScenarioPane() {
+		this.setState({
+			scenarioPaneActive: !this.state.scenarioPaneActive
+		})
+	}
+
 	render() {
 		if (!Auth.isEngineer()) {
 			return <Redirect to="/" />
@@ -65,6 +78,10 @@ class ScenarioDesigner extends React.Component<Props, State> {
 			<div className="view scenario-designer-view">
 				<NavBar mode="ScenarioDesigner" />
 
+				<Workspace
+					smallWorkspaceDeactivated={false}
+					rightPaneActive={this.state.rightPaneActive}
+				/>
 				<div className="home-container structure-container">
 					<Query query={GET_DESIGNER_DATA}>
 						{
@@ -83,11 +100,6 @@ class ScenarioDesigner extends React.Component<Props, State> {
 						}
 					</Query>
 
-					<Workspace
-						smallWorkspaceDeactivated={false}
-						rightPaneActive={this.state.rightPaneActive}
-					/>
-
 					<Query query={READ_FOLDERS}>
 						{
 							({ loading, error, data }) => {
@@ -97,10 +109,27 @@ class ScenarioDesigner extends React.Component<Props, State> {
 									return <div>Error</div>;
 								}
 
+								/** Obtain the scenarios and folders */
+								const scenarioFolders = data.folders
+									.filter((folder: any) => folder.folderType.id === '1');
+								const scenariosWithoutFolders = data.scenarios
+									.filter((scenario: any) => scenario.folder === null);
+
 								/** The instruments menu stays the same */
 								return (
-									<RightPane paneName="Instrumenten"
-										icon={instrumentsIcon}
+									<div className="home-container structure-container">
+									<ScenarioPane
+										paneName="Scenario's"
+										icon={scenarioIcon}
+										toggle={this.toggleScenarioPane}
+										active={this.state.scenarioPaneActive}
+										folders={scenarioFolders}
+										scenarios={scenariosWithoutFolders}
+										boundingBox={data.boundingBox}
+									/>
+
+									<RightPane
+										paneName="Instrumenten" icon={instrumentsIcon}
 										toggle={this.toggleRightPane}
 										active={this.state.rightPaneActive}
 										instruments={data.instruments}
@@ -108,6 +137,8 @@ class ScenarioDesigner extends React.Component<Props, State> {
 										currDrip={data.currDripId}
 										boundingBox={data.boundingBox}
 									/>
+
+									</div>
 								);
 							}
 						}
