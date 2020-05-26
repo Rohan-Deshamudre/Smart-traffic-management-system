@@ -1,5 +1,4 @@
 import {select} from "d3";
-import {node} from "prop-types";
 
 /*
 	When hovering over a condition node.
