@@ -161,6 +161,13 @@ $node-height: $node-width / 3 * 2;
 		fill: orange;
 	  }
 	}
+    .response-plan-button {
+		transform: translateX(-($node-width / 3));
+
+	  rect {
+		  fill: blue;
+	  	}
+	}
   }
 
   .road-segment {

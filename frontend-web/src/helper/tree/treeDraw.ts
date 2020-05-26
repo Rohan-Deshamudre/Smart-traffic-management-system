@@ -15,7 +15,7 @@ function drawConditionHover(g: any, d: any, i: number) {
 
 		name.append('rect').attr('class', 'road-condition-hover-rect');
 
-		if(d.data.roadConditionDate) {
+		if (d.data.roadConditionDate) {
 			name.append('rect').attr('class', 'road-condition-hover-time-box').attr('transform', 'translate(' + (secondColumnX - 3) + ',' + (firstColumnXY - 3) + ')').attr('rx', 3);
 			name.append('text').attr('class', 'road-condition-hover-text').text('Van:').attr('transform', 'translate(' + firstColumnXY + ',' + firstColumnXY + ')');
 			name.append('text').attr('class', 'road-condition-hover-time').text(d.data.roadConditionDate.startDate).attr('transform', 'translate(' + secondColumnX + ',' + firstColumnXY + ')');
@@ -25,7 +25,7 @@ function drawConditionHover(g: any, d: any, i: number) {
 			name.append('text').attr('class', 'road-condition-hover-time').text(d.data.roadConditionDate.endDate).attr('transform', 'translate(' + secondColumnX + ',' + secondRowY + ')');
 		}
 
-		if(d.data.roadConditionType.id === 7) {
+		if (d.data.roadConditionType.id === 7) {
 			name.append('rect').attr('class', 'road-condition-hover-time-box level-box').attr('transform', 'translate(' + (secondColumnX - 3) + ',' + (thirdRowY - 3) + ')').attr('rx', 3);
 			name.append('text').attr('class', 'road-condition-hover-text').text('Level:').attr('transform', 'translate(' + firstColumnXY + ',' + thirdRowY + ')');
 			name.append('text').attr('class', 'road-condition-hover-value').text(d.data.value).attr('transform', 'translate(' + secondColumnX + ',' + thirdRowY + ')');
@@ -321,6 +321,24 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 				return '-'
 			}
 		})
+
+	// -- Response plan button
+	let responsePlanButton = buttons.append('g')
+		.on('click', function (d: any, i) {
+			that.toggleVisibilityButtonFunctionality(that, d);
+		})
+		.attr('class', 'button response-plan-button');
+
+	responsePlanButton.append('rect').attr('class', 'button-rect');
+	responsePlanButton.append('text').attr('class', 'button-text')
+		.text(function (d: any, i) {
+			if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
+				return 'RP+';
+			} else {
+				return 'RP-'
+			}
+		})
+
 }
 
 

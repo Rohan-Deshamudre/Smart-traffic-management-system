@@ -60,7 +60,7 @@ class Tree extends React.Component<Props, State> {
 	}
 
 	componentDidMount() {
-		if (this.props.scenario !== undefined) {
+		if (this.props.scenario) {
 			const hierarchyData = hierarchy(this.props.scenario).sum(function (d) {
 				return d.value
 			});
