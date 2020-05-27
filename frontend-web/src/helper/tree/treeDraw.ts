@@ -1,4 +1,5 @@
 import {select} from "d3";
+import * as axios from 'axios';
 
 /*
 	When hovering over a condition node.
@@ -322,42 +323,66 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 			}
 		});
 
-
 	// -- Response plan button
-	// TODO Check in this filter if the thing actually has a response plan, so make the request.
-	let responsePlanButtonRoadSegment = buttons.filter((d: any) => d.data.__typename === 'RoadSegmentObjectType').append('g')
+	let responsePlanButtonRoadSegment = buttons.filter((d: any) => {
+		return d.data.__typename === 'RoadSegmentObjectType';
+	}).append('g')
 		.on('click', function (d: any, i) {
 			that.openModalWithScenario(d.data.id);
 		})
 		.attr('class', 'button response-plan-button');
 
-	responsePlanButtonRoadSegment.append('rect').attr('class', 'button-rect');
-	responsePlanButtonRoadSegment.append('text').attr('class', 'button-text')
-		.text(function (d: any, i) {
-			if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
-				return 'RP+';
-			} else {
-				return 'RP-'
+	// TODO replace with d.data.id.
+	hasResponsePlan(2).then(
+		(result) => {
+			if (result) {
+				responsePlanButtonRoadSegment.append('rect').attr('class', 'button-rect');
+				responsePlanButtonRoadSegment.append('text').attr('class', 'button-text')
+					.text(function (d: any, i) {
+						if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
+							return 'RP+';
+						} else {
+							return 'RP-'
+						}
+					});
 			}
-		});
+		}
+	);
 
-	// TODO Check in this filter if the thing actually has a response plan, so make the request.
 	let responsePlanButtonScenario = buttons.filter((d: any) => d.data.__typename === 'ScenarioObjectType').append('g')
 		.on('click', function (d: any, i) {
 			that.openModalWithRoadSegment(d.data.id);
 		})
 		.attr('class', 'button response-plan-button');
 
-	responsePlanButtonScenario.append('rect').attr('class', 'button-rect');
-	responsePlanButtonScenario.append('text').attr('class', 'button-text')
-		.text(function (d: any, i) {
-			if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
-				return 'RP+';
-			} else {
-				return 'RP-'
+	// TODO replace with d.data.id.
+	hasResponsePlan(1).then(
+		(result) => {
+			if (result) {
+				responsePlanButtonScenario.append('rect').attr('class', 'button-rect');
+				responsePlanButtonScenario.append('text').attr('class', 'button-text')
+					.text(function (d: any, i) {
+						if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
+							return 'RP+';
+						} else {
+							return 'RP-'
+						}
+					})
 			}
-		})
+		}
+	);
+}
 
+function hasResponsePlan(id: number): Promise<boolean> {
+	// TODO change id to scenario_id and road_segment_id and make dynamic function.
+	return axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: id })
+		.then((res) => {
+			console.log(res);
+			return res.data.children && res.data.children.length > 0;
+		})
+		.catch(() => {
+			return false;
+		});
 }
 
 

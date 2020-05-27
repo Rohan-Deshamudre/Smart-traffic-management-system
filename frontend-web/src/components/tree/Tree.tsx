@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import {treeDraw} from "../../helper/tree/treeDraw";
 import {selectAll} from "d3-selection";
 import Popup from "reactjs-popup";
+import * as axios from "axios";
 
 type Props = {
 	treeTransform: any,
@@ -31,6 +32,8 @@ type State = {
 
 class Tree extends React.Component<Props, State> {
 	private readonly chartRef: React.LegacyRef<HTMLDivElement>;
+
+	private responsePlan;
 
 	constructor(props: Props) {
 		super(props);
@@ -506,21 +509,33 @@ class Tree extends React.Component<Props, State> {
 	}
 
 	openModalWithRoadSegment(id: number) {
-		this.setState({ open: true });
-		console.log(id);
-		// TODO Fetch data
+		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: 1 })
+			.then((res) => {
+				this.responsePlan = res.data.operator;
+
+				res.data.children.forEach(
+					(item) => {
+						this.responsePlan += item.operator;
+					}
+				);
+				
+				this.setState({ open: true });
+				console.log(this.responsePlan)
+			});
 	}
 
 	openModalWithScenario(id: number) {
-		this.setState({ open: true });
-		console.log(id);
-		// TODO Fetch data
+		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: 1 })
+			.then((res) => {
+				this.responsePlan = res.data.operator;
+				this.setState({ open: true });
+				console.log(this.responsePlan)
+			});
 	}
 
 	closeModal() {
 		this.setState({ open: false });
-		console.log('Close');
-		// TODO discard data
+		this.responsePlan = undefined;
 	}
 
 	render() {
@@ -540,6 +555,7 @@ class Tree extends React.Component<Props, State> {
 							&times;
 						</a>
 						<h1>TODO This should display the tree with the ors and ands.</h1>
+						<h1>{this.responsePlan}</h1>
 						<div className="tree">
 							<div ref={this.chartRef} className="treeLayout">
 							</div>
