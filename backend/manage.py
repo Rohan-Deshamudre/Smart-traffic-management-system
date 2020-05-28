@@ -3,7 +3,6 @@
 import os
 import sys
 
-from ndw import listener
 from subscription import broadcast
 
 

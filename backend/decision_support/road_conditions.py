@@ -8,8 +8,9 @@ from api.road_segments.methods.getter import (
 from subscription.object.methods import create_road_segments
 from utils.route import match
 from .exceptions import NoMeasurementAvailableException
-from ndw import opendata
-from ndw.datex_ii.endpoints.message_object import loc_key, val_key, typ_key
+from utils.retrieve_data import get_traffic_flow, get_traffic_speed, \
+    get_travel_time
+
 
 int_typ = "i"
 spd_typ = "s"
@@ -25,18 +26,12 @@ def is_road_condition_active(road_condition: RoadCondition):
 
     if con_type == wkd_typ:
         interp(datetime.datetime.today().weekday(), symbol, target)
-    if con_type == tim_typ:
+    elif con_type == tim_typ:
         interp(int(time.time()), symbol, target)
-    if con_type == int_typ or con_type == spd_typ:
-        interp(
-            find_closest_measurement_for_road_condition(
-                opendata.get_status()[road_condition.road_condition_type.id],
-                road_condition.id,
-                con_type,
-            ),
-            symbol,
-            target,
-        )
+    elif con_type == int_typ:
+        interp(get_traffic_flow(), symbol, target)
+    elif con_type == spd_typ:
+        interp(get_traffic_speed(), symbol, target)
 
     return interp(closest_measurement[val_key], symbol, target)
 
@@ -57,6 +52,7 @@ def interp(value, symbol, target):
     raise InvalidValueException(symbol)
 
 
+# TODO: Use the api and not the xml
 def find_closest_measurement_for_road_condition(
     measurements, road_condition_id, measurement_type
 ):
