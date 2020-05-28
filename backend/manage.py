@@ -22,9 +22,7 @@ def main():
         ) from exc
 
     if 'test' not in sys.argv:
-        listener.start_update()
         broadcast.start()
-        listener.start_daily_update()
     execute_from_command_line(sys.argv)
 
 
