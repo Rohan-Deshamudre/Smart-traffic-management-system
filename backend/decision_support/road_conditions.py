@@ -37,8 +37,6 @@ def is_road_condition_active(road_condition: RoadCondition):
 
     return interp(closest_measurement[val_key], symbol, target)
 
-    # <120s
-
     # i -> intensity
     # s -> speed
     # w -> weekend?
@@ -48,7 +46,7 @@ def is_road_condition_active(road_condition: RoadCondition):
 def interp(value, symbol, target):
     # API may return None in case no data is found
     if value is None:
-        raise InvalidValueException(value)
+        raise NoMeasurementAvailableException()
 
     if symbol == "<":
         return value < target
@@ -56,37 +54,3 @@ def interp(value, symbol, target):
         return value > target
 
     raise InvalidValueException(symbol)
-
-
-# TODO: Use the api and not the xml
-def find_closest_measurement_for_road_condition(
-    measurements, road_condition_id, measurement_type
-):
-    segment = get_road_segment_with_road_condition_id(road_condition_id)
-    polylines = get_polylines_with_id(segment.id)
-
-    closest_measurement = None
-    distance = -1
-    i = 0
-
-    for measurement in measurements:
-        if measurement[typ_key] != measurement_type:
-            continue
-        i = i + 1
-        print(closest_measurement, i)
-        matches = match(measurement[loc_key], polylines)
-        if matches:
-            offset = matches[0]["offset"]
-            if not closest_measurement:
-                closest_measurement = measurement
-                distance = offset
-            elif offset < distance:
-                closest_measurement = measurement
-                distance = offset
-
-    if distance == -1:
-        raise NoMeasurementAvailableException(road_condition_id)
-
-    print(closest_measurement)
-
-    return closest_measurement
