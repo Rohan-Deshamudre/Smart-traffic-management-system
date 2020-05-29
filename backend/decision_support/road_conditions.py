@@ -29,9 +29,11 @@ def is_road_condition_active(road_condition: RoadCondition):
     elif con_type == tim_typ:
         interp(int(time.time()), symbol, target)
     elif con_type == int_typ:
-        interp(get_traffic_flow(), symbol, target)
+        # TODO: Retrieve correct siteId
+        interp(get_traffic_flow("RWS01_MONIBAS_0041hrl0559ra"), symbol, target)
     elif con_type == spd_typ:
-        interp(get_traffic_speed(), symbol, target)
+        # TODO: Retrieve correct siteId
+        interp(get_traffic_speed("RWS01_MONIBAS_0041hrl0559ra"), symbol, target)
 
     return interp(closest_measurement[val_key], symbol, target)
 
@@ -44,6 +46,10 @@ def is_road_condition_active(road_condition: RoadCondition):
 
 
 def interp(value, symbol, target):
+    # API may return None in case no data is found
+    if value is None:
+        raise InvalidValueException(value)
+
     if symbol == "<":
         return value < target
     if symbol == ">":

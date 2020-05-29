@@ -247,4 +247,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
+SMARTROADS_API = {
+    'SPEED_FLOW_API': 'https://analytics.smartroads.nl/point-cloud',
+    'TRAVEL_TIME_API': 'https://analytics.smartroads.nl/routes/measurements',
+    'headers': { 'Authorization': 'Basic c2Nlbndpc2U6NlJ6YkMzVEY=' }
+}
