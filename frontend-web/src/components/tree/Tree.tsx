@@ -32,6 +32,7 @@ type State = {
 
 class Tree extends React.Component<Props, State> {
 	private readonly chartRef: React.LegacyRef<HTMLDivElement>;
+	private readonly chartRef1: React.LegacyRef<HTMLDivElement>;
 
 	private responsePlan;
 
@@ -50,6 +51,7 @@ class Tree extends React.Component<Props, State> {
 
 		this.createTree = this.createTree.bind(this);
 		this.chartRef = React.createRef();
+		this.chartRef1 = React.createRef();
 		this.addButtonFunctionality = this.addButtonFunctionality.bind(this);
 		this.toggleVisibilityButtonFunctionality = this.toggleVisibilityButtonFunctionality.bind(this);
 		this.minimizeChildren = this.minimizeChildren.bind(this);
@@ -75,7 +77,8 @@ class Tree extends React.Component<Props, State> {
 			this.props.client.writeData({data: {treeHeight: hierarchyData.height}});
 			this.setState({treeHeight: hierarchyData.height}, () => {
 				if(this.props.treeLevel !== -1) { this.handleLevel(this.props.treeLevel) }
-				this.createTree(this.getVisibleTree(), this.props.treeTransform);
+				this.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
+				this.createTree(this.getVisibleTree(), this.props.treeTransform, '.responsePlanTreeLayout');
 			});
 		}
 	}
@@ -83,7 +86,8 @@ class Tree extends React.Component<Props, State> {
 	componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void {
 		if (!_.isEqual(this.props.scenario, prevProps.scenario)) {
 			select('svg').remove();
-			this.createTree(this.getVisibleTree(), this.props.treeTransform);
+			this.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
+			this.createTree(this.getVisibleTree(), this.props.treeTransform, '.responsePlanTreeLayout');
 		}
 
 		if (this.props.treeLevel !== prevProps.treeLevel) {
@@ -128,7 +132,7 @@ class Tree extends React.Component<Props, State> {
 		return nodes;
 	}
 
-	createTree(scenario, initTransformStatus) {
+	createTree(scenario, initTransformStatus, selector) {
 		let width: number = window.innerWidth;
 		let height: number = window.innerHeight;
 
@@ -154,7 +158,7 @@ class Tree extends React.Component<Props, State> {
 		});
 
 		// Create svg
-		let svg = select('.treeLayout')
+		let svg = select(selector)
 			.append('svg')
 			.attr('width', width)
 			.attr('height', height);
@@ -400,7 +404,8 @@ class Tree extends React.Component<Props, State> {
 			treeLevel: -1
 		}, () => {
 			select('svg').remove();
-			that.createTree(this.getVisibleTree(), this.props.treeTransform);
+			that.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
+			that.createTree(this.getVisibleTree(), this.props.treeTransform, '.responsePlanTreeLayout');
 		})
 	}
 
@@ -415,7 +420,8 @@ class Tree extends React.Component<Props, State> {
 			})
 		});
 		select('svg').remove();
-		that.createTree(this.getVisibleTree(), this.props.treeTransform);
+		that.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
+		that.createTree(this.getVisibleTree(), this.props.treeTransform, '.responsePlanTreeLayout');
 	}
 
 	/*
@@ -427,7 +433,8 @@ class Tree extends React.Component<Props, State> {
 			minimizedNodes: [...this.state.minimizedNodes, {typename: d.data.__typename, id: d.data.id}],
 		});
 		select('svg').remove();
-		that.createTree(this.getVisibleTree(), this.props.treeTransform);
+		that.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
+		that.createTree(this.getVisibleTree(), this.props.treeTransform, '.responsePlanTreeLayout');
 	}
 
 	/*
@@ -496,7 +503,8 @@ class Tree extends React.Component<Props, State> {
 				this.minimizeChildrenLevel(hierarchyData, this.state.treeLevel)
 		}, () => {
 			select('svg').remove();
-			this.createTree(this.getVisibleTree(), this.props.treeTransform);
+			this.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
+			this.createTree(this.getVisibleTree(), this.props.treeTransform, '.responsePlanTreeLayout');
 		})
 	}
 
@@ -554,10 +562,10 @@ class Tree extends React.Component<Props, State> {
 						<a className="close" onClick={this.closeModal}>
 							&times;
 						</a>
-						<h1>TODO This should display the tree with the ors and ands.</h1>
-						<h1>{this.responsePlan}</h1>
+						{/*<h1>TODO This should display the tree with the ors and ands.</h1>*/}
+						{/*<h1>{this.responsePlan}</h1>*/}
 						<div className="tree">
-							<div ref={this.chartRef} className="treeLayout">
+							<div ref={this.chartRef1} className="responsePlanTreeLayout">
 							</div>
 						</div>
 					</div>
