@@ -537,13 +537,23 @@ class Tree extends React.Component<Props, State> {
 			.then((res) => {
 				this.responsePlan = res.data.operator;
 				this.setState({ open: true });
-				console.log(this.responsePlan)
+				this.createResponsePlanTree(this.responsePlan);
+				console.log(res.data)
 			});
 	}
 
 	closeModal() {
 		this.setState({ open: false });
 		this.responsePlan = undefined;
+	}
+
+	createResponsePlanTree(responsePlan) {
+		const hierarchyData = hierarchy(responsePlan).sum(function (d) {
+			return d.value
+		});
+
+		console.log(hierarchyData);
+
 	}
 
 	render() {

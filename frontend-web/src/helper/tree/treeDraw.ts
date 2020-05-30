@@ -328,7 +328,7 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 		return d.data.__typename === 'RoadSegmentObjectType';
 	}).append('g')
 		.on('click', function (d: any, i) {
-			that.openModalWithScenario(d.data.id);
+			that.openModalWithRoadSegment(d.data.id);
 		})
 		.attr('class', 'button response-plan-button');
 
@@ -351,7 +351,7 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 
 	let responsePlanButtonScenario = buttons.filter((d: any) => d.data.__typename === 'ScenarioObjectType').append('g')
 		.on('click', function (d: any, i) {
-			that.openModalWithRoadSegment(d.data.id);
+			that.openModalWithScenario(d.data.id);
 		})
 		.attr('class', 'button response-plan-button');
 
