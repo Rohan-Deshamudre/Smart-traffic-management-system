@@ -213,7 +213,15 @@ function displayAlternate(routes: any, sourceId: string, map: mb.Map) {
                 }
             });
 
-            map.on("idle", function () {
+            map.on('idle', function() {
+                map.on('click', sourceId, function(e) {
+                    var coords = e.lngLat;
+
+                    map.getCanvas().style.cursor = 'grabbing';
+
+                    geoJson.geometry.coordinates = [coords.lng, coords.lat];
+                });
+
                 (map.getSource(sourceId) as GeoJSONSource).setData({
                     "type": 'FeatureCollection',
                     "features": geoJson

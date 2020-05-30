@@ -135,7 +135,6 @@ class Map extends React.PureComponent<Props, State> {
         mapDisplay.displayAlternate(selectedRoute, 'alternativeRouteSource', this.map);
         mapDisplay.displayDestination(selectedRoute, 'destinationIconSource', this.map);
         mapDisplay.displayConditionIcon(selectedRoute, 'conditionIconSource', this.map);
-        // mapDisplay.displayRoutes(selectedRoute, 'selectedRouteSource', this.map);
     }
 
     /*
@@ -165,7 +164,6 @@ class Map extends React.PureComponent<Props, State> {
         const roadSegmentWayPoints = this.getRoadSegmentWayPoints(this.props.scenario, true);
         const roadSegmentRoutes = this.getRoutes(roadSegmentWayPoints);
         mapDisplay.display(roadSegmentRoutes, 'roadSegmentRoutesSource', this.map);
-        // mapDisplay.displayRoutes(roadSegmentRoutes, 'roadSegmentRoutesSource', this.map);
     }
 
     /*
@@ -244,6 +242,7 @@ class Map extends React.PureComponent<Props, State> {
                 this.props.client.writeData({ data: { mapLocation: '' } });
 
             }
+
             // Adjust the stores longitude and latitude to be corresponding with the map
             if (this.directions.getOrigin().geometry !== undefined) {
                 this.props.client.writeData({
@@ -265,8 +264,6 @@ class Map extends React.PureComponent<Props, State> {
             mapDisplay.displayAlternate(currentRoadSegmentRoutes, 'alternativeRouteSource', this.map);
             mapDisplay.displayDestination(currentRoadSegmentRoutes, 'destinationIconSource', this.map);
             mapDisplay.displayConditionIcon(currentRoadSegmentRoutes, 'conditionIconSource', this.map);
-
-            // mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
         }
     }
 
@@ -331,6 +328,5 @@ export default {
     ,
     Large
 };
-
 
 
