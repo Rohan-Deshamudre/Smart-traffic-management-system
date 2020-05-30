@@ -5,6 +5,11 @@ from decision_support.exceptions import InvalidResponsePlanException
 from decision_support.road_conditions import is_road_condition_active
 
 
+def check_road_segments():
+    # TODO: Loop over all road segments and check if the response plans are active
+    pass
+
+
 def get_active_response_plans(road_segment_id: int):
     parents = ResponsePlan.objects.filter(
         road_segment_id=road_segment_id

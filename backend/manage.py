@@ -4,6 +4,7 @@ import os
 import sys
 
 from subscription import broadcast
+from decision_support import decision_module
 
 
 def main():
@@ -22,6 +23,7 @@ def main():
 
     if 'test' not in sys.argv:
         broadcast.start()
+        decision_module.start()
     execute_from_command_line(sys.argv)
 
 
