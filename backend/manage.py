@@ -26,6 +26,5 @@ def main():
         decision_module.start()
     execute_from_command_line(sys.argv)
 
-
 if __name__ == '__main__':
     main()

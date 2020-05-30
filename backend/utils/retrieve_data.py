@@ -40,7 +40,7 @@ def get_speed_flow(site_id,
         return None
 
 
-def get_travel_time(coords={},
+def get_travel_time(coords,
                     start_date=datetime.utcnow(),
                     delta=1,
                     max_retry=4):
@@ -58,8 +58,8 @@ def get_travel_time(coords={},
 
     r = post_request(SMARTROADS_API['TRAVEL_TIME_API'], data)
     json_decoded = r.json()
-    if r.ok:
-        return json_decoded
+    if r.ok and len(json_decoded['measurementsPerTime']) > 0:
+        return json_decoded['measurementsPerTime'][0]['values']
     elif max_retry > 0:
         return get_travel_time(coords, start_date, delta * 2, max_retry - 1)
     else:

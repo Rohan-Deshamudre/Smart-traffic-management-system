@@ -30,7 +30,10 @@ def is_response_plan_active(response_plan: ResponsePlan):
         return apply_operator(response_plan, False, lambda a, b: a or b)
     elif response_plan.road_condition is not None:
         return {
-            "active": is_road_condition_active(response_plan.road_condition),
+            "active": is_road_condition_active(
+                response_plan.road_condition,
+                response_plan.road_segment
+            ),
             "response_plan": response_plan,
             "children": []
         }

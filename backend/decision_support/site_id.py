@@ -17,7 +17,7 @@ def fetch_shapefile():
     return sf
 
 
-def get_site_id(segment: RouteSegment):
+def fetch_site_id(segment: RouteSegment) -> RouteSegment:
     global sf
     if sf is None:
         sf = fetch_shapefile()
@@ -42,4 +42,4 @@ def get_site_id(segment: RouteSegment):
         segment.site_id = sf.record(index)
         segment.save()
 
-    return segment.site_id
+    return segment
