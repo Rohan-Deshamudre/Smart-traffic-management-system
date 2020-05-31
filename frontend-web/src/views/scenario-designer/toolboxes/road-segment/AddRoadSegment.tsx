@@ -49,8 +49,6 @@ class AddRoadSegment extends React.Component<Props, State> {
 					<div className='toolbox'>
 						<p>Adding new road segment for parent {this.props.parentInfo[0]}</p>
 						<RoadSegmentToolbox id={this.props.parentInfo[0]} handleData={(newData) => this.handleData(createRoadSegment, newData)}/>
-						<input type="checkbox" name="alt_route" id="alt_route_check"/>
-						<RoadSegmentToolbox id={this.props.parentInfo[0]} handleData={(newData) => this.handleData(createRoadSegment, newData)}/>
 					</div>
 				)}
 			</Mutation>
