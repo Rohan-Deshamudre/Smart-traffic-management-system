@@ -30,7 +30,7 @@ trv_typ = "v"
 # i -> intensity
 # s -> speed
 # w -> weekday
-# t -> time (format: epoch)
+# t -> time
 # v -> travel time
 
 
@@ -63,11 +63,11 @@ def get_travel_time_from(road_segment: RoadSegment):
 
 def is_road_condition_active(road_condition: RoadCondition, road_segment: RoadSegment):
     # TODO: error checking
-    parts = road_condition.condition.split()
+    parts = road_condition.value.split("|")
 
     con_type = parts[0]
     symbol = parts[1]
-    target1 = parts[2]
+    target1 = int(parts[2])
     target2 = None if len(parts) < 4 else parts[3]
 
     result = None
@@ -98,9 +98,9 @@ def interp(value, symbol, target1, target2):
         raise NoMeasurementAvailableException()
 
     if symbol == "<" and not target2:
-        return value < target
+        return value < target1
     if symbol == ">" and not target2:
-        return value > target
+        return value > target1
     if symbol == "<<" and target2:
         return target1 < value and value < target2
     if symbol == "><" and target2:

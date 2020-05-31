@@ -1,6 +1,6 @@
 import shapefile
 from api.routes.models import RouteSegment
-from api.route import distance_meters
+from utils.route import distance_meters
 
 
 SHP_LOC = "shapefiles/Telpunten_WGS84.shp"
