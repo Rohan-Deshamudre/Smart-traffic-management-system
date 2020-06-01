@@ -47,7 +47,7 @@ function displayLargeInstruments(map: mb.Map, visibleInstruments: [string, [numb
 
 /*
 	Edit the MapBox GL Directions Plug-in to display 1 point on the map
- */
+ 
 function displayOneMarker(directions: any, client: any) {
     directions.on('destination', () => {
         if (directions.getDestination().geometry !== undefined) {
@@ -63,19 +63,32 @@ function displayOneMarker(directions: any, client: any) {
         }
     });
 }
+*/
 
 function display(routes: any, sourceId: string, map: mb.Map) {
     displayRoutes(routes, sourceId, map);
     displayConditionIcon(routes, sourceId, map);
-    displayDestination(routes, sourceId, map);
+    //displayDestination(routes, sourceId, map);
     displayAlternate(routes, sourceId, map);
 }
 
+let marker = undefined;
 function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
     if (routes !== undefined) {
         Promise.all(routes).then((result: any) => {
             const geoJson: any = result.map((route) => {
                 console.log(route.data.routes);
+                
+                var end_pt = route.data.routes[0].geometry.coordinates.length - 1;
+                var loc = route.data.routes[0].geometry.coordinates[end_pt];
+
+                if (marker) {
+                    marker.remove();
+                }
+
+                marker = new mb.Marker()
+                    .setLngLat(loc)
+                    .addTo(map);
 
                 return {
                     'type': 'Feature',
@@ -101,13 +114,14 @@ function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
     }
 }
 
-
 function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
     if (routes != undefined) {
         Promise.all(routes).then((result: any) => {
             const geoJson: any = result.map((route) => {
                 var mid_pt = Math.ceil(route.data.routes[0].geometry.coordinates.length / 2);
                 var loc = route.data.routes[0].geometry.coordinates[mid_pt];
+
+                //
 
                 return {
                     'type': 'Feature',
@@ -179,6 +193,7 @@ function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
     }
 }
 
+/*
 let marker = undefined;
 function displayDestination(routes: any, sourceId: string, map: mb.Map) {
     if (routes != undefined) {
@@ -198,6 +213,7 @@ function displayDestination(routes: any, sourceId: string, map: mb.Map) {
         })
     }
 }
+*/
 
 function displayAlternate(routes: any, sourceId: string, map: mb.Map) {
     if (routes != undefined) {
@@ -238,10 +254,8 @@ function displayAlternate(routes: any, sourceId: string, map: mb.Map) {
 export const mapDisplay = {
     displayInstruments: displayInstruments,
     displayLargeInstruments: displayLargeInstruments,
-    displayOneMarker: displayOneMarker,
     display: display,
     displayRoutes: displayRoutes,
     displayAlternate: displayAlternate,
-    displayDestination: displayDestination,
     displayConditionIcon: displayConditionIcon
 };

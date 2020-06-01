@@ -122,7 +122,7 @@ class Map extends React.PureComponent<Props, State> {
     setupDirections(accessToken: string) {
         this.directions = mapSetup.setupDirections(accessToken, this.dirContainer);
         this.map.addControl(this.directions, 'top-left');
-        mapDisplay.displayOneMarker(this.directions, this.props.client);
+        //mapDisplay.displayOneMarker(this.directions, this.props.client);
     }
 
     /*
@@ -133,7 +133,7 @@ class Map extends React.PureComponent<Props, State> {
         const selectedRoute = this.getRoutes([this.props.selectedRoute]);
         mapDisplay.displayRoutes(selectedRoute, 'selectedRouteSource', this.map);
         mapDisplay.displayAlternate(selectedRoute, 'alternativeRouteSource', this.map);
-        mapDisplay.displayDestination(selectedRoute, 'destinationIconSource', this.map);
+        //mapDisplay.displayDestination(selectedRoute, 'destinationIconSource', this.map);
         mapDisplay.displayConditionIcon(selectedRoute, 'conditionIconSource', this.map);
     }
 
@@ -262,7 +262,7 @@ class Map extends React.PureComponent<Props, State> {
             const currentRoadSegmentRoutes = this.getRoutes(currentRoadSegmentWayPoints);
             mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
             mapDisplay.displayAlternate(currentRoadSegmentRoutes, 'alternativeRouteSource', this.map);
-            mapDisplay.displayDestination(currentRoadSegmentRoutes, 'destinationIconSource', this.map);
+            //mapDisplay.displayDestination(currentRoadSegmentRoutes, 'destinationIconSource', this.map);
             mapDisplay.displayConditionIcon(currentRoadSegmentRoutes, 'conditionIconSource', this.map);
         }
     }
