@@ -62,13 +62,15 @@ def get_travel_time_from(road_segment: RoadSegment):
 
 
 def is_road_condition_active(road_condition: RoadCondition, road_segment: RoadSegment):
-    # TODO: error checking
     parts = road_condition.value.split("|")
 
+    if len(parts) < 3 or not parts[2].isdigit() or (len(parts) > 3 and not parts[3].isdigit()):
+        raise InvalidConditionException(road_condition.condition, road_condition.id)
+    
     con_type = parts[0]
     symbol = parts[1]
     target1 = int(parts[2])
-    target2 = None if len(parts) < 4 else parts[3]
+    target2 = None if len(parts) < 4 else int(parts[3])
 
     result = None
 
