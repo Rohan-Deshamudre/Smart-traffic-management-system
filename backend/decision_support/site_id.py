@@ -33,13 +33,13 @@ def fetch_site_id(segment: RouteSegment) -> RouteSegment:
                 curr = distance_meters(shape.points[0], [segment.lng, segment.lat])
                 close = distance_meters(closest, [segment.lng, segment.lat])
                 if curr < close:
-                    closest = curr
+                    closest = shape.points[0]
                     index = idx
 
     if closest is not None:
         segment.lng = closest[0]
         segment.lat = closest[1]
-        segment.site_id = sf.record(index)
+        segment.site_id = sf.record(index)[2]
         segment.save()
-
+        
     return segment

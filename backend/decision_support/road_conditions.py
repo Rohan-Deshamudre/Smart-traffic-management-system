@@ -61,16 +61,17 @@ def get_travel_time_from(road_segment: RoadSegment):
     return max(get_travel_time(coordinates)) if len(coordinates) > 0 else 0
 
 
-def is_road_condition_active(road_condition: RoadCondition, road_segment: RoadSegment):
+def is_road_condition_active(road_condition: RoadCondition,
+                             road_segment: RoadSegment):
     parts = road_condition.value.split("|")
 
-    if len(parts) < 3 or not parts[2].isdigit() or (len(parts) > 3 and not parts[3].isdigit()):
-        raise InvalidConditionException(road_condition.condition, road_condition.id)
-    
-    con_type = parts[0]
-    symbol = parts[1]
-    target1 = int(parts[2])
-    target2 = None if len(parts) < 4 else int(parts[3])
+    if len(parts) < 3 or not parts[2].strip().isdigit() or (len(parts) > 3 and not parts[3].strip().isdigit()):
+        raise InvalidConditionException(road_condition.value, road_condition.id)
+
+    con_type = parts[0].strip()
+    symbol = parts[1].strip()
+    target1 = int(parts[2].strip())
+    target2 = None if len(parts) < 4 else int(parts[3].strip())
 
     result = None
 
@@ -89,7 +90,7 @@ def is_road_condition_active(road_condition: RoadCondition, road_segment: RoadSe
         result = interp(travel_time, symbol, target1, target2)
 
     if result is None:
-        raise InvalidConditionException(road_condition.condition, road_condition.id)
+        raise InvalidConditionException(road_condition.value, road_condition.id)
 
     return result
 
