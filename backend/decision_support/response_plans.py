@@ -5,6 +5,11 @@ from decision_support.exceptions import InvalidResponsePlanException
 from decision_support.road_conditions import is_road_condition_active
 
 
+def check_road_segments():
+    # TODO: Loop over all road segments and check if the response plans are active
+    pass
+
+
 def get_active_response_plans(road_segment_id: int):
     parents = ResponsePlan.objects.filter(
         road_segment_id=road_segment_id
@@ -25,7 +30,10 @@ def is_response_plan_active(response_plan: ResponsePlan):
         return apply_operator(response_plan, False, lambda a, b: a or b)
     elif response_plan.road_condition is not None:
         return {
-            "active": is_road_condition_active(response_plan.road_condition),
+            "active": is_road_condition_active(
+                response_plan.road_condition,
+                response_plan.road_segment
+            ),
             "response_plan": response_plan,
             "children": []
         }

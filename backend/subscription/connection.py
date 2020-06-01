@@ -118,6 +118,7 @@ def live_messenger(subscriber_obj):
     sim_id = get_live_id(subscriber_obj)
     scene = create_simulation_scene(sim_id, datetime.now(pytz.utc).isoformat(), None)
     for road_segment_id, poly_lines in road_segments.items():
+        # TODO: Use the API Endpoint not XML
         find(scene.id, road_segment_id, poly_lines)
 
     send_save_to_channel(get_channel(subscriber_obj), simulation_id_to_json(scene.id))
@@ -140,6 +141,7 @@ def handle_send_messages():
             live_messenger(subscriber_obj)
 
 
+# TODO: Refactor to use the api endpoint
 def find(scene_id, road_segment_id, poly_lines):
     road_status = opendata.get_status()
     matches = []

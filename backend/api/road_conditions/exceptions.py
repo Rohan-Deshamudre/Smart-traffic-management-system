@@ -24,6 +24,9 @@ class CircularRoadCondition(ApiException):
         )
 
 
-class InvalidValueException(ApiException):
-    def __init__(self, value):
-        self.message = "Invalid symbol: %s " % (condition_id, value,)
+class InvalidConditionException(ApiException):
+    def __init__(self, condition, roadcondition_id):
+        self.message = "Invalid condition: %s for road condition with id %s " % (
+            condition,
+            roadcondition_id,
+        )
