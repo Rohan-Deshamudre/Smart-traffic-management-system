@@ -146,29 +146,3 @@ def handle_send_messages():
         elif sim_id and sim_id == "live":
             live_messenger(subscriber_obj)
 
-
-# TODO: Refactor to use the api endpoint
-def find(scene_id, road_segment_id, poly_lines):
-    road_status = opendata.get_status()
-    matches = []
-    for road_condition_type_id, ndw_status in road_status.items():
-        hits = 0
-        road_condition_value = 0
-        for i in ndw_status:
-            if match(i[loc_key], poly_lines, 0.5):
-                road_condition_value += i[val_key]
-                hits += 1
-
-                # points = get_float_array(get_road_segment_with_id(
-                #     road_segment_id).route)
-
-                # if check_if_point_in_direction_list(i[loc_key], points):
-        if hits > 0:
-            simulation_scene_event = create_simulation_scene_event(
-                scene_id,
-                road_segment_id,
-                road_condition_type_id,
-                int(road_condition_value / hits),
-            )
-            matches.append(simulation_scene_event)
-    return matches
