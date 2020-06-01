@@ -78,7 +78,6 @@ class Tree extends React.Component<Props, State> {
 			this.setState({treeHeight: hierarchyData.height}, () => {
 				if(this.props.treeLevel !== -1) { this.handleLevel(this.props.treeLevel) }
 				this.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
-				this.createTree(this.getVisibleTree(), this.props.treeTransform, '.responsePlanTreeLayout');
 			});
 		}
 	}
@@ -87,7 +86,6 @@ class Tree extends React.Component<Props, State> {
 		if (!_.isEqual(this.props.scenario, prevProps.scenario)) {
 			select('svg').remove();
 			this.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
-			this.createTree(this.getVisibleTree(), this.props.treeTransform, '.responsePlanTreeLayout');
 		}
 
 		if (this.props.treeLevel !== prevProps.treeLevel) {
@@ -132,7 +130,7 @@ class Tree extends React.Component<Props, State> {
 		return nodes;
 	}
 
-	createTree(scenario, initTransformStatus, selector) {
+	createTree(data, initTransformStatus, selector) {
 		let width: number = window.innerWidth;
 		let height: number = window.innerHeight;
 
@@ -140,7 +138,7 @@ class Tree extends React.Component<Props, State> {
 
 		let that = this;
 
-		const hierarchyData = hierarchy(scenario).sum(function (d) {
+		const hierarchyData = hierarchy(data).sum(function (d) {
 			return d.value
 		});
 
@@ -405,7 +403,6 @@ class Tree extends React.Component<Props, State> {
 		}, () => {
 			select('svg').remove();
 			that.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
-			that.createTree(this.getVisibleTree(), this.props.treeTransform, '.responsePlanTreeLayout');
 		})
 	}
 
@@ -421,7 +418,6 @@ class Tree extends React.Component<Props, State> {
 		});
 		select('svg').remove();
 		that.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
-		that.createTree(this.getVisibleTree(), this.props.treeTransform, '.responsePlanTreeLayout');
 	}
 
 	/*
@@ -434,7 +430,6 @@ class Tree extends React.Component<Props, State> {
 		});
 		select('svg').remove();
 		that.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
-		that.createTree(this.getVisibleTree(), this.props.treeTransform, '.responsePlanTreeLayout');
 	}
 
 	/*
@@ -504,7 +499,6 @@ class Tree extends React.Component<Props, State> {
 		}, () => {
 			select('svg').remove();
 			this.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
-			this.createTree(this.getVisibleTree(), this.props.treeTransform, '.responsePlanTreeLayout');
 		})
 	}
 
@@ -519,26 +513,19 @@ class Tree extends React.Component<Props, State> {
 	openModalWithRoadSegment(id: number) {
 		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: 1 })
 			.then((res) => {
-				this.responsePlan = res.data.operator;
-
-				res.data.children.forEach(
-					(item) => {
-						this.responsePlan += item.operator;
-					}
-				);
+				console.log(res.data);
 				
 				this.setState({ open: true });
-				console.log(this.responsePlan)
 			});
 	}
 
 	openModalWithScenario(id: number) {
 		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: 1 })
 			.then((res) => {
+				console.log(res.data);
 				this.responsePlan = res.data.operator;
 				this.setState({ open: true });
 				this.createResponsePlanTree(this.responsePlan);
-				console.log(res.data)
 			});
 	}
 
@@ -548,19 +535,14 @@ class Tree extends React.Component<Props, State> {
 	}
 
 	createResponsePlanTree(responsePlan) {
-		const hierarchyData = hierarchy(responsePlan).sum(function (d) {
-			return d.value
-		});
-
-		console.log(hierarchyData);
-
+		this.createTree(responsePlan, this.props.treeTransform, '.responsePlanTreeLayout');
 	}
 
 	render() {
 		return (
 			<div>
 				<div className="tree">
-					<div ref={this.chartRef} className="treeLayout">
+					<div className="treeLayout">
 					</div>
 				</div>
 				<Popup
@@ -572,10 +554,9 @@ class Tree extends React.Component<Props, State> {
 						<a className="close" onClick={this.closeModal}>
 							&times;
 						</a>
-						{/*<h1>TODO This should display the tree with the ors and ands.</h1>*/}
-						{/*<h1>{this.responsePlan}</h1>*/}
+						<div className="header"> Response Plan </div>
 						<div className="tree">
-							<div ref={this.chartRef1} className="responsePlanTreeLayout">
+							<div className="responsePlanTreeLayout">
 							</div>
 						</div>
 					</div>

@@ -41,6 +41,11 @@ function drawIcon(node: any) {
 	node.append('image')
 		.attr('xlink:href', function (d: any) {
 
+			console.log(d);
+			if (d.data === 'OR') {
+				return '../../assets/tree_icons/scenario.svg';
+			}
+
 			switch (d.data.__typename) {
 				case 'ScenarioObjectType':
 					return '../../assets/tree_icons/scenario.svg';
@@ -50,11 +55,6 @@ function drawIcon(node: any) {
 					return d.data.roadConditionType.img ? '../../assets/tree_icons/road_condition/' + d.data.roadConditionType.img + '.svg' : '';
 				case 'RoadConditionActionObjectType':
 					break;
-				case 'ResponsePlanObjectType':
-					return '../../assets/tree_icons/response-plan.svg';
-				case 'GateObjectType':
-					// TODO check AND or OR.
-					return '../../assets/tree_icons/gate-or.svg';
 				default:
 					return '../../assets/tree_icons/constraint.svg';
 			}
@@ -376,13 +376,8 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 function hasResponsePlan(id: number): Promise<boolean> {
 	// TODO change id to scenario_id and road_segment_id and make dynamic function.
 	return axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: id })
-		.then((res) => {
-			console.log(res);
-			return res.data.children && res.data.children.length > 0;
-		})
-		.catch(() => {
-			return false;
-		});
+		.then((res) => res.data.children && res.data.children.length > 0)
+		.catch(() => false);
 }
 
 
