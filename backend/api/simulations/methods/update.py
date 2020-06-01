@@ -30,7 +30,8 @@ def update_simulation_scene(simulation_scene_id: int,
 def update_simulation_scene_event(simulation_scene_event_id: int,
                                   road_segment_id: int,
                                   road_condition_type_id: int,
-                                  value: int) -> SimulationSceneEvent:
+                                  value: int,
+                                  response_plan: str) -> SimulationSceneEvent:
     simulation_scene_event = get_simulation_scene_event_with_id(
         simulation_scene_event_id)
     if road_segment_id:
@@ -43,6 +44,10 @@ def update_simulation_scene_event(simulation_scene_event_id: int,
 
     simulation_scene_event.value = value \
         if value else simulation_scene_event.value
+
+    if response_plan:
+        simulation_scene_event.response_plan = response_plan
+    
     simulation_scene_event.save()
 
     return simulation_scene_event

@@ -75,6 +75,7 @@ class SimulationMethodsTest(TestCase):
     def test_update_simulation_scene_event(self):
         event = self.events[0]
         value = 5
-        update_simulation_scene_event(event.id, None, None, value)
+        response_plan = "[]"
+        update_simulation_scene_event(event.id, None, None, value, response_plan)
         updated_event = get_simulation_scene_event_with_id(event.id)
         self.assertEqual(updated_event.value, value)

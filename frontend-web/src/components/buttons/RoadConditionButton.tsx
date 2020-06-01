@@ -22,12 +22,16 @@ class RoadConditionButton extends React.Component<Props, State> {
     }
 
     parseLevel() {
-        const parts = this.props.level.split("|");
         let state = {
             less_value: '',
             greater_value: ''
         }
 
+        if (!this.props.level) {
+            return state;
+        }
+
+        const parts = this.props.level.split("|");
         if (parts.length < 3) {
             return state;
         }
