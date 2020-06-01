@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import pytz
+import json
 
 from api.exception.api_exception import ApiException
 from api.road_segments.methods.getter import get_road_segment_with_id
@@ -32,6 +33,7 @@ from utils.route import (
     check_if_point_in_direction,
     check_if_point_in_direction_list,
 )
+from decision_support.response_plans import get_active_response_plans
 
 subscribers = {}
 
@@ -112,14 +114,18 @@ def frame_messenger(subscriber_obj):
 
 def live_messenger(subscriber_obj):
     """
-    Matches RoadSegments with the current NDW data model.
+    Retrieve response plan information for each road segment
     """
     road_segments = get_road_segments(subscriber_obj)
     sim_id = get_live_id(subscriber_obj)
     scene = create_simulation_scene(sim_id, datetime.now(pytz.utc).isoformat(), None)
-    for road_segment_id, poly_lines in road_segments.items():
-        # TODO: Use the API Endpoint not XML
-        find(scene.id, road_segment_id, poly_lines)
+    for road_segment_id, _ in road_segments.items():
+        response_plan = get_active_response_plans(road_segment_id)
+        create_simulation_scene_event(
+            scene.id,
+            road_segment_id,
+            8, 0, json.dumps(response_plan)
+        )
 
     send_save_to_channel(get_channel(subscriber_obj), simulation_id_to_json(scene.id))
 

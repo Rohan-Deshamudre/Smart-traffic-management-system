@@ -5,6 +5,7 @@ class SimulationSceneEventInputObject(graphene.InputObjectType):
     road_segment_id = graphene.Int(required=True)
     road_condition_type_id = graphene.Int(required=True)
     value = graphene.Int(required=True)
+    response_plan = graphene.String(blank=True, null=True)
 
 
 class SimulationSceneInputObject(graphene.InputObjectType):
