@@ -13,6 +13,7 @@ def check_road_segments():
         for road_segment in road_segments:
             response_plans = get_active_response_plans(road_segment.id)
             is_one_active = False
+            print(response_plans)
             for response_plan in response_plans:
                 if response_plan['active']:
                     # TODO: Fire conditions
@@ -35,7 +36,7 @@ def get_active_response_plans(road_segment_id: int):
     for parent in parents:
         try:
             result.append(is_response_plan_active(parent))
-        except Exception as _:
+        except Exception as ex:
             print("Invalid Response Plan with id = %s " % parent.id)
     return result
 
@@ -46,12 +47,15 @@ def is_response_plan_active(response_plan: ResponsePlan):
     elif response_plan.operator == 'OR':
         return apply_operator(response_plan, False, lambda a, b: a or b)
     elif response_plan.road_condition is not None:
+        active, description = is_road_condition_active(
+            response_plan.road_condition,
+            response_plan.road_segment
+        )
         return {
-            "active": is_road_condition_active(
-                response_plan.road_condition,
-                response_plan.road_segment
-            ),
-            "response_plan": response_plan,
+            "active": active,
+            "description": description,
+            "response_plan_id": response_plan.id,
+            "road_condition_id": response_plan.road_condition.id,
             "children": []
         }
     else:
@@ -69,7 +73,10 @@ def apply_operator(response_plan: ResponsePlan,
 
     return {
         "active": active,
-        "response_plan": ResponsePlan,
+        "response_plan_id": response_plan.id,
+        "road_segment_id": response_plan.road_segment.id,
+        "scenario_id": response_plan.scenario.id,
+        "operator": response_plan.operator,
         "children": children
     }
 

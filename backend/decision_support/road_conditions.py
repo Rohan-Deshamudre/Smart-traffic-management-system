@@ -73,26 +73,29 @@ def is_road_condition_active(road_condition: RoadCondition,
     target1 = int(parts[2].strip())
     target2 = None if len(parts) < 4 else int(parts[3].strip())
 
-    result = None
+    value = None
 
     if con_type == wkd_typ:
-        result = interp(datetime.datetime.today().weekday(), symbol, target1, target2)
+        value = datetime.datetime.today().weekday()
     elif con_type == tim_typ:
-        result = interp(int(time.time()), symbol, target1, target2)
+        value = int(time.time())
     elif con_type == int_typ:
-        traffic_flow = get_traffic_flow_from(road_segment)
-        result = interp(traffic_flow, symbol, target1, target2)
+        value = get_traffic_flow_from(road_segment)
     elif con_type == spd_typ:
-        traffic_speed = get_traffic_speed_from(road_segment)
-        result = interp(traffic_speed, symbol, target1, target2)
+        value = get_traffic_speed_from(road_segment)
     elif con_type == trv_typ:
-        travel_time = get_travel_time_from(road_segment)
-        result = interp(travel_time, symbol, target1, target2)
+        value = get_travel_time_from(road_segment)
+
+    if value is None:
+        raise InvalidConditionException(road_condition.value, road_condition.id)
+
+    result = interp(value, symbol, target1, target2)
+    description = get_description(con_type, result, value, symbol, target1, target2)
 
     if result is None:
         raise InvalidConditionException(road_condition.value, road_condition.id)
 
-    return result
+    return result, description
 
 
 def interp(value, symbol, target1, target2):
@@ -110,3 +113,31 @@ def interp(value, symbol, target1, target2):
         return target1 > value or value > target2
 
     return None
+
+
+def get_description(typ, result, value, symbol, target1, target2):
+    mapTypes = {
+        int_typ: "Traffic Intensity",
+        spd_typ: "Traffic Speed",
+        wkd_typ: "Weekday",
+        tim_typ: "Time",
+        trv_typ: "Travel Time"
+    }
+
+    symbolTypes = {
+        "<": "less than",
+        ">": "greater than",
+        "<<": "in between",
+        "><": "outside"
+    }
+
+    description = "The value of %s is %s and it is %s %s %s %s" % (
+        mapTypes[typ],
+        value,
+        "" if result else "not",
+        symbolTypes[symbol],
+        target1,
+        targets if target2 else ""
+    )
+
+    return description
