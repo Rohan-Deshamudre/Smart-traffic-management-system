@@ -3,8 +3,8 @@
 import os
 import sys
 
-from ndw import listener
 from subscription import broadcast
+from decision_support import decision_module
 
 
 def main():
@@ -22,11 +22,9 @@ def main():
         ) from exc
 
     if 'test' not in sys.argv:
-        listener.start_update()
         broadcast.start()
-        listener.start_daily_update()
+        decision_module.start()
     execute_from_command_line(sys.argv)
-
 
 if __name__ == '__main__':
     main()
