@@ -13,8 +13,5 @@ class InvalidResponsePlanException(DecisionSupportException):
 
 
 class NoMeasurementAvailableException(DecisionSupportException):
-    def __init__(self, road_condition_id: int):
-        self.message = (
-            "No available measurement for road condition with id = %s "
-            % road_condition_id
-        )
+    def __init__(self):
+        self.message = "No available measurement"

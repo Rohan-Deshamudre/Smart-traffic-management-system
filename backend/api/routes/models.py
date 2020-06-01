@@ -14,3 +14,4 @@ class RouteSegment(AbstractModel):
     segment = models.IntegerField()
     lat = models.DecimalField(max_digits=11, decimal_places=8)
     lng = models.DecimalField(max_digits=11, decimal_places=8)
+    site_id = models.CharField(max_length=255, blank=True, null=True)
