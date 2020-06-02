@@ -14,6 +14,8 @@ def to_json_response_plan_by_id(response_plan_id: int):
 
 def to_json_response_plan(response_plan: ResponsePlan):
     response_obj = {}
+    response_obj['id'] = response_plan.id
+    response_obj['__typename'] = 'ResponsePlan'
     response_obj['operator'] = response_plan.operator
     response_obj['children'] = []
 
