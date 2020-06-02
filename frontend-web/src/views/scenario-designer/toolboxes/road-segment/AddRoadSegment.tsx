@@ -47,7 +47,7 @@ class AddRoadSegment extends React.Component<Props, State> {
 			<Mutation mutation={ADD_ROAD_SEGMENT}>
 				{(createRoadSegment, callbackData) => (
 					<div className='toolbox'>
-						<p>Adding new road segment for parent {this.props.parentInfo[0]}</p>
+						<p>Mark problem area:</p>
 						<RoadSegmentToolbox id={this.props.parentInfo[0]} handleData={(newData) => this.handleData(createRoadSegment, newData)}/>
 					</div>
 				)}

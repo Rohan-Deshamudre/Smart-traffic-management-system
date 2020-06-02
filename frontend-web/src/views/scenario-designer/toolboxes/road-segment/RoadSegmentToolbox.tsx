@@ -5,6 +5,8 @@ import RouteToolbox from "../RouteToolbox";
 import Type from "../../../../components/other/Type";
 import {Query, ApolloConsumer} from 'react-apollo';
 import {GET_ROAD_SEGMENT_TYPES} from "./RoadSegmentToolboxQueries";
+import AlternateRouteToolbox from "../AlternateRouteToolbox";
+
 
 type Props = {
 	id: number,
@@ -16,6 +18,8 @@ type Props = {
 type State = {
 	name: string,
 	route: { id: number, lat: number, lng: number }[],
+	altRoute: { id: number, lat: number, lng: number }[],
+
 	roadSegmentTypeId: number,
 	saved: boolean,
 	disabled: boolean
@@ -31,6 +35,7 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 	baseState: State = {
 		name: '',
 		route: [],
+		altRoute: [],
 		roadSegmentTypeId: -1,
 		saved: true,
 		disabled: true
@@ -47,6 +52,7 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 				...this.state,
 				name: data.roadSegments[0].name,
 				route: data.roadSegments[0].route.routePoints,
+				// altRoute: data.roadSegments[0].altRoute.routePoints,
 				roadSegmentTypeId: data.roadSegments[0].roadSegmentType.id
 			}
 		}
@@ -54,6 +60,7 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 		this.handleName = this.handleName.bind(this);
 		this.handleData = this.handleData.bind(this);
 		this.handleRoute = this.handleRoute.bind(this);
+		// this.handleAlternateRoute = this.handleAlternateRoute.bind(this);
 		this.handleRoadSegmentType = this.handleRoadSegmentType.bind(this);
 		this.disabled = this.disabled.bind(this);
 	}
@@ -84,6 +91,7 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 			name: this.state.name,
 			roadSegmentTypeId: this.state.roadSegmentTypeId,
 			route: this.state.route.map(route => ({lng: route.lng, lat: route.lat})),
+			// altRoute: this.state.altRoute.map(altRoute => ({lng: altRoute.lng, lat: altRoute.lat}))
 		});
 	}
 
@@ -97,9 +105,17 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 	handleRoute(newRoute: { id: number, lng: number, lat: number }[]) {
 		this.setState({
 			route: newRoute,
+			// altRoute: newRoute,
 			saved: false,
 		}, () => this.disabled());
 	}
+
+	// handleAlternateRoute(newRoute: { id: number, lng: number, lat: number }[]) {
+	// 	this.setState({
+	// 		altRoute: newRoute,
+	// 		saved: false,
+	// 	}, () => this.disabled());
+	// }
 
 	handleRoadSegmentType(newID: number) {
 		this.setState({
@@ -113,6 +129,7 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 			disabled: (
 				this.state.name === ""
 				|| this.state.route === undefined
+					// || this.state.altRoute === undefined
 				|| this.state.roadSegmentTypeId < 0
 			)
 		});
@@ -145,6 +162,14 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 				</ApolloConsumer>
 				<p>Select road segment type:</p>
 				{roadsegmentTypes}
+				<br/>
+				<p>Mark alternate route:</p>
+				{/*<ApolloConsumer>*/}
+				{/*	{client => (*/}
+				{/*		<AlternateRouteToolbox altRoute={this.state.route} client={client} disabled={this.props.readOnly} handleAltRoute={this.handleRoute}/>*/}
+				{/*	)}*/}
+				{/*</ApolloConsumer>*/}
+
 				{!this.props.readOnly && (
 					<Button className={"opslaan-button" + disabled + success} onClick={() => {
 						if (!this.state.saved && !this.state.disabled) {
