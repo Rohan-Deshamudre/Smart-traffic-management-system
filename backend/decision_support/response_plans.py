@@ -13,7 +13,6 @@ def check_road_segments():
         for road_segment in road_segments:
             response_plans = get_active_response_plans(road_segment.id)
             is_one_active = False
-            print(response_plans)
             for response_plan in response_plans:
                 if response_plan['active']:
                     # TODO: Fire conditions
