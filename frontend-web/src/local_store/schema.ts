@@ -49,6 +49,15 @@ export const schema = gql`
         img: String
         description: String
     }
+
+    type ResponsePlan {
+        id: ID!
+        operator: String!
+        children: [ResponsePlan!]!
+        road_condition_id: Int
+        road_segment_id: Int
+        scenario_id: Int
+    }
     
     type ApplicationData {
         mapFocusPoint: Coordinates
