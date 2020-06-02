@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Query } from "react-apollo";
 import { GET_ROAD_CONDITION_TYPES } from "../../scenario-designer/toolboxes/road-condition/RoadConditionToolboxQueries";
 
-function getDescription(type) {
+let getDescription = (type) => {
     switch (type) {
         case "Broken Car":
             return <p>
@@ -36,80 +36,66 @@ function getDescription(type) {
     }
 }
 
+let conditionString = (id) => (
+    <Query query={GET_ROAD_CONDITION_TYPES}>
+        {
+            ({ data, loading, error }) => {
+                if (loading) return <p>Loading</p>;
+                if (error) return <p>Error</p>;
 
-export function InsightsLog(props) {
-    let conditionString = (id) => (
-        <Query query={GET_ROAD_CONDITION_TYPES}>
-            {
-                ({ data, loading, error }) => {
-                    if (loading) return <p>Loading</p>;
-                    if (error) return <p>Error</p>;
-
-                    for (let type of data.roadConditionTypes) {
-                        if (parseInt(type.id) === id) {
-                            return (
-                                type.name
-                            );
-                        }
+                for (let type of data.roadConditionTypes) {
+                    if (parseInt(type.id) === id) {
+                        return (
+                            type.name
+                        );
                     }
-
-                    return id;
                 }
+
+                return id;
             }
-        </Query>
-    );
+        }
+    </Query>
+);
 
-    console.log(props.simulationLog);
-    let log = props.simulationLog.map((log, index) => (
-        <div key={index} className="log-item">
-            <div className="log-info-message-list">
-                {
-                    log.text ? (
-                        <div></div>
-                    ) : (
-                            // @ts-ignore
-                            (log.simulationSceneEvents.length > 0) ? (
-                                log.simulationSceneEvents.map(event => (
-                                    <section className="stats">
-                                        <div className="box">
-                                            <div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()} className="log-info-message">
-                                                <a>
-                                                    <h3>{event.roadConditionType.name}</h3>
-                                                </a>
-                                                <div>
-                                                    <img src={
-                                                        "../../../assets/tree_icons/road_condition/" + event.roadConditionType.name.toString().toLowerCase().replace(/\s/g, "") + ".svg"
-                                                    } width="50" height="50"></img>
-                                                    <img src={
-                                                        "../../../assets/tree_icons/road_segment/" + event.roadSegment.roadSegmentType.name.toString().replace(/\s/g, "") + ".svg"
-                                                    } width="50" height="50"></img>
-                                                    <div className="button">
-                                                        <i className="fa fa-exclamation-triangle">
-                                                            {event.roadSegment.name}
-                                                        </i>
-                                                    </div>
-                                                    <br />
-                                                    {getDescription(event.roadConditionType.name.toString())}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-                                ))
-                            ) : (
-                                    <div className="log-info-message">
-                                        Geen verkeersstatussen gevonden.
-                            </div>
-                                )
-                        )
-                }
+let displaySimulationSceneEvent = event => (
+    <section className="stats">
+        <div className="box">
+            <div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()} className="log-info-message">
+                <a>
+                    <h3>{event.roadConditionType.name}</h3>
+                </a>
+                <div>
+                    <img src={
+                        "../../../assets/tree_icons/road_condition/" + event.roadConditionType.name.toString().toLowerCase().replace(/\s/g, "") + ".svg"
+                    } width="50" height="50"></img>
+                    <img src={
+                        "../../../assets/tree_icons/road_segment/" + event.roadSegment.roadSegmentType.name.toString().replace(/\s/g, "") + ".svg"
+                    } width="50" height="50"></img>
+                    <div className="button">
+                        <i className="fa fa-exclamation-triangle">
+                            {event.roadSegment.name}
+                        </i>
+                    </div>
+                    <br />
+                    {getDescription(event.roadConditionType.name.toString())}
+                </div>
             </div>
         </div>
-    ));
+    </section>
+)
 
-
-    return (
-        <div>
-            <div>{log}</div>
+let displaySimulationLog = (log, index) => (
+    <div key={index} className="log-item">
+        <div className="log-info-message-list">
+            {
+                !log.text ? log.simulationSceneEvents.map(displaySimulationSceneEvent) : null
+            }
         </div>
+    </div>
+)
+
+export function InsightsLog(props) {
+    return (
+        <div>{props.simulationLog.map(displaySimulationLog)}</div>
     );
 }
