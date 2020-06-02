@@ -1,6 +1,11 @@
 import * as React from 'react';
+import Button from "react-bootstrap/Button";
 import { Query } from "react-apollo";
 import { GET_ROAD_CONDITION_TYPES } from "../../scenario-designer/toolboxes/road-condition/RoadConditionToolboxQueries";
+
+function highlighRoad(event) {
+
+}
 
 let getDescription = (type) => {
     switch (type) {
@@ -57,32 +62,35 @@ let conditionString = (id) => (
     </Query>
 );
 
+let getRoadConditionDescriptions = responsePlan => (
+    <div>
+        {
+            responsePlan.description
+                ? <p>{responsePlan.description}</p>
+                : responsePlan.children.map(getRoadConditionDescriptions)
+        }
+    </div>
+);
+
+let displayResponsePlan = (responsePlan, index) => (
+    <div>
+        <p>Response Plan #{index + 1} {responsePlan.active ? <span>Active</span> : <span>Not Active</span>}</p>
+        {getRoadConditionDescriptions(responsePlan)}
+        <hr />
+    </div>
+);
+
 let displaySimulationSceneEvent = event => (
     <section className="stats">
         <div className="box">
             <div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()} className="log-info-message">
-                <a>
-                    <h3>{event.roadConditionType.name}</h3>
-                </a>
-                <div>
-                    <img src={
-                        "../../../assets/tree_icons/road_condition/" + event.roadConditionType.name.toString().toLowerCase().replace(/\s/g, "") + ".svg"
-                    } width="50" height="50"></img>
-                    <img src={
-                        "../../../assets/tree_icons/road_segment/" + event.roadSegment.roadSegmentType.name.toString().replace(/\s/g, "") + ".svg"
-                    } width="50" height="50"></img>
-                    <div className="button">
-                        <i className="fa fa-exclamation-triangle">
-                            {event.roadSegment.name}
-                        </i>
-                    </div>
-                    <br />
-                    {getDescription(event.roadConditionType.name.toString())}
-                </div>
+                <h3>{event.roadSegment.name}</h3>
+                {/* <Button onClick={() => highlighRoad(event)}>Highlight Road</Button> */}
+                {JSON.parse(event.response_plan).map(displayResponsePlan)}
             </div>
         </div>
     </section>
-)
+);
 
 let displaySimulationLog = (log, index) => (
     <div key={index} className="log-item">
@@ -92,7 +100,7 @@ let displaySimulationLog = (log, index) => (
             }
         </div>
     </div>
-)
+);
 
 export function InsightsLog(props) {
     return (
