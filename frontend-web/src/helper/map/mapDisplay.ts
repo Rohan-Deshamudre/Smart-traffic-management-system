@@ -208,7 +208,7 @@ function displayAlternate(routes: any, sourceId: string, map: mb.Map) {
                     'properties': {},
                     'geometry': {
                         'type': 'LineString',
-                        'coordinates': route.data.routes[1].geometry.coordinates
+                        'coordinates': route.data.routes.length > 1 ? route.data.routes[1].geometry.coordinates : []
                     }
                 }
             });
