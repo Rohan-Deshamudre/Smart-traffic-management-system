@@ -132,7 +132,7 @@ class Map extends React.PureComponent<Props, State> {
     configureSelectedRoute() {
         const selectedRoute = this.getRoutes([this.props.selectedRoute]);
         mapDisplay.displayRoutes(selectedRoute, 'selectedRouteSource', this.map);
-        // mapDisplay.displayAlternate(selectedRoute, 'alternativeRouteSource', this.map);
+        //mapDisplay.displayAlternate(selectedRoute, 'alternativeRouteSource', this.map);
         mapDisplay.displayDestination(selectedRoute, 'destinationIconSource', this.map);
         mapDisplay.displayConditionIcon(selectedRoute, 'conditionIconSource', this.map);
     }
@@ -163,7 +163,6 @@ class Map extends React.PureComponent<Props, State> {
     configureRoadSegment() {
         const roadSegmentWayPoints = this.getRoadSegmentWayPoints(this.props.scenario, true);
         const roadSegmentRoutes = this.getRoutes(roadSegmentWayPoints);
-        // mapDisplay.display(roadSegmentRoutes, 'roadSegmentRoutesSource', this.map);
         mapDisplay.displayRoutes(roadSegmentRoutes, 'selectedRouteSource', this.map);
     }
 
@@ -243,6 +242,7 @@ class Map extends React.PureComponent<Props, State> {
                 this.props.client.writeData({ data: { mapLocation: '' } });
 
             }
+
             // Adjust the stores longitude and latitude to be corresponding with the map
             if (this.directions.getOrigin().geometry !== undefined) {
                 this.props.client.writeData({
@@ -261,11 +261,9 @@ class Map extends React.PureComponent<Props, State> {
         if (!_.isEqual(currentRoadSegmentWayPoints, this.getRoadSegmentWayPoints(prevProps.scenario, false))) {
             const currentRoadSegmentRoutes = this.getRoutes(currentRoadSegmentWayPoints);
             mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
-            // mapDisplay.displayAlternate(currentRoadSegmentRoutes, 'alternativeRouteSource', this.map);
+            //mapDisplay.displayAlternate(currentRoadSegmentRoutes, 'alternativeRouteSource', this.map);
             mapDisplay.displayDestination(currentRoadSegmentRoutes, 'destinationIconSource', this.map);
             mapDisplay.displayConditionIcon(currentRoadSegmentRoutes, 'conditionIconSource', this.map);
-
-            // mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
         }
     }
 
@@ -326,8 +324,7 @@ const
     );
 
 export default {
-    Small
-    ,
+    Small,
     Large
 };
 
