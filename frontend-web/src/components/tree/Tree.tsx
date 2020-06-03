@@ -333,6 +333,20 @@ class Tree extends React.Component<Props, State> {
 	 */
 	addButtonFunctionality(item: any, that: Tree, d: any) {
 		let options = [];
+
+		if (d.data.operator === "NONE" && d.data.road_condition) {
+			if (d.depth < 6) { // HARDCODED LIMIT TO DEPTH OF TREE
+				options = [
+					{text: 'Add Action', __typename: 'RoadConditionActionObjectType'}
+				];
+				if (!this.hasChild(d, 'RoadConditionObjectType')) {
+					options.push({text: 'Add Condition', __typename: 'RoadConditionObjectType'});
+				}
+			} else if (d.depth >= 6) {
+				options = [{text: 'Add Action', __typename: 'RoadConditionActionObjectType'}];
+			}
+		}
+
 		switch (d.data.__typename) {
 			case 'ScenarioObjectType':
 				options = [{text: 'Add Segment', __typename: 'RoadSegmentObjectType'}];
@@ -514,7 +528,7 @@ class Tree extends React.Component<Props, State> {
 	}
 
 	openModalWithRoadSegment(id: number) {
-		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: 1 })
+		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: id })
 			.then((res) => {
 				this.responsePlan = res.data;
 				this.setState({ open: true });
@@ -523,7 +537,7 @@ class Tree extends React.Component<Props, State> {
 	}
 
 	openModalWithScenario(id: number) {
-		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: 1 })
+		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: id })
 			.then((res) => {
 				this.responsePlan = res.data;
 				this.setState({ open: true });

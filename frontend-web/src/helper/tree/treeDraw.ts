@@ -6,7 +6,7 @@ import * as axios from 'axios';
 	Show its time stamp and level
  */
 function drawConditionHover(g: any, d: any, i: number) {
-	console.log(d.data.operator);
+
 	if (d.data.__typename === 'RoadConditionObjectType' || d.data.operator === 'NONE') {
 		let name = select(g).append('g').attr('class', 'road-condition-hover').attr('id', 'road-condition-hover-' + i);
 
@@ -32,6 +32,12 @@ function drawConditionHover(g: any, d: any, i: number) {
 			name.append('text').attr('class', 'road-condition-hover-text').text('Level:').attr('transform', 'translate(' + firstColumnXY + ',' + thirdRowY + ')');
 			name.append('text').attr('class', 'road-condition-hover-value').text(d.data.value).attr('transform', 'translate(' + secondColumnX + ',' + thirdRowY + ')');
 		}
+
+		if (d.data.road_condition && d.data.road_condition.roadConditionType && d.data.road_condition.roadConditionType.id === 7) {
+			name.append('rect').attr('class', 'road-condition-hover-time-box level-box').attr('transform', 'translate(' + (secondColumnX - 3) + ',' + (thirdRowY - 3) + ')').attr('rx', 3);
+			name.append('text').attr('class', 'road-condition-hover-text').text('Level:').attr('transform', 'translate(' + firstColumnXY + ',' + thirdRowY + ')');
+			name.append('text').attr('class', 'road-condition-hover-value').text(d.data.road_condition.value).attr('transform', 'translate(' + secondColumnX + ',' + thirdRowY + ')');
+		}
 	}
 }
 
@@ -51,9 +57,11 @@ function drawIcon(node: any) {
 					} else if (d.data.operator === 'AND') {
 						return '../../assets/tree_icons/scenario.svg';
 					} else {
-						// TODO check road condition.
-						return '../../assets/tree_icons/scenario.svg';
+						if (d.data.road_condition && d.data.road_condition.roadConditionType) {
+							return d.data.road_condition.roadConditionType.img ? '../../assets/tree_icons/road_condition/' + d.data.road_condition.roadConditionType.img + '.svg' : '';
+						}
 					}
+					break;
 				case 'RoadSegmentObjectType':
 					return d.data.roadSegmentType.img ? '../../assets/tree_icons/road_segment/' + d.data.roadSegmentType.img + '.svg' : '';
 				case 'RoadConditionObjectType':
@@ -81,6 +89,9 @@ function drawNodes(nodeContent: any) {
 		else if (d.data.actionName) {
 			return d.data.actionName.substr(0, 13)
 		} else if (d.data.operator) {
+			if (d.data.road_condition) {
+				return d.data.road_condition.name.substr(0, 13)
+			}
 			// TODO check road conditions
 			return d.data.operator.substr(0, 13)
 		}
@@ -344,8 +355,7 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 		.attr('class', 'button response-plan-button');
 
 
-	// TODO replace with d.data.id.
-	hasResponsePlan(4).then(
+	hasResponsePlan(d.data.id).then(
 		(result) => {
 			if (result) {
 				responsePlanButtonRoadSegment.append('rect').attr('class', 'button-rect');
@@ -366,9 +376,8 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 			that.openModalWithScenario(d.data.id);
 		})
 		.attr('class', 'button response-plan-button');
-
-	// TODO replace with d.data.id.
-	hasResponsePlan(7).then(
+	
+	hasResponsePlan(d.data.id).then(
 		(result) => {
 			if (result) {
 				responsePlanButtonScenario.append('rect').attr('class', 'button-rect');
