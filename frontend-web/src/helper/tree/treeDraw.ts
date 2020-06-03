@@ -6,7 +6,8 @@ import * as axios from 'axios';
 	Show its time stamp and level
  */
 function drawConditionHover(g: any, d: any, i: number) {
-	if (d.data.__typename === 'RoadConditionObjectType') {
+	console.log(d.data.operator);
+	if (d.data.__typename === 'RoadConditionObjectType' || d.data.operator === 'NONE') {
 		let name = select(g).append('g').attr('class', 'road-condition-hover').attr('id', 'road-condition-hover-' + i);
 
 		const firstColumnXY = 5;
@@ -26,7 +27,7 @@ function drawConditionHover(g: any, d: any, i: number) {
 			name.append('text').attr('class', 'road-condition-hover-time').text(d.data.roadConditionDate.endDate).attr('transform', 'translate(' + secondColumnX + ',' + secondRowY + ')');
 		}
 
-		if (d.data.roadConditionType.id === 7) {
+		if (d.data.roadConditionType && d.data.roadConditionType.id === 7) {
 			name.append('rect').attr('class', 'road-condition-hover-time-box level-box').attr('transform', 'translate(' + (secondColumnX - 3) + ',' + (thirdRowY - 3) + ')').attr('rx', 3);
 			name.append('text').attr('class', 'road-condition-hover-text').text('Level:').attr('transform', 'translate(' + firstColumnXY + ',' + thirdRowY + ')');
 			name.append('text').attr('class', 'road-condition-hover-value').text(d.data.value).attr('transform', 'translate(' + secondColumnX + ',' + thirdRowY + ')');
@@ -45,8 +46,14 @@ function drawIcon(node: any) {
 				case 'ScenarioObjectType':
 					return '../../assets/tree_icons/scenario.svg';
 				case 'ResponsePlan':
-					console.log('got m')
-					return '../../assets/tree_icons/scenario.svg';
+					if (d.data.operator === 'OR') {
+						return '../../assets/tree_icons/constraint.svg';
+					} else if (d.data.operator === 'AND') {
+						return '../../assets/tree_icons/scenario.svg';
+					} else {
+						// TODO check road condition.
+						return '../../assets/tree_icons/scenario.svg';
+					}
 				case 'RoadSegmentObjectType':
 					return d.data.roadSegmentType.img ? '../../assets/tree_icons/road_segment/' + d.data.roadSegmentType.img + '.svg' : '';
 				case 'RoadConditionObjectType':
@@ -73,6 +80,9 @@ function drawNodes(nodeContent: any) {
 		}
 		else if (d.data.actionName) {
 			return d.data.actionName.substr(0, 13)
+		} else if (d.data.operator) {
+			// TODO check road conditions
+			return d.data.operator.substr(0, 13)
 		}
 		else return '';
 	});
@@ -294,32 +304,35 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 	let buttons = select(g).filter((d: any) => d.data.__typename !== 'RoadConditionActionObjectType').append('g').attr('id', 'buttons-' + i);
 
 	// -- Add button
-	let addButton = buttons.append('g')
-		.on('click', function (d: any, i) {
-			that.addButtonFunctionality(this, that, d);
-		})
-		.attr('class', 'button add-button');
+	if (!d.data.operator) {
+		let addButton = buttons.append('g')
+			.on('click', function (d: any, i) {
+				that.addButtonFunctionality(this, that, d);
+			})
+			.attr('class', 'button add-button');
 
-	addButton.append('rect').attr('class', 'button-rect');
-	addButton.append('text').text('+').attr('class', 'button-text');
+		addButton.append('rect').attr('class', 'button-rect');
+		addButton.append('text').text('+').attr('class', 'button-text');
 
-	// -- Hide Button
-	let hideButton = buttons.append('g')
-		.attr('maximize', 'false')
-		.on('click', function (d: any, i) {
-			that.toggleVisibilityButtonFunctionality(that, d);
-		})
-		.attr('class', 'button hide-button');
+		// -- Hide Button
+		let hideButton = buttons.append('g')
+			.attr('maximize', 'false')
+			.on('click', function (d: any, i) {
+				that.toggleVisibilityButtonFunctionality(that, d);
+			})
+			.attr('class', 'button hide-button');
 
-	hideButton.append('rect').attr('class', 'button-rect');
-	hideButton.append('text').attr('class', 'button-text')
-		.text(function (d: any, i) {
-			if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
-				return '+';
-			} else {
-				return '-'
-			}
-		});
+		hideButton.append('rect').attr('class', 'button-rect');
+		hideButton.append('text').attr('class', 'button-text')
+			.text(function (d: any, i) {
+				if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
+					return '+';
+				} else {
+					return '-'
+				}
+			});
+	}
+
 
 	// -- Response plan button
 	let responsePlanButtonRoadSegment = buttons.filter((d: any) => {

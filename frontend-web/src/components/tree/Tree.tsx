@@ -138,13 +138,9 @@ class Tree extends React.Component<Props, State> {
 
 		let that = this;
 
-		console.log(data);
-
 		const hierarchyData = hierarchy(data).sum(function (d) {
 			return d.value
 		});
-
-		console.log(hierarchyData);
 
 		let treeMain = tree()
 			.nodeSize([200, 200])
@@ -233,7 +229,7 @@ class Tree extends React.Component<Props, State> {
 			})
 			.attr('class', function (d: any) {
 				let className = 'node ';
-				if (!d.data.active) {
+				if (!d.data.active && !d.data.operator) {
 					className += 'deactivated ';
 				} else {
 					className += 'activated ';
@@ -243,7 +239,7 @@ class Tree extends React.Component<Props, State> {
 						className += 'scenario';
 						break;
 					case 'ResponsePlan':
-						className += 'scenario';
+						className += 'response-plan';
 						break;
 					case 'RoadSegmentObjectType':
 						className += 'road-segment';
@@ -520,17 +516,16 @@ class Tree extends React.Component<Props, State> {
 	openModalWithRoadSegment(id: number) {
 		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: 1 })
 			.then((res) => {
-				console.log(res.data);
-				
+				this.responsePlan = res.data;
 				this.setState({ open: true });
+				this.createResponsePlanTree(this.responsePlan);
 			});
 	}
 
 	openModalWithScenario(id: number) {
 		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: 1 })
 			.then((res) => {
-				console.log(res.data);
-				this.responsePlan = res.data.operator;
+				this.responsePlan = res.data;
 				this.setState({ open: true });
 				this.createResponsePlanTree(this.responsePlan);
 			});
