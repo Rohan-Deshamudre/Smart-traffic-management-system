@@ -49,6 +49,6 @@ def handle_response_plan(request):
         if 'xml' in body and body['xml']:
             return HttpResponse(dicttoxml(response), content_type='text/html')
         else:
-            return JsonResponse(response)
+            return JsonResponse(response, safe=False)
     else:
         return HttpResponseNotAllowed(permitted_methods='POST')
