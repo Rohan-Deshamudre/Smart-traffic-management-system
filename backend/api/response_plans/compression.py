@@ -44,7 +44,21 @@ def to_json_response_plan(response_plan: ResponsePlan):
     response_obj['children'] = []
 
     if response_plan.road_condition:
-        response_obj['road_condition_id'] = response_plan.road_condition.id
+        condition = response_plan.road_condition
+        response_obj['road_condition_id'] = condition.id
+        response_obj['road_condition'] = {
+            '__typename': 'RoadCondition',
+            'id': condition.id,
+            'name': condition.name,
+            'value': condition.value,
+            'roadConditionType': {
+                '__typename': 'RoadConditionType',
+                'id': condition.road_condition_type.id,
+                'name': condition.road_condition_type.name,
+                'img': condition.road_condition_type.img,
+                'description': condition.road_condition_type.description,
+            }
+        }
 
     if response_plan.scenario:
         response_obj['scenario_id'] = response_plan.scenario.id
