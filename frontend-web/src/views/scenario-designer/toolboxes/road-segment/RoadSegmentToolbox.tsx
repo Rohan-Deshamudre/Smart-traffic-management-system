@@ -60,7 +60,7 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 		this.handleName = this.handleName.bind(this);
 		this.handleData = this.handleData.bind(this);
 		this.handleRoute = this.handleRoute.bind(this);
-		// this.handleAlternateRoute = this.handleAlternateRoute.bind(this);
+		this.handleAlternateRoute = this.handleAlternateRoute.bind(this);
 		this.handleRoadSegmentType = this.handleRoadSegmentType.bind(this);
 		this.disabled = this.disabled.bind(this);
 	}
@@ -91,7 +91,7 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 			name: this.state.name,
 			roadSegmentTypeId: this.state.roadSegmentTypeId,
 			route: this.state.route.map(route => ({lng: route.lng, lat: route.lat})),
-			// altRoute: this.state.altRoute.map(altRoute => ({lng: altRoute.lng, lat: altRoute.lat}))
+			altRoute: this.state.altRoute.map(altRoute => ({lng: altRoute.lng, lat: altRoute.lat}))
 		});
 	}
 
@@ -105,17 +105,16 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 	handleRoute(newRoute: { id: number, lng: number, lat: number }[]) {
 		this.setState({
 			route: newRoute,
-			// altRoute: newRoute,
 			saved: false,
 		}, () => this.disabled());
 	}
 
-	// handleAlternateRoute(newRoute: { id: number, lng: number, lat: number }[]) {
-	// 	this.setState({
-	// 		altRoute: newRoute,
-	// 		saved: false,
-	// 	}, () => this.disabled());
-	// }
+	handleAlternateRoute(newRoute: { id: number, lng: number, lat: number }[]) {
+		this.setState({
+			altRoute: newRoute,
+			saved: false,
+		}, () => this.disabled());
+	}
 
 	handleRoadSegmentType(newID: number) {
 		this.setState({
@@ -129,7 +128,7 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 			disabled: (
 				this.state.name === ""
 				|| this.state.route === undefined
-					// || this.state.altRoute === undefined
+					|| this.state.altRoute === undefined
 				|| this.state.roadSegmentTypeId < 0
 			)
 		});
@@ -164,11 +163,11 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 				{roadsegmentTypes}
 				<br/>
 				<p>Mark alternate route:</p>
-				{/*<ApolloConsumer>*/}
-				{/*	{client => (*/}
-				{/*		<AlternateRouteToolbox altRoute={this.state.route} client={client} disabled={this.props.readOnly} handleAltRoute={this.handleRoute}/>*/}
-				{/*	)}*/}
-				{/*</ApolloConsumer>*/}
+				<ApolloConsumer>
+					{client => (
+						<AlternateRouteToolbox altRoute={this.state.altRoute} client={client} disabled={this.props.readOnly} handleAltRoute={this.handleAlternateRoute}/>
+					)}
+				</ApolloConsumer>
 
 				{!this.props.readOnly && (
 					<Button className={"opslaan-button" + disabled + success} onClick={() => {
