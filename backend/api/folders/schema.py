@@ -9,6 +9,7 @@ from .models import *
 
 from utils.auth import has_perms
 
+
 class FolderObjectType(DjangoObjectType):
     class Meta:
         model = Folder

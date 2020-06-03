@@ -13,6 +13,7 @@ from .road_condition_actions import schema as actions_schema
 
 from utils.auth import has_perms
 
+
 class RoadConditionObjectType(DjangoObjectType):
     class Meta:
         model = RoadCondition
@@ -133,7 +134,7 @@ class UpdateRoadCondition(graphene.Mutation):
     def mutate(self, info, id, name=None, date=None, value=None,
                road_condition_type_id=None, road_condition_actions=None,
                parent_rc=None, parent_rs=None):
-        has_perms(info, ['road_conditions.change_roadcondition']);
+        has_perms(info, ['road_conditions.change_roadcondition'])
         try:
             road_condition = update_road_condition(id, name, date, value,
                                                    road_condition_type_id,
@@ -163,7 +164,7 @@ class DeleteRoadCondition(graphene.Mutation):
         :param id: The ID of the road_condition
         :return:
         """
-        has_perms(info, ['road_conditions.delete_roadcondition']);
+        has_perms(info, ['road_conditions.delete_roadcondition'])
         try:
             delete_road_condition(id)
         except ApiException as exc:

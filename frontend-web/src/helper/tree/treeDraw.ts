@@ -1,11 +1,13 @@
 import {select} from "d3";
+import * as axios from 'axios';
 
 /*
 	When hovering over a condition node.
 	Show its time stamp and level
  */
 function drawConditionHover(g: any, d: any, i: number) {
-	if (d.data.__typename === 'RoadConditionObjectType') {
+	console.log(d.data.operator);
+	if (d.data.__typename === 'RoadConditionObjectType' || d.data.operator === 'NONE') {
 		let name = select(g).append('g').attr('class', 'road-condition-hover').attr('id', 'road-condition-hover-' + i);
 
 		const firstColumnXY = 5;
@@ -15,7 +17,7 @@ function drawConditionHover(g: any, d: any, i: number) {
 
 		name.append('rect').attr('class', 'road-condition-hover-rect');
 
-		if(d.data.roadConditionDate) {
+		if (d.data.roadConditionDate) {
 			name.append('rect').attr('class', 'road-condition-hover-time-box').attr('transform', 'translate(' + (secondColumnX - 3) + ',' + (firstColumnXY - 3) + ')').attr('rx', 3);
 			name.append('text').attr('class', 'road-condition-hover-text').text('Van:').attr('transform', 'translate(' + firstColumnXY + ',' + firstColumnXY + ')');
 			name.append('text').attr('class', 'road-condition-hover-time').text(d.data.roadConditionDate.startDate).attr('transform', 'translate(' + secondColumnX + ',' + firstColumnXY + ')');
@@ -25,7 +27,7 @@ function drawConditionHover(g: any, d: any, i: number) {
 			name.append('text').attr('class', 'road-condition-hover-time').text(d.data.roadConditionDate.endDate).attr('transform', 'translate(' + secondColumnX + ',' + secondRowY + ')');
 		}
 
-		if(d.data.roadConditionType.id === 7) {
+		if (d.data.roadConditionType && d.data.roadConditionType.id === 7) {
 			name.append('rect').attr('class', 'road-condition-hover-time-box level-box').attr('transform', 'translate(' + (secondColumnX - 3) + ',' + (thirdRowY - 3) + ')').attr('rx', 3);
 			name.append('text').attr('class', 'road-condition-hover-text').text('Level:').attr('transform', 'translate(' + firstColumnXY + ',' + thirdRowY + ')');
 			name.append('text').attr('class', 'road-condition-hover-value').text(d.data.value).attr('transform', 'translate(' + secondColumnX + ',' + thirdRowY + ')');
@@ -43,17 +45,21 @@ function drawIcon(node: any) {
 			switch (d.data.__typename) {
 				case 'ScenarioObjectType':
 					return '../../assets/tree_icons/scenario.svg';
+				case 'ResponsePlan':
+					if (d.data.operator === 'OR') {
+						return '../../assets/tree_icons/constraint.svg';
+					} else if (d.data.operator === 'AND') {
+						return '../../assets/tree_icons/scenario.svg';
+					} else {
+						// TODO check road condition.
+						return '../../assets/tree_icons/scenario.svg';
+					}
 				case 'RoadSegmentObjectType':
 					return d.data.roadSegmentType.img ? '../../assets/tree_icons/road_segment/' + d.data.roadSegmentType.img + '.svg' : '';
 				case 'RoadConditionObjectType':
 					return d.data.roadConditionType.img ? '../../assets/tree_icons/road_condition/' + d.data.roadConditionType.img + '.svg' : '';
 				case 'RoadConditionActionObjectType':
 					break;
-				case 'ResponsePlanObjectType':
-					return '../../assets/tree_icons/response-plan.svg';
-				case 'GateObjectType':
-					// TODO check AND or OR.
-					return '../../assets/tree_icons/gate-or.svg';
 				default:
 					return '../../assets/tree_icons/constraint.svg';
 			}
@@ -74,6 +80,9 @@ function drawNodes(nodeContent: any) {
 		}
 		else if (d.data.actionName) {
 			return d.data.actionName.substr(0, 13)
+		} else if (d.data.operator) {
+			// TODO check road conditions
+			return d.data.operator.substr(0, 13)
 		}
 		else return '';
 	});
@@ -295,32 +304,92 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 	let buttons = select(g).filter((d: any) => d.data.__typename !== 'RoadConditionActionObjectType').append('g').attr('id', 'buttons-' + i);
 
 	// -- Add button
-	let addButton = buttons.append('g')
+	if (!d.data.operator) {
+		let addButton = buttons.append('g')
+			.on('click', function (d: any, i) {
+				that.addButtonFunctionality(this, that, d);
+			})
+			.attr('class', 'button add-button');
+
+		addButton.append('rect').attr('class', 'button-rect');
+		addButton.append('text').text('+').attr('class', 'button-text');
+
+		// -- Hide Button
+		let hideButton = buttons.append('g')
+			.attr('maximize', 'false')
+			.on('click', function (d: any, i) {
+				that.toggleVisibilityButtonFunctionality(that, d);
+			})
+			.attr('class', 'button hide-button');
+
+		hideButton.append('rect').attr('class', 'button-rect');
+		hideButton.append('text').attr('class', 'button-text')
+			.text(function (d: any, i) {
+				if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
+					return '+';
+				} else {
+					return '-'
+				}
+			});
+	}
+
+
+	// -- Response plan button
+	let responsePlanButtonRoadSegment = buttons.filter((d: any) => {
+		return d.data.__typename === 'RoadSegmentObjectType';
+	}).append('g')
 		.on('click', function (d: any, i) {
-			that.addButtonFunctionality(this, that, d);
+			that.openModalWithRoadSegment(d.data.id);
 		})
-		.attr('class', 'button add-button');
+		.attr('class', 'button response-plan-button');
 
-	addButton.append('rect').attr('class', 'button-rect');
-	addButton.append('text').text('+').attr('class', 'button-text');
 
-	// -- Hide Button
-	let hideButton = buttons.append('g')
-		.attr('maximize', 'false')
-		.on('click', function (d: any, i) {
-			that.toggleVisibilityButtonFunctionality(that, d);
-		})
-		.attr('class', 'button hide-button');
-
-	hideButton.append('rect').attr('class', 'button-rect');
-	hideButton.append('text').attr('class', 'button-text')
-		.text(function (d: any, i) {
-			if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
-				return '+';
-			} else {
-				return '-'
+	// TODO replace with d.data.id.
+	hasResponsePlan(4).then(
+		(result) => {
+			if (result) {
+				responsePlanButtonRoadSegment.append('rect').attr('class', 'button-rect');
+				responsePlanButtonRoadSegment.append('text').attr('class', 'button-text')
+					.text(function (d: any, i) {
+						if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
+							return 'RP+';
+						} else {
+							return 'RP-'
+						}
+					});
 			}
+		}
+	);
+
+	let responsePlanButtonScenario = buttons.filter((d: any) => d.data.__typename === 'ScenarioObjectType').append('g')
+		.on('click', function (d: any, i) {
+			that.openModalWithScenario(d.data.id);
 		})
+		.attr('class', 'button response-plan-button');
+
+	// TODO replace with d.data.id.
+	hasResponsePlan(7).then(
+		(result) => {
+			if (result) {
+				responsePlanButtonScenario.append('rect').attr('class', 'button-rect');
+				responsePlanButtonScenario.append('text').attr('class', 'button-text')
+					.text(function (d: any, i) {
+						if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
+							return 'RP+';
+						} else {
+							return 'RP-'
+						}
+					})
+			}
+		}
+	);
+}
+
+function hasResponsePlan(id: number): Promise<boolean> {
+	// TODO change id to scenario_id and road_segment_id and make dynamic function.
+	return axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: id })
+		.then((res) => res.data.children && res.data.children.length > 0)
+		.catch(() => false);
 }
 
 
