@@ -12,6 +12,7 @@ from .models import *
 
 from utils.auth import has_perms
 
+
 class ScenarioObjectType(DjangoObjectType):
     class Meta:
         model = Scenario

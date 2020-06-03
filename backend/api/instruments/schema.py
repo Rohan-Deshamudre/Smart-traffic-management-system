@@ -19,6 +19,7 @@ from ..road_segments.models import RoadSegment
 
 from utils.auth import has_perms
 
+
 class InstrumentObjectType(DjangoObjectType):
     class Meta:
         model = Instrument

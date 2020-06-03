@@ -30,6 +30,13 @@ export const schema = gql`
         response_plan: String
     }
 
+    type RoadCondition {
+        id: ID!
+        name: String!
+        value: String!
+        roadConditionType: RoadConditionType!
+    }
+
     type RoadConditionType {
         id: ID!
         name: String!

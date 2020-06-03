@@ -10,6 +10,7 @@ from tests.api.road_segments.methods import create_road_segment_types, \
     create_road_segments, create_rs_to_rc
 from tests.api.scenarios.methods import create_scenarios
 from api.response_plans.compression import to_json_response_plan_by_id, \
+    to_json_response_plan_by_scenario, to_json_response_plan_by_road_segment, \
     import_response_plan
 
 
@@ -61,6 +62,58 @@ class ResponsePlanCompressionTest(TestCase):
             })
         self.assertEqual(children, response_children)
 
+    def test_export_by_scenario(self):
+        parent = self.response_plans[0]
+        children = [
+            {'operator': self.response_plans[1].operator,
+             'road_condition_id': self.response_plans[1].road_condition.id
+             },
+            {'operator': self.response_plans[2].operator,
+             'road_condition_id': self.response_plans[2].road_condition.id
+             }
+        ]
+
+        responses = to_json_response_plan_by_scenario(self.scenarios[0])
+        self.assertEqual(len(responses), 1)
+        response = responses[0]
+        self.assertEqual(response['operator'], parent.operator)
+        self.assertEqual(response['road_segment_id'], parent.road_segment.id)
+
+        response_children = []
+        for child in response['children']:
+            self.assertEqual(0, len(child['children']))
+            response_children.append({
+                'operator': child['operator'],
+                'road_condition_id': child['road_condition_id'],
+            })
+        self.assertEqual(children, response_children)
+
+    def test_export_by_road_segment(self):
+        parent = self.response_plans[0]
+        children = [
+            {'operator': self.response_plans[1].operator,
+             'road_condition_id': self.response_plans[1].road_condition.id
+             },
+            {'operator': self.response_plans[2].operator,
+             'road_condition_id': self.response_plans[2].road_condition.id
+             }
+        ]
+
+        responses = to_json_response_plan_by_road_segment(self.segments[0])
+        self.assertEqual(len(responses), 1)
+        response = responses[0]
+        self.assertEqual(response['operator'], parent.operator)
+        self.assertEqual(response['road_segment_id'], parent.road_segment.id)
+
+        response_children = []
+        for child in response['children']:
+            self.assertEqual(0, len(child['children']))
+            response_children.append({
+                'operator': child['operator'],
+                'road_condition_id': child['road_condition_id'],
+            })
+        self.assertEqual(children, response_children)
+        
     def test_export_exception(self):
         id = -99
         response = to_json_response_plan_by_id(id)
