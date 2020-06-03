@@ -41,13 +41,11 @@ function drawIcon(node: any) {
 	node.append('image')
 		.attr('xlink:href', function (d: any) {
 
-			console.log(d);
-			if (d.data === 'OR') {
-				return '../../assets/tree_icons/scenario.svg';
-			}
-
 			switch (d.data.__typename) {
 				case 'ScenarioObjectType':
+					return '../../assets/tree_icons/scenario.svg';
+				case 'ResponsePlan':
+					console.log('got m')
 					return '../../assets/tree_icons/scenario.svg';
 				case 'RoadSegmentObjectType':
 					return d.data.roadSegmentType.img ? '../../assets/tree_icons/road_segment/' + d.data.roadSegmentType.img + '.svg' : '';
@@ -332,8 +330,9 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 		})
 		.attr('class', 'button response-plan-button');
 
+
 	// TODO replace with d.data.id.
-	hasResponsePlan(2).then(
+	hasResponsePlan(4).then(
 		(result) => {
 			if (result) {
 				responsePlanButtonRoadSegment.append('rect').attr('class', 'button-rect');
@@ -356,7 +355,7 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 		.attr('class', 'button response-plan-button');
 
 	// TODO replace with d.data.id.
-	hasResponsePlan(1).then(
+	hasResponsePlan(7).then(
 		(result) => {
 			if (result) {
 				responsePlanButtonScenario.append('rect').attr('class', 'button-rect');

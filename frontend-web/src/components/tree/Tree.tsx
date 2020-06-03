@@ -138,9 +138,13 @@ class Tree extends React.Component<Props, State> {
 
 		let that = this;
 
+		console.log(data);
+
 		const hierarchyData = hierarchy(data).sum(function (d) {
 			return d.value
 		});
+
+		console.log(hierarchyData);
 
 		let treeMain = tree()
 			.nodeSize([200, 200])
@@ -236,6 +240,9 @@ class Tree extends React.Component<Props, State> {
 				}
 				switch (d.data.__typename) {
 					case 'ScenarioObjectType':
+						className += 'scenario';
+						break;
+					case 'ResponsePlan':
 						className += 'scenario';
 						break;
 					case 'RoadSegmentObjectType':
