@@ -77,7 +77,7 @@ class Tree extends React.Component<Props, State> {
 			this.props.client.writeData({data: {treeHeight: hierarchyData.height}});
 			this.setState({treeHeight: hierarchyData.height}, () => {
 				if(this.props.treeLevel !== -1) { this.handleLevel(this.props.treeLevel) }
-				this.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
+				this.createTree(this.getVisibleTree(this.props.scenario), this.props.treeTransform, '.treeLayout');
 			});
 		}
 	}
@@ -85,7 +85,7 @@ class Tree extends React.Component<Props, State> {
 	componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void {
 		if (!_.isEqual(this.props.scenario, prevProps.scenario)) {
 			select('svg').remove();
-			this.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
+			this.createTree(this.getVisibleTree(this.props.scenario), this.props.treeTransform, '.treeLayout');
 		}
 
 		if (this.props.treeLevel !== prevProps.treeLevel) {
@@ -94,8 +94,8 @@ class Tree extends React.Component<Props, State> {
 
 	}
 
-	getVisibleTree() {
-		let tree = this.props.scenario;
+	getVisibleTree(data) {
+		let tree = data;
 
 		let nodes = this.removeBothDuplicatesAndMerge(this.state.minimizedNodes, this.props.deactivatedNodes);
 
@@ -409,7 +409,7 @@ class Tree extends React.Component<Props, State> {
 			treeLevel: -1
 		}, () => {
 			select('svg').remove();
-			that.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
+			that.createTree(this.getVisibleTree(this.props.scenario), this.props.treeTransform, '.treeLayout');
 		})
 	}
 
@@ -424,7 +424,7 @@ class Tree extends React.Component<Props, State> {
 			})
 		});
 		select('svg').remove();
-		that.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
+		that.createTree(this.getVisibleTree(this.props.scenario), this.props.treeTransform, '.treeLayout');
 	}
 
 	/*
@@ -436,7 +436,7 @@ class Tree extends React.Component<Props, State> {
 			minimizedNodes: [...this.state.minimizedNodes, {typename: d.data.__typename, id: d.data.id}],
 		});
 		select('svg').remove();
-		that.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
+		that.createTree(this.getVisibleTree(this.props.scenario), this.props.treeTransform, '.treeLayout');
 	}
 
 	/*
@@ -505,7 +505,7 @@ class Tree extends React.Component<Props, State> {
 				this.minimizeChildrenLevel(hierarchyData, this.state.treeLevel)
 		}, () => {
 			select('svg').remove();
-			this.createTree(this.getVisibleTree(), this.props.treeTransform, '.treeLayout');
+			this.createTree(this.getVisibleTree(this.props.scenario), this.props.treeTransform, '.treeLayout');
 		})
 	}
 
@@ -542,7 +542,7 @@ class Tree extends React.Component<Props, State> {
 	}
 
 	createResponsePlanTree(responsePlan) {
-		this.createTree(responsePlan, this.props.treeTransform, '.responsePlanTreeLayout');
+		this.createTree(this.getVisibleTree(responsePlan), this.props.treeTransform, '.responsePlanTreeLayout');
 	}
 
 	render() {
