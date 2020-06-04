@@ -6,6 +6,9 @@ from graphql_jwt.decorators import user_passes_test
 
 
 def engineer_required(fn=None):
+    if "test" in sys.argv or os.getenv("ENV", "production") == "development":
+        return fn
+
     decorator = user_passes_test(has_group_engineer)
     if fn:
         return decorator(fn)
@@ -13,6 +16,9 @@ def engineer_required(fn=None):
 
 
 def operator_required(fn=None):
+    if "test" in sys.argv or os.getenv("ENV", "production") == "development":
+        return fn
+
     decorator = user_passes_test(has_group_operator)
     if fn:
         return decorator(fn)
@@ -30,13 +36,13 @@ def has_group_operator(user):
     ) or has_group_engineer(user)
 
 
-def has_group(user, group_id):
+def has_group(user, group_name):
     if "test" in sys.argv or os.getenv("ENV", "production") == "development":
         return True
 
     if user:
         if user.is_authenticated:
-            return user.groups.filter(id=group_id).exists()
+            return user.groups.filter(codename=group_name).exists()
 
     return False
 
