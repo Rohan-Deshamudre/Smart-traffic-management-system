@@ -8,7 +8,8 @@ import {DefaultLinkObject, Link} from "d3-shape";
 import * as _ from 'lodash';
 import {treeDraw} from "../../helper/tree/treeDraw";
 import {selectAll} from "d3-selection";
-
+import Popup from "reactjs-popup";
+import * as axios from "axios";
 
 type Props = {
 	treeTransform: any,
@@ -25,11 +26,15 @@ type State = {
 	treeHeight: number,
 	treeLevel: number,
 	curNodeId: number,
-	curNodeType: string
+	curNodeType: string,
+	open: boolean
 }
 
 class Tree extends React.Component<Props, State> {
 	private readonly chartRef: React.LegacyRef<HTMLDivElement>;
+	private readonly chartRef1: React.LegacyRef<HTMLDivElement>;
+
+	private responsePlan;
 
 	constructor(props: Props) {
 		super(props);
@@ -40,11 +45,13 @@ class Tree extends React.Component<Props, State> {
 			zoom: 0.5,
 			minimizedNodes: [],
 			treeHeight: 1,
-			treeLevel: -1
+			treeLevel: -1,
+			open: false
 		};
 
 		this.createTree = this.createTree.bind(this);
 		this.chartRef = React.createRef();
+		this.chartRef1 = React.createRef();
 		this.addButtonFunctionality = this.addButtonFunctionality.bind(this);
 		this.toggleVisibilityButtonFunctionality = this.toggleVisibilityButtonFunctionality.bind(this);
 		this.minimizeChildren = this.minimizeChildren.bind(this);
@@ -53,14 +60,16 @@ class Tree extends React.Component<Props, State> {
 		this.editNode = this.editNode.bind(this);
 		this.addNode = this.addNode.bind(this);
 		this.getVisibleTree = this.getVisibleTree.bind(this);
-		this.minimizeChildrenLevel = this.minimizeChildrenLevel.bind(this)
+		this.minimizeChildrenLevel = this.minimizeChildrenLevel.bind(this);
 		this.updateMinimizedNodes = this.updateMinimizedNodes.bind(this);
-		this.handleLevel = this.handleLevel.bind(this)
-
+		this.handleLevel = this.handleLevel.bind(this);
+		this.openModalWithRoadSegment = this.openModalWithRoadSegment.bind(this);
+		this.openModalWithScenario = this.openModalWithScenario.bind(this);
+		this.closeModal = this.closeModal.bind(this);
 	}
 
 	componentDidMount() {
-		if (this.props.scenario !== undefined) {
+		if (this.props.scenario) {
 			const hierarchyData = hierarchy(this.props.scenario).sum(function (d) {
 				return d.value
 			});
@@ -68,7 +77,7 @@ class Tree extends React.Component<Props, State> {
 			this.props.client.writeData({data: {treeHeight: hierarchyData.height}});
 			this.setState({treeHeight: hierarchyData.height}, () => {
 				if(this.props.treeLevel !== -1) { this.handleLevel(this.props.treeLevel) }
-				this.createTree(this.getVisibleTree(), this.props.treeTransform);
+				this.createTree(this.getVisibleTree(this.props.scenario), this.props.treeTransform, '.treeLayout');
 			});
 		}
 	}
@@ -76,7 +85,7 @@ class Tree extends React.Component<Props, State> {
 	componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void {
 		if (!_.isEqual(this.props.scenario, prevProps.scenario)) {
 			select('svg').remove();
-			this.createTree(this.getVisibleTree(), this.props.treeTransform);
+			this.createTree(this.getVisibleTree(this.props.scenario), this.props.treeTransform, '.treeLayout');
 		}
 
 		if (this.props.treeLevel !== prevProps.treeLevel) {
@@ -85,8 +94,8 @@ class Tree extends React.Component<Props, State> {
 
 	}
 
-	getVisibleTree() {
-		let tree = this.props.scenario;
+	getVisibleTree(data) {
+		let tree = data;
 
 		let nodes = this.removeBothDuplicatesAndMerge(this.state.minimizedNodes, this.props.deactivatedNodes);
 
@@ -121,7 +130,7 @@ class Tree extends React.Component<Props, State> {
 		return nodes;
 	}
 
-	createTree(scenario, initTransformStatus) {
+	createTree(data, initTransformStatus, selector) {
 		let width: number = window.innerWidth;
 		let height: number = window.innerHeight;
 
@@ -129,7 +138,7 @@ class Tree extends React.Component<Props, State> {
 
 		let that = this;
 
-		const hierarchyData = hierarchy(scenario).sum(function (d) {
+		const hierarchyData = hierarchy(data).sum(function (d) {
 			return d.value
 		});
 
@@ -147,7 +156,7 @@ class Tree extends React.Component<Props, State> {
 		});
 
 		// Create svg
-		let svg = select('.treeLayout')
+		let svg = select(selector)
 			.append('svg')
 			.attr('width', width)
 			.attr('height', height);
@@ -220,7 +229,7 @@ class Tree extends React.Component<Props, State> {
 			})
 			.attr('class', function (d: any) {
 				let className = 'node ';
-				if (!d.data.active) {
+				if (!d.data.active && !d.data.operator) {
 					className += 'deactivated ';
 				} else {
 					className += 'activated ';
@@ -228,6 +237,9 @@ class Tree extends React.Component<Props, State> {
 				switch (d.data.__typename) {
 					case 'ScenarioObjectType':
 						className += 'scenario';
+						break;
+					case 'ResponsePlan':
+						className += 'response-plan';
 						break;
 					case 'RoadSegmentObjectType':
 						className += 'road-segment';
@@ -393,7 +405,7 @@ class Tree extends React.Component<Props, State> {
 			treeLevel: -1
 		}, () => {
 			select('svg').remove();
-			that.createTree(this.getVisibleTree(), this.props.treeTransform);
+			that.createTree(this.getVisibleTree(this.props.scenario), this.props.treeTransform, '.treeLayout');
 		})
 	}
 
@@ -408,7 +420,7 @@ class Tree extends React.Component<Props, State> {
 			})
 		});
 		select('svg').remove();
-		that.createTree(this.getVisibleTree(), this.props.treeTransform);
+		that.createTree(this.getVisibleTree(this.props.scenario), this.props.treeTransform, '.treeLayout');
 	}
 
 	/*
@@ -420,7 +432,7 @@ class Tree extends React.Component<Props, State> {
 			minimizedNodes: [...this.state.minimizedNodes, {typename: d.data.__typename, id: d.data.id}],
 		});
 		select('svg').remove();
-		that.createTree(this.getVisibleTree(), this.props.treeTransform);
+		that.createTree(this.getVisibleTree(this.props.scenario), this.props.treeTransform, '.treeLayout');
 	}
 
 	/*
@@ -489,7 +501,7 @@ class Tree extends React.Component<Props, State> {
 				this.minimizeChildrenLevel(hierarchyData, this.state.treeLevel)
 		}, () => {
 			select('svg').remove();
-			this.createTree(this.getVisibleTree(), this.props.treeTransform);
+			this.createTree(this.getVisibleTree(this.props.scenario), this.props.treeTransform, '.treeLayout');
 		})
 	}
 
@@ -501,12 +513,58 @@ class Tree extends React.Component<Props, State> {
 		});
 	}
 
+	openModalWithRoadSegment(id: number) {
+		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: 1 })
+			.then((res) => {
+				this.responsePlan = res.data;
+				this.setState({ open: true });
+				this.createResponsePlanTree(this.responsePlan);
+			});
+	}
+
+	openModalWithScenario(id: number) {
+		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: 1 })
+			.then((res) => {
+				this.responsePlan = res.data;
+				this.setState({ open: true });
+				this.createResponsePlanTree(this.responsePlan);
+			});
+	}
+
+	closeModal() {
+		this.setState({ open: false });
+		this.responsePlan = undefined;
+	}
+
+	createResponsePlanTree(responsePlan) {
+		this.createTree(this.getVisibleTree(responsePlan), this.props.treeTransform, '.responsePlanTreeLayout');
+	}
+
 	render() {
 		return (
-			<div className="tree">
-				<div ref={this.chartRef} className="treeLayout">
+			<div>
+				<div className="tree">
+					<div className="treeLayout">
+					</div>
 				</div>
+				<Popup
+					open={this.state.open}
+					closeOnDocumentClick
+					onClose={this.closeModal}
+				>
+					<div className="custom-modal">
+						<a className="close" onClick={this.closeModal}>
+							&times;
+						</a>
+						<div className="header"> Response Plan </div>
+						<div className="tree">
+							<div className="responsePlanTreeLayout">
+							</div>
+						</div>
+					</div>
+				</Popup>
 			</div>
+
 		);
 	}
 }

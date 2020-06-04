@@ -11,7 +11,7 @@ def broadcast_message(name):
         raise exc
     while True:
         handle_send_messages()
-        time.sleep(5)
+        time.sleep(60)
 
 
 def start():

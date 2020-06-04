@@ -29,6 +29,13 @@ class RoadSegment(AbstractModel):
         null=True,
         on_delete=models.SET_NULL,
     )
+    alternative_route = models.ForeignKey(
+        Route,
+        db_column="alternative_route_id",
+        related_name="road_segment_alternative_route",
+        null=True,
+        on_delete=models.SET_NULL,
+    )
     road_segment_type = models.ForeignKey(
         RoadSegmentType,
         db_column="road_segment_type_id",

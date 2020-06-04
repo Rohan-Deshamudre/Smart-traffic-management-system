@@ -205,20 +205,22 @@ class CreateSimulationSceneEvent(graphene.Mutation):
     road_segment_id = graphene.Int()
     road_condition_type_id = graphene.Int()
     value = graphene.Int()
+    response_plan = graphene.String()
 
     class Arguments:
         simulation_scene_id = graphene.Int(required=True)
         road_segment_id = graphene.Int(required=True)
         road_condition_type_id = graphene.Int(required=True)
         value = graphene.Int(required=True)
+        response_plan = graphene.String()
 
     def mutate(self, info, simulation_scene_id, road_segment_id,
-               road_condition_type_id, value):
+               road_condition_type_id, value, response_plan=None):
         has_perms(info, ['simulations.add_simulationsceneevent'])
         try:
             simulation_scene_event = create_simulation_scene_event(
                 simulation_scene_id, road_segment_id,
-                road_condition_type_id, value)
+                road_condition_type_id, value, response_plan)
 
             rct = simulation_scene_event.road_condition_type.id
             return CreateSimulationSceneEvent(
@@ -226,7 +228,8 @@ class CreateSimulationSceneEvent(graphene.Mutation):
                 simulation_scene_id=simulation_scene_event.simulation_scene.id,
                 road_segment_id=simulation_scene_event.road_segment.id,
                 road_condition_type_id=rct,
-                value=simulation_scene_event.value
+                value=simulation_scene_event.value,
+                response_plan=simulation_scene_event.response_plan
             )
         except ApiException as exc:
             raise GraphQLError(str(exc))
@@ -294,27 +297,31 @@ class UpdateSimulationSceneEvent(graphene.Mutation):
     road_segment_id = graphene.Int()
     road_condition_type_id = graphene.Int()
     value = graphene.Int()
+    response_plan = graphene.String()
 
     class Arguments:
         id = graphene.Int(required=True)
         road_segment_id = graphene.Int()
         road_condition_type_id = graphene.Int()
         value = graphene.Int()
+        response_plan = graphene.String()
 
     def mutate(self, info, id, road_segment_id=None,
-               road_condition_type_id=None, value=None):
+               road_condition_type_id=None, value=None, response_plan=None):
         has_perms(info, ['simulations.change_simulationsceneevent'])
         try:
             event = \
                 update_simulation_scene_event(id,
                                               road_segment_id,
                                               road_condition_type_id,
-                                              value)
+                                              value,
+                                              response_plan)
             return UpdateSimulationSceneEvent(
                 id=event.id,
                 road_segment_id=event.road_segment.id,
                 road_condition_type_id=event.road_condition_type.id,
-                value=event.value
+                value=event.value,
+                response_plan=event.response_plan
             )
         except ApiException as exc:
             raise GraphQLError(str(exc))
