@@ -1,6 +1,7 @@
 import * as mb from 'mapbox-gl';
 import { mapHelper } from "./mapHelper";
 import { GeoJSONSource } from "mapbox-gl";
+import InsightsLog from '../../views/scenario-simulator/components/InsightsLog';
 
 /*
 	Change the data of the drips source
@@ -101,6 +102,17 @@ function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
             const geoJson: any = result.map((route) => {
                 var mid_pt = Math.ceil(route.data.routes[0].geometry.coordinates.length / 2);
                 var loc = route.data.routes[0].geometry.coordinates[mid_pt];
+
+                /*
+                var cond = new InsightsLog(this.props.log);
+                console.log(cond.getCondition(''));
+
+                OR
+                
+                //Set it in function    --> log : InsightsLog
+                var cond = log.getCondition('');
+                
+                */
 
                 return {
                     'type': 'Feature',

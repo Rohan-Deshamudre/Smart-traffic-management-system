@@ -48,8 +48,8 @@ class InsightsLog extends React.Component<Props, State> {
         }
     }
 
-    render() {
-        let conditionString = (id) => (
+    getCondition(id) {
+        return (
             <Query query={GET_ROAD_CONDITION_TYPES}>
                 {
                         ({ data, loading, error }) => {
@@ -69,6 +69,10 @@ class InsightsLog extends React.Component<Props, State> {
                 }
             </Query>
         );
+    }
+
+    render() {
+        let conditionString = (id) => this.getCondition(id);
 
         let log = this.props.simulationLog.map((log, index) => (
             <div key={index} className="log-item">
