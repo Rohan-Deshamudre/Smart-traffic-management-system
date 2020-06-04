@@ -1,6 +1,7 @@
 import * as mb from 'mapbox-gl';
 import { mapHelper } from "./mapHelper";
 import { GeoJSONSource } from "mapbox-gl";
+import { InsightsLog } from '../../views/scenario-simulator/components/InsightsLog';
 
 /*
 	Change the data of the drips source
@@ -93,7 +94,7 @@ function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
     }
 }
 
-
+//private log: InsightsLog = new InsightsLog();
 function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
     if (routes != undefined) {
         Promise.all(routes).then((result: any) => {
