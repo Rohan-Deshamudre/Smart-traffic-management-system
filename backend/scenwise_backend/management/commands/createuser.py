@@ -9,12 +9,16 @@ class Command(BaseCommand):
         parser.add_argument("username", nargs="?", type=str, default=None)
 
     def handle(self, *args, **options):
-        username = options["username"]
+        username = options["username"][0]
         while not username:
             self.stdout.write("Enter username:")
             username = input()
             if User.objects.filter(username=username).exists():
-                self.stdout.write("User with username '%s' already exists." % username)
+                self.stdout.write(
+                    self.style.NOTICE(
+                        "User with username '%s' already exists." % username
+                    )
+                )
                 username = None
 
         password = None
@@ -47,7 +51,7 @@ class Command(BaseCommand):
         while not confirm:
             confirm = input()
             if not confirm:
-                self.stdout.write("aborted")
+                self.stdout.write(self.style.ERROR("Aborted"))
                 return
             if confirm is not "y":
                 confirm = None
@@ -78,7 +82,11 @@ class Command(BaseCommand):
                 if not gno:
                     break
             except (ValueError, TypeError):
-                self.stdout.write("Invalid input. Please enter numbers like so: 123")
+                self.stdout.write(
+                    self.style.NOTICE(
+                        "Invalid input. Please enter numbers like so: 123"
+                    )
+                )
 
         for d in str(gno):
             d = int(d)
