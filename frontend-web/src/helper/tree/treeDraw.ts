@@ -7,7 +7,7 @@ import * as axios from 'axios';
  */
 function drawConditionHover(g: any, d: any, i: number) {
 
-	if (d.data.__typename === 'RoadConditionObjectType' || d.data.operator === 'NONE') {
+	if (d.data.__typename === 'RoadConditionObjectType' || d.data.road_condition) {
 		let name = select(g).append('g').attr('class', 'road-condition-hover').attr('id', 'road-condition-hover-' + i);
 
 		const firstColumnXY = 5;
@@ -336,7 +336,7 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 		hideButton.append('rect').attr('class', 'button-rect');
 		hideButton.append('text').attr('class', 'button-text')
 			.text(function (d: any, i) {
-				if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
+				if (d.data.hasOwnProperty('children')) {
 					return '+';
 				} else {
 					return '-'
@@ -346,58 +346,43 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 
 
 	// -- Response plan button
-	let responsePlanButtonRoadSegment = buttons.filter((d: any) => {
-		return d.data.__typename === 'RoadSegmentObjectType';
+	let responsePlanButton = buttons.filter((d: any) => {
+		return d.data.__typename === 'RoadSegmentObjectType' || d.data.__typename === 'ScenarioObjectType';
 	}).append('g')
 		.on('click', function (d: any, i) {
-			that.openModalWithRoadSegment(d.data.id);
-		})
-		.attr('class', 'button response-plan-button');
-
-
-	hasResponsePlan(d.data.id).then(
-		(result) => {
-			if (result) {
-				responsePlanButtonRoadSegment.append('rect').attr('class', 'button-rect');
-				responsePlanButtonRoadSegment.append('text').attr('class', 'button-text')
-					.text(function (d: any, i) {
-						if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
-							return 'RP+';
-						} else {
-							return 'RP-'
-						}
-					});
+			if (d.data.__typename === 'ScenarioObjectType') {
+				that.openModalWithScenario(d);
+			} else if (d.data.__typename === 'RoadSegmentObjectType') {
+				that.openModalWithRoadSegment(d);
 			}
-		}
-	);
-
-	let responsePlanButtonScenario = buttons.filter((d: any) => d.data.__typename === 'ScenarioObjectType').append('g')
-		.on('click', function (d: any, i) {
-			that.openModalWithScenario(d.data.id);
 		})
 		.attr('class', 'button response-plan-button');
-	
+
 	hasResponsePlan(d.data.id).then(
 		(result) => {
 			if (result) {
-				responsePlanButtonScenario.append('rect').attr('class', 'button-rect');
-				responsePlanButtonScenario.append('text').attr('class', 'button-text')
-					.text(function (d: any, i) {
-						if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
-							return 'RP+';
-						} else {
-							return 'RP-'
-						}
-					})
+				responsePlanButton.append('rect').attr('class', 'button-rect');
+				responsePlanButton.append('text').attr('class', 'button-text')
+					.text('RP')
 			}
 		}
 	);
 }
 
 function hasResponsePlan(id: number): Promise<boolean> {
-	// TODO change id to scenario_id and road_segment_id and make dynamic function.
-	return axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: id })
-		.then((res) => res.data.children && res.data.children.length > 0)
+	return axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { road_segment_id: id })
+		.then((res) => {
+			if (res.data && res.data.length && res.data.length > 0) {
+				return true;
+			}
+			return axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { scenario_id: id })
+				.then((res1) => {
+					if (res1.data && res1.data.length && res1.data.length > 0) {
+						return true;
+					}
+				})
+				.catch(() => false);
+		})
 		.catch(() => false);
 }
 
