@@ -9,7 +9,17 @@ class Command(BaseCommand):
         parser.add_argument("username", nargs="?", type=str, default=None)
 
     def handle(self, *args, **options):
-        username = options["username"][0]
+        username = options["username"]
+        if username:
+            username = username
+            if User.objects.filter(username=username).exists():
+                self.stdout.write(
+                    self.style.ERROR(
+                        "User with username '%s' already exists." % username
+                    )
+                )
+                return
+
         while not username:
             self.stdout.write("Enter username:")
             username = input()
