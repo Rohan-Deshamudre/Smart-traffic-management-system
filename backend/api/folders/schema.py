@@ -28,7 +28,7 @@ class Query(graphene.ObjectType):
         desc=graphene.String(),
     )
 
-    @engineer_required
+    @operator_required
     def resolve_folders(self, info, folder_id=None, name=None, desc=None, **kwargs):
         """
         Queries folders from the database
@@ -39,7 +39,6 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) folders
         """
-        # has_perms(info, ["folders.view_folder", "folders.view_foldertype"])
 
         res = methods.get_all_folders()
         if folder_id:
@@ -64,8 +63,8 @@ class CreateFolder(graphene.Mutation):
         name = graphene.String(required=True)
         description = graphene.String()
 
+    @engineer_required
     def mutate(self, info, folder_type_id, name, description="", parent_id=None):
-        has_perms(info, ["folders.add_folder", "folders.add_foldertype"])
 
         try:
             folder = methods.create_folder(name, folder_type_id, parent_id, description)
@@ -98,8 +97,8 @@ class UpdateFolder(graphene.Mutation):
         parent_id = graphene.Int()
         description = graphene.String()
 
+    @engineer_required
     def mutate(self, info, id, name=None, parent_id=None, description=None):
-        has_perms(info, ["folders.change_folder", "folders.change_foldertype"])
 
         try:
             folder = methods.update_folder(id, name, parent_id, description)
@@ -120,6 +119,7 @@ class DeleteFolder(graphene.Mutation):
     class Arguments:
         id = graphene.Int(required=True)
 
+    @engineer_required
     def mutate(self, info, id, **kwargs):
         """
         Deletes the folder with the given ID
@@ -128,7 +128,6 @@ class DeleteFolder(graphene.Mutation):
         :param kwargs:
         :return:
         """
-        has_perms(info, ["folders.delete_folder", "folders.delete_foldertype"])
 
         try:
             methods.delete_folder(id)
