@@ -4,7 +4,7 @@ import '../styles/toolbox.scss';
 import * as _ from 'lodash';
 
 type Props = {
-    altRoute?: { id: number, lng: number, lat: number }[],
+    alternativeRoute?: { id: number, lng: number, lat: number }[],
     handleAltRoute: (newRoute: { id: number, lng: number, lat: number }[]) => void,
     client?: any,
     disabled?: boolean
@@ -29,7 +29,7 @@ class AlternateRouteToolbox extends React.Component<Props, State>{
     componentDidMount() {
         let routeToBeDrawn: any = [];
         if (this.props.client) {
-            routeToBeDrawn = this.props.altRoute.map((routeSegment) => [routeSegment.lng, routeSegment.lat]);
+            routeToBeDrawn = this.props.alternativeRoute.map((routeSegment) => [routeSegment.lng, routeSegment.lat]);
             this.props.client.writeData({
                 data: {
                     selectedRoute: routeToBeDrawn
@@ -39,9 +39,9 @@ class AlternateRouteToolbox extends React.Component<Props, State>{
     }
 
     handleLocation(newLocation: [number, number]) {
-        let newRoute = [...this.props.altRoute, {
+        let newRoute = [...this.props.alternativeRoute, {
             ...{lng: newLocation[0], lat: newLocation[1]},
-            id: this.props.altRoute.length
+            id: this.props.alternativeRoute.length
         }];
         this.setState({
             addNewSegmentToggle: false
@@ -51,7 +51,7 @@ class AlternateRouteToolbox extends React.Component<Props, State>{
     }
 
     deleteSegment(segmentId: number) {
-        let newRoute = this.props.altRoute;
+        let newRoute = this.props.alternativeRoute;
         newRoute = newRoute.filter((routeSegment) => {
             return routeSegment.id !== segmentId
         });
@@ -65,8 +65,8 @@ class AlternateRouteToolbox extends React.Component<Props, State>{
 
     componentDidUpdate(prevProps) {
         let routeToBeDrawn: any = [];
-        if (!_.isEqual(this.props.altRoute, prevProps.altRoute) && this.props.client) {
-            routeToBeDrawn = this.props.altRoute.map((routeSegment) => [routeSegment.lng, routeSegment.lat]);
+        if (!_.isEqual(this.props.alternativeRoute, prevProps.altRoute) && this.props.client) {
+            routeToBeDrawn = this.props.alternativeRoute.map((routeSegment) => [routeSegment.lng, routeSegment.lat]);
             this.props.client.writeData({
                 data: {
                     selectedRoute: routeToBeDrawn
@@ -76,7 +76,7 @@ class AlternateRouteToolbox extends React.Component<Props, State>{
     }
 
     render() {
-        let currentRoutes = this.props.altRoute.map((routeSegment) =>
+        let currentRoutes = this.props.alternativeRoute.map((routeSegment) =>
             <div className="route-item" key={routeSegment.id}>
                 <div className="route-item-body">
                     <div className="text">Lng:</div>

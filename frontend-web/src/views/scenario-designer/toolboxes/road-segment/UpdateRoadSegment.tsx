@@ -38,7 +38,8 @@ class UpdateRoadSegment extends React.Component<Props, State> {
 				id: this.props.id,
 				name: newData.name,
 				roadSegmentTypeId: newData.roadSegmentTypeId,
-				route: newData.route
+				route: newData.route,
+				alternativeRoute: newData.alternativeRoute
 			},
 			refetchQueries: [{ query: GET_TREE, variables: { id: this.props.scenarioId } }]
 		})

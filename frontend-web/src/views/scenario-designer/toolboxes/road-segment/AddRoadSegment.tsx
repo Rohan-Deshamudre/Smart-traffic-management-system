@@ -36,7 +36,8 @@ class AddRoadSegment extends React.Component<Props, State> {
 				scenarioId: this.props.scenarioId,
 				name: newData.name,
 				roadSegmentTypeId: newData.roadSegmentTypeId,
-				route: newData.route
+				route: newData.route,
+				alternativeRoute: newData.alternativeRoute
 			},
 			refetchQueries: [{ query: GET_TREE, variables: { id: this.props.scenarioId } }]
 		})

@@ -18,8 +18,7 @@ type Props = {
 type State = {
 	name: string,
 	route: { id: number, lat: number, lng: number }[],
-	altRoute: { id: number, lat: number, lng: number }[],
-
+	alternativeRoute: { id: number, lat: number, lng: number }[],
 	roadSegmentTypeId: number,
 	saved: boolean,
 	disabled: boolean
@@ -35,7 +34,7 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 	baseState: State = {
 		name: '',
 		route: [],
-		altRoute: [],
+		alternativeRoute: [],
 		roadSegmentTypeId: -1,
 		saved: true,
 		disabled: true
@@ -52,7 +51,7 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 				...this.state,
 				name: data.roadSegments[0].name,
 				route: data.roadSegments[0].route.routePoints,
-				// altRoute: data.roadSegments[0].altRoute.routePoints,
+				alternativeRoute: data.roadSegments[0].alternativeRoute.routePoints,
 				roadSegmentTypeId: data.roadSegments[0].roadSegmentType.id
 			}
 		}
@@ -91,7 +90,7 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 			name: this.state.name,
 			roadSegmentTypeId: this.state.roadSegmentTypeId,
 			route: this.state.route.map(route => ({lng: route.lng, lat: route.lat})),
-			altRoute: this.state.altRoute.map(altRoute => ({lng: altRoute.lng, lat: altRoute.lat}))
+			alternativeRoute: this.state.alternativeRoute.map(altRoute => ({lng: altRoute.lng, lat: altRoute.lat}))
 		});
 	}
 
@@ -111,7 +110,7 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 
 	handleAlternateRoute(newRoute: { id: number, lng: number, lat: number }[]) {
 		this.setState({
-			altRoute: newRoute,
+			alternativeRoute: newRoute,
 			saved: false,
 		}, () => this.disabled());
 	}
@@ -128,7 +127,7 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 			disabled: (
 				this.state.name === ""
 				|| this.state.route === undefined
-					|| this.state.altRoute === undefined
+					// || this.state.alternativeRoute === undefined
 				|| this.state.roadSegmentTypeId < 0
 			)
 		});
@@ -165,7 +164,7 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 				<p>Mark alternate route:</p>
 				<ApolloConsumer>
 					{client => (
-						<AlternateRouteToolbox altRoute={this.state.altRoute} client={client} disabled={this.props.readOnly} handleAltRoute={this.handleAlternateRoute}/>
+						<AlternateRouteToolbox alternativeRoute={this.state.alternativeRoute} client={client} disabled={this.props.readOnly} handleAltRoute={this.handleAlternateRoute}/>
 					)}
 				</ApolloConsumer>
 
