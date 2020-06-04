@@ -26,13 +26,13 @@ def operator_required(fn=None):
 
 
 def has_group_engineer(user):
-    return has_group(user, Group.objects.get(name="traffic_engineer").id)
+    return has_group(user, Group.objects.get(name="traffic_engineer").name)
 
 
 def has_group_operator(user):
     # Traffic engineers are a proper subset of traffic operators.
     return has_group(
-        user, Group.objects.get(name="traffic_operator").id
+        user, Group.objects.get(name="traffic_operator").name
     ) or has_group_engineer(user)
 
 
@@ -42,7 +42,7 @@ def has_group(user, group_name):
 
     if user:
         if user.is_authenticated:
-            return user.groups.filter(codename=group_name).exists()
+            return user.groups.filter(name=group_name).exists()
 
     return False
 
