@@ -17,7 +17,7 @@ def check_road_segments():
                 if response_plan['active']:
                     # TODO: Fire conditions
                     print("Response plan with id = %s is active" %
-                          response_plan['response_plan'].id)
+                          response_plan['response_plan_id'])
                     is_one_active = True
             if not is_one_active:
                 # TODO: Freeflow activated
