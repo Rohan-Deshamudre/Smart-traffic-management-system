@@ -11,30 +11,33 @@ from api.routes.input_object import RouteInputObject
 from .models import *
 from ..road_conditions.methods.getter import get_road_condition_parents
 
-from utils.auth import has_perms
+from utils.auth import engineer_required, operator_required
 
 
 class RoadSegmentObjectType(DjangoObjectType):
     class Meta:
         model = RoadSegment
-        exclude_fields = ('scenario', 'fk_simulationSceneEvent_roadSegment')
+        exclude_fields = ("scenario", "fk_simulationSceneEvent_roadSegment")
 
 
 class RoadSegmentTypeObjectType(DjangoObjectType):
     class Meta:
         model = RoadSegmentType
-        exclude_fields = ('road_segment_enum',)
+        exclude_fields = ("road_segment_enum",)
 
 
 class Query(graphene.ObjectType):
-    road_segments = graphene.List(RoadSegmentObjectType,
-                                  segment_id=graphene.Int(),
-                                  condition_id=graphene.Int())
-    road_segment_types = graphene.List(RoadSegmentTypeObjectType,
-                                       type_id=graphene.Int(),
-                                       name=graphene.String(),
-                                       desc=graphene.String())
+    road_segments = graphene.List(
+        RoadSegmentObjectType, segment_id=graphene.Int(), condition_id=graphene.Int()
+    )
+    road_segment_types = graphene.List(
+        RoadSegmentTypeObjectType,
+        type_id=graphene.Int(),
+        name=graphene.String(),
+        desc=graphene.String(),
+    )
 
+    @operator_required
     def resolve_road_segments(self, info, segment_id=None, condition_id=None):
         """
         Queries road_segments from the database
@@ -43,7 +46,6 @@ class Query(graphene.ObjectType):
         :param condition_id: The condition ID to filter on
         :return: All (filtered) road_segments
         """
-        has_perms(info, ['road_segments.view_roadsegment'])
         res = RoadSegment.objects.all()
 
         if segment_id:
@@ -57,8 +59,10 @@ class Query(graphene.ObjectType):
             res = res.filter(Q(road_conditions=rc))
         return res
 
-    def resolve_road_segment_types(self, info, type_id=None, name=None,
-                                   desc=None, **kwargs):
+    @operator_required
+    def resolve_road_segment_types(
+        self, info, type_id=None, name=None, desc=None, **kwargs
+    ):
         """
         Queries road_segment_types from the database
         :param info:
@@ -68,7 +72,6 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) road_segment_types
         """
-        has_perms(info, ['road_segments.view_roadsegmenttype'])
         res = RoadSegmentType.objects.all()
         if type_id:
             res = res.filter(Q(id__exact=type_id))
@@ -93,11 +96,12 @@ class CreateRoadSegment(graphene.Mutation):
         road_segment_type_id = graphene.Int(required=True)
         route = RouteInputObject
 
+    @engineer_required
     def mutate(self, info, name, scenario_id, road_segment_type_id, route):
-        has_perms(info, ['road_segments.add_roadsegment'])
         try:
-            road_segment = create_road_segment(name, scenario_id,
-                                               road_segment_type_id, route)
+            road_segment = create_road_segment(
+                name, scenario_id, road_segment_type_id, route
+            )
             return CreateRoadSegment(
                 id=road_segment.id,
                 name=road_segment.name,
@@ -122,12 +126,20 @@ class UpdateRoadSegment(graphene.Mutation):
         road_segment_type_id = graphene.Int()
         route = RouteInputObject
 
-    def mutate(self, info, id, name=None, scenario_id=None,
-               road_segment_type_id=None, route=None):
-        has_perms(info, ['road_segments.change_roadsegment'])
+    @engineer_required
+    def mutate(
+        self,
+        info,
+        id,
+        name=None,
+        scenario_id=None,
+        road_segment_type_id=None,
+        route=None,
+    ):
         try:
-            road_segment = update_road_segment(id, name, scenario_id,
-                                               road_segment_type_id, route)
+            road_segment = update_road_segment(
+                id, name, scenario_id, road_segment_type_id, route
+            )
             return UpdateRoadSegment(
                 id=road_segment.id,
                 name=road_segment.name,
@@ -144,6 +156,7 @@ class DeleteRoadSegment(graphene.Mutation):
     class Arguments:
         id = graphene.Int(required=True)
 
+    @engineer_required
     def mutate(self, info, id):
         """
         Deletes the road_segment
@@ -151,7 +164,6 @@ class DeleteRoadSegment(graphene.Mutation):
         :param id: The ID of the road_segment
         :return:
         """
-        has_perms(info, ['road_segments.delete_roadsegment'])
         try:
             delete_road_segment(id)
         except ApiException as exc:
