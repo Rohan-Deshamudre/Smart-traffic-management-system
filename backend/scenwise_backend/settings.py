@@ -235,4 +235,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = "/static/"
+STATIC_URL = '/static/'
+
+SMARTROADS_API = {
+    'SPEED_FLOW_API': 'https://analytics.smartroads.nl/point-cloud',
+    'TRAVEL_TIME_API': 'https://analytics.smartroads.nl/routes/measurements',
+    'headers': { 'Authorization': 'Basic c2Nlbndpc2U6NlJ6YkMzVEY=' }
+}

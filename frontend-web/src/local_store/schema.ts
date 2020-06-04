@@ -27,6 +27,14 @@ export const schema = gql`
         value: Int!
         roadSegment: RoadSegment
         roadConditionType: RoadConditionType
+        response_plan: String
+    }
+
+    type RoadCondition {
+        id: ID!
+        name: String!
+        value: String!
+        roadConditionType: RoadConditionType!
     }
 
     type RoadConditionType {
@@ -47,6 +55,15 @@ export const schema = gql`
         name: String!
         img: String
         description: String
+    }
+
+    type ResponsePlan {
+        id: ID!
+        operator: String!
+        children: [ResponsePlan!]!
+        road_condition_id: Int
+        road_segment_id: Int
+        scenario_id: Int
     }
     
     type ApplicationData {

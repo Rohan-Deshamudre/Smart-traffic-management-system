@@ -318,7 +318,8 @@ class SimulationSchemaTest(TestCase):
                                         }
                                     }
                                     ''' % (
-                                        event.id, segment.id, condition_type.id, value))
+                                        event.id, segment.id, condition_type.id,
+                                        value))
         self.assertEquals(executed['data']['updateSimulationEvent']['roadSegmentId'],
                           segment.id)
         self.assertEquals(executed['data']['updateSimulationEvent']['value'],

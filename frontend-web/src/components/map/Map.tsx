@@ -11,10 +11,6 @@ import asLargeWorkspace from "../containers/LargeWorkspace";
 import { requests } from "../../helper/requests";
 import { mapSetup } from "../../helper/map/mapSetup";
 import { mapDisplay } from "../../helper/map/mapDisplay";
-import Col from "react-bootstrap/Col";
-import { ApolloConsumer } from "@apollo/react-components";
-import FormControl from "react-bootstrap/FormControl";
-
 
 
 type State = {
@@ -51,7 +47,7 @@ class Map extends React.PureComponent<Props, State> {
 
         this.state = {
             input: '',
-            mapboxApiToken: 'pk.eyJ1Ijoia2FhbjU4IiwiYSI6ImNqcTczNWczZzI3a3o0M3FudnNqdjJrbHAifQ.FZWwVCNOkDdifgGxn3_D-Q',
+            mapboxApiToken: 'pk.eyJ1IjoiYWduaXZjIiwiYSI6ImNrYWt5NTgzNjA0d2cycXF3ZjRneno0ZWIifQ.H_wVlOqQkVF4yJfYuOTiAw',
             lng: this.props.lng,
             lat: this.props.lat,
             zoom: this.props.zoom
@@ -136,6 +132,10 @@ class Map extends React.PureComponent<Props, State> {
     configureSelectedRoute() {
         const selectedRoute = this.getRoutes([this.props.selectedRoute]);
         mapDisplay.displayRoutes(selectedRoute, 'selectedRouteSource', this.map);
+        mapDisplay.displayAlternate(selectedRoute, 'alternativeRouteSource', this.map);
+        mapDisplay.displayDestination(selectedRoute, 'destinationIconSource', this.map);
+        mapDisplay.displayConditionIcon(selectedRoute, 'conditionIconSource', this.map);
+        // mapDisplay.displayRoutes(selectedRoute, 'selectedRouteSource', this.map);
     }
 
     /*
@@ -164,7 +164,8 @@ class Map extends React.PureComponent<Props, State> {
     configureRoadSegment() {
         const roadSegmentWayPoints = this.getRoadSegmentWayPoints(this.props.scenario, true);
         const roadSegmentRoutes = this.getRoutes(roadSegmentWayPoints);
-        mapDisplay.displayRoutes(roadSegmentRoutes, 'roadSegmentRoutesSource', this.map);
+        mapDisplay.display(roadSegmentRoutes, 'roadSegmentRoutesSource', this.map);
+        // mapDisplay.displayRoutes(roadSegmentRoutes, 'roadSegmentRoutesSource', this.map);
     }
 
     /*
@@ -193,6 +194,7 @@ class Map extends React.PureComponent<Props, State> {
             return wayPoints.filter((route) => route !== undefined && route.length >= 2).map(async (route) => requests.getRoute(route, 'full'));
         }
     }
+
 
     /*
             Update the map to the corresponding center
@@ -260,6 +262,11 @@ class Map extends React.PureComponent<Props, State> {
         if (!_.isEqual(currentRoadSegmentWayPoints, this.getRoadSegmentWayPoints(prevProps.scenario, false))) {
             const currentRoadSegmentRoutes = this.getRoutes(currentRoadSegmentWayPoints);
             mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
+            mapDisplay.displayAlternate(currentRoadSegmentRoutes, 'alternativeRouteSource', this.map);
+            mapDisplay.displayDestination(currentRoadSegmentRoutes, 'destinationIconSource', this.map);
+            mapDisplay.displayConditionIcon(currentRoadSegmentRoutes, 'conditionIconSource', this.map);
+
+            // mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
         }
     }
 
@@ -288,6 +295,7 @@ class Map extends React.PureComponent<Props, State> {
         if (!_.isEqual(this.props.selectedRoute, prevProps.selectedRoute)) {
             this.configureSelectedRoute();
         }
+
 
         if (!_.isEqual(this.props.selectedInstrumentActionRoutes, prevProps.selectedInstrumentActionRoutes)) {
             this.configureSelectedInstrumentActionRoutes();

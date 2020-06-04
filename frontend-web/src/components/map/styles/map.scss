@@ -28,4 +28,12 @@
       cursor: pointer !important;
     }
   }
+
+  .mapboxgl-marker {
+    stroke: black;
+  }
+
+  .mapboxgl-marker:hover {
+    stroke: red;
+  }
 }

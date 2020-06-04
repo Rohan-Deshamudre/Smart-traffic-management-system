@@ -43,6 +43,7 @@ def simulation_id_to_json(simulation_scene_id):
              'value': simulation_scene_event.value,
              'roadSegment': road_segment,
              'roadConditionType': road_condition_type,
+             'response_plan': simulation_scene_event.response_plan,
              '__typename': 'SimulationSceneEvent',
              }
         simulation_scene_event_array.append(simulation_scene_event_object)

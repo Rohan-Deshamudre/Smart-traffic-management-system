@@ -40,3 +40,4 @@ class SimulationSceneEvent(AbstractModel):
                           related_name=key,
                           on_delete=models.DO_NOTHING)
     value = models.IntegerField()
+    response_plan = models.TextField(blank=True, null=True)

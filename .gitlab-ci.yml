@@ -25,11 +25,14 @@ test backend:
     - python3 manage.py test
     - coverage run manage.py test
     - coverage html
+    - coverage xml
     - "coverage report | grep 'TOTAL' | awk '{print substr($NF, 1, 2), \"% covered\"}'"
   coverage: /\d+ \% covered/
   artifacts:
     paths:
       - backend/htmlcov
+    reports:
+      cobertura: backend/coverage.xml
 
 deploy frontend-web:
   image: node:latest
