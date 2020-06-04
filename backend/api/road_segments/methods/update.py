@@ -9,7 +9,8 @@ from api.scenarios.methods.update import update_location
 
 def update_road_segment(road_segment_id: int, name: str, scenario_id: int,
                         road_segment_type_id: int,
-                        route: RouteInputObject) -> RoadSegment:
+                        route: RouteInputObject,
+                        alternative_route: RouteInputObject) -> RoadSegment:
     road_segment = get_road_segment_with_id(road_segment_id)
     road_segment.name = name if name else road_segment.name
     if scenario_id:
@@ -22,6 +23,10 @@ def update_road_segment(road_segment_id: int, name: str, scenario_id: int,
     if route:
         r = create_route(route)
         road_segment.route = r
+
+    if alternative_route:
+        r = create_route(alternative_route)
+        road_segment.alternative_route = r
 
     road_segment.save()
     update_location(road_segment.scenario)
