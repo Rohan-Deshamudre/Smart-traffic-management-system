@@ -17,7 +17,7 @@ from ..road_conditions.models import RoadCondition
 from ..road_conditions.road_condition_actions.models import RoadConditionAction
 from ..road_segments.models import RoadSegment
 
-from utils.auth import has_perms
+from utils.auth import engineer_required, operator_required
 
 
 class InstrumentObjectType(DjangoObjectType):
@@ -28,40 +28,56 @@ class InstrumentObjectType(DjangoObjectType):
 class InstrumentTypeObjectType(DjangoObjectType):
     class Meta:
         model = InstrumentType
-        exclude_fields = ('instrument_enum',)
+        exclude_fields = ("instrument_enum",)
 
 
 class InstrumentSystemObjectType(DjangoObjectType):
     class Meta:
         model = InstrumentSystem
         exclude_fields = (
-            'instrument_system_enum',
-            'road_condition_action_instrument_system',)
+            "instrument_system_enum",
+            "road_condition_action_instrument_system",
+        )
 
 
 class Query(action_schema.Query, graphene.ObjectType):
-    instruments = graphene.List(InstrumentObjectType,
-                                instrument_id=graphene.Int(),
-                                name=graphene.String(),
-                                instrument_type_id=graphene.Int(),
-                                instrument_system_id=graphene.Int(),
-                                desc=graphene.String(),
-                                folder_id=graphene.Int(),
-                                scenario_id=graphene.Int(),
-                                label_name=graphene.String())
-    instrument_types = graphene.List(InstrumentTypeObjectType,
-                                     instrument_type_id=graphene.Int(),
-                                     name=graphene.String(),
-                                     desc=graphene.String())
-    instrument_systems = graphene.List(InstrumentSystemObjectType,
-                                       instrument_system_id=graphene.Int(),
-                                       name=graphene.String())
+    instruments = graphene.List(
+        InstrumentObjectType,
+        instrument_id=graphene.Int(),
+        name=graphene.String(),
+        instrument_type_id=graphene.Int(),
+        instrument_system_id=graphene.Int(),
+        desc=graphene.String(),
+        folder_id=graphene.Int(),
+        scenario_id=graphene.Int(),
+        label_name=graphene.String(),
+    )
+    instrument_types = graphene.List(
+        InstrumentTypeObjectType,
+        instrument_type_id=graphene.Int(),
+        name=graphene.String(),
+        desc=graphene.String(),
+    )
+    instrument_systems = graphene.List(
+        InstrumentSystemObjectType,
+        instrument_system_id=graphene.Int(),
+        name=graphene.String(),
+    )
 
-    def resolve_instruments(self, info, instrument_id=None, name=None,
-                            instrument_type_id=None,
-                            instrument_system_id=None, desc=None,
-                            folder_id=None,
-                            scenario_id=None, label_name=None, **kwargs):
+    @operator_required
+    def resolve_instruments(
+        self,
+        info,
+        instrument_id=None,
+        name=None,
+        instrument_type_id=None,
+        instrument_system_id=None,
+        desc=None,
+        folder_id=None,
+        scenario_id=None,
+        label_name=None,
+        **kwargs
+    ):
         """
         Queries instruments from the database
         :param label_name:
@@ -76,16 +92,16 @@ class Query(action_schema.Query, graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) instruments
         """
-        has_perms(info, ['instruments.view_instrument'])
         res = Instrument.objects.all()
         if scenario_id:
             rs = RoadSegment.objects.filter(scenario__id=scenario_id).all()
-            rc = RoadCondition.objects.filter(
-                road_segment_road_condition__in=rs).all()
+            rc = RoadCondition.objects.filter(road_segment_road_condition__in=rs).all()
             rca = RoadConditionAction.objects.filter(
-                road_condition_road_condition_actions__in=rc).all()
+                road_condition_road_condition_actions__in=rc
+            ).all()
             ia = InstrumentAction.objects.filter(
-                road_condition_action_instrument_action__in=rca).all()
+                road_condition_action_instrument_action__in=rca
+            ).all()
             res = res.filter(Q(instrument_actions__id__in=ia)).distinct()
         if instrument_id:
             res = res.filter(Q(id__exact=instrument_id))
@@ -94,18 +110,18 @@ class Query(action_schema.Query, graphene.ObjectType):
         if instrument_type_id:
             res = res.filter(Q(instrument_type__id__exact=instrument_type_id))
         if instrument_system_id:
-            res = res.filter(
-                Q(instrument_system__id__exact=instrument_system_id))
+            res = res.filter(Q(instrument_system__id__exact=instrument_system_id))
         if desc:
             res = res.filter(Q(description__icontains=desc))
         if label_name:
-            res = res.filter(
-                Q(labels__unique_label__icontains=label_name.lower()))
+            res = res.filter(Q(labels__unique_label__icontains=label_name.lower()))
 
         return res
 
-    def resolve_instrument_types(self, info, instrument_type_id=None,
-                                 name=None, desc=None, **kwargs):
+    @operator_required
+    def resolve_instrument_types(
+        self, info, instrument_type_id=None, name=None, desc=None, **kwargs
+    ):
         """
         Queries instrument_types from the database
         :param info:
@@ -115,7 +131,6 @@ class Query(action_schema.Query, graphene.ObjectType):
         :param kwargs:
         :return: ALl (filtered) instrument_types
         """
-        has_perms(info, ['instruments.view_instrumenttype'])
         res = InstrumentType.objects.all()
         if instrument_type_id:
             res = res.filter(Q(id__exact=instrument_type_id))
@@ -126,8 +141,10 @@ class Query(action_schema.Query, graphene.ObjectType):
 
         return res
 
-    def resolve_instrument_systems(self, info, instrument_system_id=None,
-                                   name=None, **kwargs):
+    @operator_required
+    def resolve_instrument_systems(
+        self, info, instrument_system_id=None, name=None, **kwargs
+    ):
         """
         Queries instrument_systems from the database
         :param info:
@@ -136,7 +153,6 @@ class Query(action_schema.Query, graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) instrument_systems
         """
-        has_perms(info, ['instruments.view_instrumentsystem'])
         res = InstrumentSystem.objects.all()
         if instrument_system_id:
             res = res.filter(Q(id__exact=instrument_system_id))
@@ -164,13 +180,28 @@ class CreateInstrument(graphene.Mutation):
         description = graphene.String()
         labels = LabelArrayInputObject
 
-    def mutate(self, info, name, instrument_type_id, lat, lng,
-               instrument_system_id, description="", labels=[]):
-        has_perms(info, ['instruments.add_instrument'])
+    @engineer_required
+    def mutate(
+        self,
+        info,
+        name,
+        instrument_type_id,
+        lat,
+        lng,
+        instrument_system_id,
+        description="",
+        labels=[],
+    ):
         try:
-            instrument = create_instrument(name, instrument_type_id, lat, lng,
-                                           instrument_system_id, description,
-                                           labels)
+            instrument = create_instrument(
+                name,
+                instrument_type_id,
+                lat,
+                lng,
+                instrument_system_id,
+                description,
+                labels,
+            )
 
             return CreateInstrument(
                 id=instrument.id,
@@ -204,15 +235,31 @@ class UpdateInstrument(graphene.Mutation):
         instrument_type_id = graphene.Int()
         labels = LabelArrayInputObject
 
-    def mutate(self, info, id, name=None, lat=None, lng=None, description=None,
-               instrument_system_id=None, instrument_type_id=None,
-               labels=None):
-        has_perms(info, ['instruments.change_instrument'])
+    @engineer_required
+    def mutate(
+        self,
+        info,
+        id,
+        name=None,
+        lat=None,
+        lng=None,
+        description=None,
+        instrument_system_id=None,
+        instrument_type_id=None,
+        labels=None,
+    ):
         try:
 
-            instrument = update_instrument(id, name, lat, lng, description,
-                                           instrument_system_id,
-                                           instrument_type_id, labels)
+            instrument = update_instrument(
+                id,
+                name,
+                lat,
+                lng,
+                description,
+                instrument_system_id,
+                instrument_type_id,
+                labels,
+            )
 
             return UpdateInstrument(
                 id=instrument.id,
@@ -233,6 +280,7 @@ class DeleteInstrument(graphene.Mutation):
     class Arguments:
         id = graphene.Int(required=True)
 
+    @engineer_required
     def mutate(self, info, id):
         """
         Deletes the instrument, and the connected instrument_action
@@ -240,7 +288,6 @@ class DeleteInstrument(graphene.Mutation):
         :param id: The ID of the instrument
         :return:
         """
-        has_perms(info, ['instruments.delete_instrument'])
         try:
             delete_instrument(id)
         except ApiException as exc:
