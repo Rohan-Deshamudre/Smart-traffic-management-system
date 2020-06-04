@@ -13,6 +13,14 @@ export const GET_ROAD_SEGMENT_INFO = gql`
                     lat
                 }
             }
+            alternativeRoute {
+                id
+                routePoints {
+                    id
+                    lng
+                    lat
+                }
+            }
             roadSegmentType {
                 id
                 name
@@ -22,25 +30,27 @@ export const GET_ROAD_SEGMENT_INFO = gql`
 `;
 
 export const UPDATE_ROAD_SEGMENT = gql`
-    mutation updateRoadSegment($id: Int!, $name: String, $roadSegmentTypeId: Int, $scenarioId: Int, $route: [RoutePoint]) {
-        updateRoadSegment(id: $id, name: $name, roadSegmentTypeId: $roadSegmentTypeId, scenarioId: $scenarioId, route: $route) {
+    mutation updateRoadSegment($id: Int!, $name: String, $roadSegmentTypeId: Int, $scenarioId: Int, $route: [RoutePoint], $alternativeRoute: [RoutePoint]) {
+        updateRoadSegment(id: $id, name: $name, roadSegmentTypeId: $roadSegmentTypeId, scenarioId: $scenarioId, route: $route, alternativeRoute: $alternativeRoute) {
             id
             name
             roadSegmentType
             scenarioId
             routeId
+            alternativeRouteId
         }
     }
 `;
 
 export const ADD_ROAD_SEGMENT = gql`
-    mutation createRoadSegment($name: String!, $roadSegmentTypeId: Int!, $scenarioId: Int!, $route: [RoutePoint]) {
-        createRoadSegment(name: $name, roadSegmentTypeId: $roadSegmentTypeId, scenarioId: $scenarioId, route: $route) {
+    mutation createRoadSegment($name: String!, $roadSegmentTypeId: Int!, $scenarioId: Int!, $route: [RoutePoint], $alternativeRoute: [RoutePoint]) {
+        createRoadSegment(name: $name, roadSegmentTypeId: $roadSegmentTypeId, scenarioId: $scenarioId, route: $route, alternativeRoute: $alternativeRoute) {
             id
             name
             roadSegmentType
             scenarioId
             routeId
+            alternativeRouteId
         }
     }
 `;
