@@ -103,6 +103,8 @@ class RoadSegmentSchemaTest(TestCase):
                                             scenarioId: %s,
                                             roadSegmentTypeId: %s,
                                             route: [{lat: 0.00, lng: 0.00},
+                                            {lat: 0.00, lng: 0.00}],
+                                            alternativeRoute: [{lat: 0.00, lng: 0.00},
                                             {lat: 0.00, lng: 0.00}]
                                         )
                                         {
@@ -111,6 +113,7 @@ class RoadSegmentSchemaTest(TestCase):
                                     }
                                     ''' % (
             name, scenario.id, segment.id))
+        print(str(executed))
         self.assertEquals(executed['data']['createRoadSegment']['name'],
                           name)
 

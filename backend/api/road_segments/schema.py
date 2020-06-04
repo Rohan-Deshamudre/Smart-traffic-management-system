@@ -88,6 +88,7 @@ class CreateRoadSegment(graphene.Mutation):
     name = graphene.String()
     scenario_id = graphene.Int()
     route_id = graphene.Int()
+    alternative_route_id = graphene.Int()
     road_segment_type = graphene.Int()
 
     class Arguments:
@@ -95,13 +96,18 @@ class CreateRoadSegment(graphene.Mutation):
         scenario_id = graphene.Int(required=True)
         road_segment_type_id = graphene.Int(required=True)
         route = RouteInputObject
+        alternative_route = RouteInputObject
+
 
     @engineer_required
-    def mutate(self, info, name, scenario_id, road_segment_type_id, route):
+    def mutate(self, info, name, scenario_id, road_segment_type_id,
+               route, alternative_route):
         try:
-            road_segment = create_road_segment(
-                name, scenario_id, road_segment_type_id, route
-            )
+            road_segment = create_road_segment(name,
+                                               scenario_id,
+                                               road_segment_type_id,
+                                               route,
+                                               alternative_route)
             return CreateRoadSegment(
                 id=road_segment.id,
                 name=road_segment.name,
@@ -117,6 +123,7 @@ class UpdateRoadSegment(graphene.Mutation):
     name = graphene.String()
     scenario_id = graphene.Int()
     route_id = graphene.Int()
+    alternative_route_id = graphene.Int()
     road_segment_type = graphene.Int()
 
     class Arguments:
@@ -125,21 +132,16 @@ class UpdateRoadSegment(graphene.Mutation):
         scenario_id = graphene.Int()
         road_segment_type_id = graphene.Int()
         route = RouteInputObject
+        alternative_route = RouteInputObject
 
     @engineer_required
-    def mutate(
-        self,
-        info,
-        id,
-        name=None,
-        scenario_id=None,
-        road_segment_type_id=None,
-        route=None,
-    ):
+    def mutate(self, info, id, name=None, scenario_id=None,
+               road_segment_type_id=None, route=None,
+               alternative_route=None):
         try:
-            road_segment = update_road_segment(
-                id, name, scenario_id, road_segment_type_id, route
-            )
+            road_segment = update_road_segment(id, name, scenario_id,
+                                               road_segment_type_id, route,
+                                               alternative_route)
             return UpdateRoadSegment(
                 id=road_segment.id,
                 name=road_segment.name,
