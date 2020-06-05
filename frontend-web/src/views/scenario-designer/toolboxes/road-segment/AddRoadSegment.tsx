@@ -36,7 +36,8 @@ class AddRoadSegment extends React.Component<Props, State> {
 				scenarioId: this.props.scenarioId,
 				name: newData.name,
 				roadSegmentTypeId: newData.roadSegmentTypeId,
-				route: newData.route
+				route: newData.route,
+				alternativeRoute: newData.alternativeRoute
 			},
 			refetchQueries: [{ query: GET_TREE, variables: { id: this.props.scenarioId } }]
 		})
@@ -47,7 +48,7 @@ class AddRoadSegment extends React.Component<Props, State> {
 			<Mutation mutation={ADD_ROAD_SEGMENT}>
 				{(createRoadSegment, callbackData) => (
 					<div className='toolbox'>
-						<p>Adding new road segment for parent {this.props.parentInfo[0]}</p>
+						<p>Mark problem area:</p>
 						<RoadSegmentToolbox id={this.props.parentInfo[0]} handleData={(newData) => this.handleData(createRoadSegment, newData)}/>
 					</div>
 				)}

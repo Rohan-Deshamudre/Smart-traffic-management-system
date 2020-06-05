@@ -1,10 +1,6 @@
 import * as React from 'react';
-import Name from "../../../../components/other/Name";
 import Button from "react-bootstrap/Button";
-import RouteToolbox from "../RouteToolbox";
-import Type from "../../../../components/other/Type";
 import {Mutation, Query} from 'react-apollo';
-import gql from "graphql-tag";
 import {GET_TREE, GET_WORKSPACE_DATA} from "../../../../components/workspaceData";
 import {DELETE_ROAD_SEGMENT, GET_ROAD_SEGMENT_INFO, UPDATE_ROAD_SEGMENT} from "./RoadSegmentToolboxQueries";
 import RoadSegmentToolbox from "./RoadSegmentToolbox";
@@ -42,7 +38,8 @@ class UpdateRoadSegment extends React.Component<Props, State> {
 				id: this.props.id,
 				name: newData.name,
 				roadSegmentTypeId: newData.roadSegmentTypeId,
-				route: newData.route
+				route: newData.route,
+				alternativeRoute: newData.alternativeRoute
 			},
 			refetchQueries: [{ query: GET_TREE, variables: { id: this.props.scenarioId } }]
 		})

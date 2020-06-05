@@ -65,9 +65,10 @@ class RoadSegmentMethodsTest(TestCase):
         point = RoutePoint()
         point.lat = 0.0
         point.lng = 1.1
-        route = [point]
+        route = [ point ]
+        alternative_route = [ point ] 
         update_road_segment(segment.id, 'Test-Segment', scenario.id,
-                            segment_type.id, route)
+                            segment_type.id, route, alternative_route)
         updated_segment = get_road_segment_with_id(segment.id)
         self.assertEqual(scenario, updated_segment.scenario)
         self.assertEqual(segment_type, updated_segment.road_segment_type)
@@ -75,8 +76,8 @@ class RoadSegmentMethodsTest(TestCase):
     def test_update_road_segment_scenario(self):
         segment = self.segments[0]
         scenario = self.scenarios[0]
-        update_road_segment(segment.id, 'Test-Segment', scenario.id, None,
-                            None)
+        update_road_segment(segment.id, 'Test-Segment', scenario.id,
+                            None, None, None)
         updated_segment = get_road_segment_with_id(segment.id)
         self.assertEqual(scenario, updated_segment.scenario)
 

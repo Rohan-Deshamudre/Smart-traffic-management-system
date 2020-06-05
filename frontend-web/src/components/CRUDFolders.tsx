@@ -42,6 +42,14 @@ export const CREATE_INSTRUMENT_ACTION = gql`
     }
 `;
 
+export const CREATE_RESPONSE_PLAN = gql`
+    mutation createResponsePlan($operator: String!, $parent: Int, $scenario: Int, $roadSegment: Int) {
+        createResponsePlan(operator: $operator, parentId: $parent, scenarioId: $scenario, roadSegmentId: $roadSegment) {
+            operator
+        }
+    }
+`;
+
 export const READ_FOLDERS = gql`
     query ReadFolders($scenarioId: Int) {
         currDripId @client
@@ -154,6 +162,14 @@ export const UPDATE_INSTRUMENT_ACTION = gql`
     }
 `;
 
+export const UPDATE_RESPONSE_PLAN = gql`
+    mutation UpdateResponsePlan($newId: Int!, $operator: String, $parent: Int, $scenario: Int, $roadSegment: Int, $roadCondition: Int) {
+        updateResponsePlan(id: $newId, operator: $operator, parentId: $parent, scenarioId: $scenario, roadSegmentId: $roadSegment, roadConditionId: $roadCondition) {
+			id
+        }
+    }
+`;
+
 export const DELETE_FOLDER = gql`
 	mutation DeleteFolder($id: Int!) {
 		deleteFolder(id: $id) {
@@ -181,6 +197,14 @@ export const DELETE_INSTRUMENT = gql`
 export const DELETE_INSTRUMENT_ACTION = gql`
     mutation DeleteInstrumentAction($id: Int!) {
         deleteInstrumentAction(id: $id) {
+            id
+        }
+    }
+`;
+
+export const DELETE_RESPONSE_PLAN = gql`
+    mutation DeleteResponsePlan($id: Int!) {
+        deleteResponsePlan(id: $id) {
             id
         }
     }
