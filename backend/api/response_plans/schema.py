@@ -7,6 +7,8 @@ from api.exception.api_exception import ApiException
 from api.response_plans import methods
 from .models import *
 
+from utils.auth import engineer_required, operator_required
+
 
 class ResponsePlanObjectType(DjangoObjectType):
     class Meta:
@@ -18,6 +20,7 @@ class Query(graphene.ObjectType):
                                    response_plan_id=graphene.Int(),
                                    operator=graphene.String())
 
+    @operator_required
     def resolve_response_plans(self, info,
                                response_plan_id=None,
                                operator=None, **kwargs):
@@ -44,6 +47,7 @@ class CreateResponsePlan(graphene.Mutation):
         road_condition_id = graphene.Int()
         parent_id = graphene.Int()
 
+    @engineer_required
     def mutate(self, info, operator,
                road_segment_id=None,
                road_condition_id=None,
@@ -90,6 +94,7 @@ class UpdateResponsePlan(graphene.Mutation):
         scenario_id = graphene.Int()
         parent_id = graphene.Int()
 
+    @engineer_required 
     def mutate(self, info, id, road_segment_id=None, operator=None,
                road_condition_id=None, scenario_id=None, parent_id=None):
         try:
@@ -122,6 +127,7 @@ class DeleteResponsePlan(graphene.Mutation):
     class Arguments:
         id = graphene.Int(required=True)
 
+    @engineer_required
     def mutate(self, info, id, **kwargs):
         try:
             methods.delete_response_plan(id)

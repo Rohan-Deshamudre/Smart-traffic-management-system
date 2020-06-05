@@ -4,24 +4,25 @@ from graphene_django import DjangoObjectType
 
 from api.labels.models import Label
 
-from utils.auth import has_perms
+from utils.auth import engineer_required, operator_required
 
 
 class LabelObjectType(DjangoObjectType):
     class Meta:
         model = Label
-        exclude_fields = (
-            'scenario_labels', 'instrument_labels', 'unique_label')
+        exclude_fields = ("scenario_labels", "instrument_labels", "unique_label")
 
 
 class Query(graphene.ObjectType):
-    labels = graphene.List(LabelObjectType,
-                           label_id=graphene.Int(),
-                           name=graphene.String(),
-                           desc=graphene.String())
+    labels = graphene.List(
+        LabelObjectType,
+        label_id=graphene.Int(),
+        name=graphene.String(),
+        desc=graphene.String(),
+    )
 
-    def resolve_labels(self, info, label_id=None, name=None, desc=None,
-                       **kwargs):
+    @operator_required
+    def resolve_labels(self, info, label_id=None, name=None, desc=None, **kwargs):
         """
         Queries labels from the database
         :param info:
@@ -31,7 +32,6 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) folders
         """
-        has_perms(info, ['labels.view_label'])
 
         res = Label.objects.all()
         if label_id:
