@@ -1,7 +1,6 @@
 import * as mb from 'mapbox-gl';
 import { mapHelper } from "./mapHelper";
 import { GeoJSONSource } from "mapbox-gl";
-import { InsightsLog } from '../../views/scenario-simulator/components/InsightsLog';
 
 /*
 	Change the data of the drips source
@@ -94,7 +93,6 @@ function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
     }
 }
 
-//private log: InsightsLog = new InsightsLog();
 function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
     if (routes != undefined) {
         Promise.all(routes).then((result: any) => {
@@ -105,9 +103,6 @@ function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
                 return {
                     'type': 'Feature',
                     'properties': {
-                        'description':
-                            '<strong>Congestion</strong>' +
-                            '<p>This road has congestion!</p>',
                         'icon': 'car'
                     },
                     'geometry': {
@@ -124,44 +119,20 @@ function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
                 });
 
                 var name = sourceId.slice(0, sourceId.length - 6);
-                var mapLayer = map.getLayer(name + 'popup');
+                var mapLayer = map.getLayer(name + 'icon');
                 if (typeof mapLayer !== 'undefined') {
-                    map.removeLayer(name + 'popup');
+                    map.removeLayer(name + 'icon');
                 }
 
                 // Add a layer showing the popup.
                 map.addLayer({
-                    'id': name + 'popup',
+                    'id': name + 'icon',
                     'type': 'symbol',
                     'source': sourceId,
                     'layout': {
                         'icon-image': '{icon}-15',
                         'icon-allow-overlap': true
                     }
-                });
-
-                var popup = new mb.Popup({
-                    closeButton: false,
-                    closeOnClick: false
-                });
-
-                map.on('mouseenter', name + 'popup', function (e) {
-                    // Change the cursor style as a UI indicator.
-                    map.getCanvas().style.cursor = 'pointer';
-
-                    //@ts-ignore
-                    var coordinates = e.features[0].geometry.coordinates;
-                    var description = e.features[0].properties.description;
-
-                    popup
-                        .setLngLat(coordinates)
-                        .setHTML(description)
-                        .addTo(map);
-                });
-
-                map.on('mouseleave', name + 'popup', function () {
-                    map.getCanvas().style.cursor = '';
-                    popup.remove();
                 });
             });
         });
