@@ -173,7 +173,8 @@ class Tree extends React.Component<Props, State> {
         let svg = select(selector)
             .append('svg')
             .attr('width', width)
-            .attr('height', height);
+            .attr('height', height)
+            .attr('id', () => { return selector.slice(1) });
 
         let g = svg.append('g');
         treeMain(hierarchyData);
@@ -571,7 +572,7 @@ class Tree extends React.Component<Props, State> {
     }
 
     createResponsePlanTree(responsePlan) {
-        select('svg').remove();
+        select('#responsePlanTreeLayout').remove();
         this.createTree(this.getVisibleTree(responsePlan), this.props.treeTransform, '.responsePlanTreeLayout');
     }
 
