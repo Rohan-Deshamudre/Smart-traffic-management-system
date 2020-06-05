@@ -8,7 +8,9 @@ from decision_support.road_conditions import is_road_condition_active
 
 
 def check_road_segments():
+    scenario_active = False
     for scenario in Scenario.objects.all():
+        road_segment_active = False
         road_segments = RoadSegment.objects.filter(scenario=scenario).all()
         for road_segment in road_segments:
             response_plans = get_active_response_plans(road_segment.id)
@@ -18,10 +20,20 @@ def check_road_segments():
                     # TODO: Fire conditions
                     print("Response plan with id = %s is active" %
                           response_plan['response_plan_id'])
+                    scenario_active = True
+                    road_segment_active = True
                     is_one_active = True
             if not is_one_active:
                 # TODO: Freeflow activated
                 pass
+
+            road_segment.response_plan_active = road_segment_active
+            road_segment.save()
+            road_segment_active = False
+
+        scenario.response_plan_active = scenario_active
+        scenario.save()
+        scenario_active = False
 
 
 def get_active_response_plans(road_segment_id: int):
