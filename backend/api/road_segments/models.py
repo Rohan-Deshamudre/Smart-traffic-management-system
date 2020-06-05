@@ -47,6 +47,7 @@ class RoadSegment(AbstractModel):
         related_name="road_segment_road_condition",
         through="RoadSegmentToRoadCondition",
     )
+    response_plan_active = models.BooleanField(null=True, default=False)
 
 
 class RoadSegmentToRoadCondition(AbstractModel):
