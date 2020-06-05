@@ -263,7 +263,7 @@ class Map extends React.PureComponent<Props, State> {
         if (!_.isEqual(currentRoadSegmentWayPoints, this.getRoadSegmentWayPoints(prevProps.scenario, false))) {
             const currentRoadSegmentRoutes = this.getRoutes(currentRoadSegmentWayPoints);
             mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
-            //mapDisplay.displayAlternate(currentRoadSegmentRoutes, 'alternativeRouteSource', this.map);
+            // mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'alternativeRouteSource', this.map);
             mapDisplay.displayDestination(currentRoadSegmentRoutes, 'destinationIconSource', this.map);
             mapDisplay.displayConditionIcon(currentRoadSegmentRoutes, 'conditionIconSource', this.map);
         }

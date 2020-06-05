@@ -22,6 +22,7 @@ export const defaultStore = {
 	instrumentActionRoutes: [],
 	selectedInstrumentActionRoutes: [],
 	selectedRoute: [],
+	alternativeRoute: [],
 	visibleInstruments: [],
 
 	treeTransform: [0.5, 200, 100],
