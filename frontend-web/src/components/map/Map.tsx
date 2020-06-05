@@ -33,6 +33,7 @@ type Props = {
     instrumentActionRoutes: [number, number][][],
     selectedInstrumentActionRoutes: [number, number][][],
     selectedRoute: [number, number][],
+    alternativeRoute: [number, number][],
     visibleInstruments: any[]
 }
 
@@ -131,8 +132,9 @@ class Map extends React.PureComponent<Props, State> {
      */
     configureSelectedRoute() {
         const selectedRoute = this.getRoutes([this.props.selectedRoute]);
+        const alternativeRoute = this.getRoutes([this.props.alternativeRoute])
         mapDisplay.displayRoutes(selectedRoute, 'selectedRouteSource', this.map);
-        //mapDisplay.displayAlternate(selectedRoute, 'alternativeRouteSource', this.map);
+        mapDisplay.displayRoutes(alternativeRoute, 'alternativeRouteSource', this.map);
         mapDisplay.displayDestination(selectedRoute, 'destinationIconSource', this.map);
         mapDisplay.displayConditionIcon(selectedRoute, 'conditionIconSource', this.map);
     }
@@ -163,7 +165,7 @@ class Map extends React.PureComponent<Props, State> {
     configureRoadSegment() {
         const roadSegmentWayPoints = this.getRoadSegmentWayPoints(this.props.scenario, true);
         const roadSegmentRoutes = this.getRoutes(roadSegmentWayPoints);
-        mapDisplay.displayRoutes(roadSegmentRoutes, 'selectedRouteSource', this.map);
+        // mapDisplay.displayRoutes(roadSegmentRoutes, 'selectedRouteSource', this.map);
     }
 
     /*
