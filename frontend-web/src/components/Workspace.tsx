@@ -10,19 +10,19 @@ import { GET_TREE, GET_WORKSPACE_DATA } from "./workspaceData";
 import { treeUtils } from "./tree/treeUtils";
 
 export interface InjectedPWorkspace {
-	// Add props here
+    // Add props here
 }
 
 type PWorkspace = {
-	rightPaneActive: boolean
-	smallWorkspaceDeactivated?: boolean
+    rightPaneActive: boolean
+    smallWorkspaceDeactivated?: boolean
 }
 
 type SWorkspace = {
-	lng: number,
-	lat: number,
-	minimized: boolean,
-	zoom: number,
+    lng: number,
+    lat: number,
+    minimized: boolean,
+    zoom: number,
 }
 
 const asWorkspace = <P extends InjectedPWorkspace>(WrappedComponent: React.ComponentType<P>) => {

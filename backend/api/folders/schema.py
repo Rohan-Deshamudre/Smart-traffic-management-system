@@ -7,7 +7,7 @@ from api.exception.api_exception import ApiException
 from api.folders import methods
 from .models import *
 
-from utils.auth import has_perms
+from utils.auth import has_perms, engineer_required, operator_required
 
 
 class FolderObjectType(DjangoObjectType):
@@ -21,11 +21,15 @@ class FolderTypeObjectType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    folders = graphene.List(FolderObjectType, folder_id=graphene.Int(),
-                            name=graphene.String(), desc=graphene.String())
+    folders = graphene.List(
+        FolderObjectType,
+        folder_id=graphene.Int(),
+        name=graphene.String(),
+        desc=graphene.String(),
+    )
 
-    def resolve_folders(self, info, folder_id=None, name=None, desc=None,
-                        **kwargs):
+    @operator_required
+    def resolve_folders(self, info, folder_id=None, name=None, desc=None, **kwargs):
         """
         Queries folders from the database
         :param info:
@@ -35,7 +39,6 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) folders
         """
-        has_perms(info, ['folders.view_folder', 'folders.view_foldertype'])
 
         res = methods.get_all_folders()
         if folder_id:
@@ -60,20 +63,18 @@ class CreateFolder(graphene.Mutation):
         name = graphene.String(required=True)
         description = graphene.String()
 
-    def mutate(self, info, folder_type_id, name, description="",
-               parent_id=None):
-        has_perms(info, ['folders.add_folder', 'folders.add_foldertype'])
+    @engineer_required
+    def mutate(self, info, folder_type_id, name, description="", parent_id=None):
 
         try:
-            folder = methods.create_folder(
-                name, folder_type_id, parent_id, description)
+            folder = methods.create_folder(name, folder_type_id, parent_id, description)
 
             return CreateFolder(
                 id=folder.id,
                 parent_id=folder.parent_id,
                 folder_type_id=folder.folder_type.id,
                 name=folder.name,
-                description=folder.description
+                description=folder.description,
             )
         except ApiException as exc:
             raise GraphQLError(str(exc))
@@ -83,6 +84,7 @@ class UpdateFolder(graphene.Mutation):
     """
     Updates folders according to what data was given.
     """
+
     id = graphene.Int()
     parent_id = graphene.Int()
     folder_type_id = graphene.Int()
@@ -95,8 +97,8 @@ class UpdateFolder(graphene.Mutation):
         parent_id = graphene.Int()
         description = graphene.String()
 
+    @engineer_required
     def mutate(self, info, id, name=None, parent_id=None, description=None):
-        has_perms(info, ['folders.change_folder', 'folders.change_foldertype'])
 
         try:
             folder = methods.update_folder(id, name, parent_id, description)
@@ -117,6 +119,7 @@ class DeleteFolder(graphene.Mutation):
     class Arguments:
         id = graphene.Int(required=True)
 
+    @engineer_required
     def mutate(self, info, id, **kwargs):
         """
         Deletes the folder with the given ID
@@ -125,7 +128,6 @@ class DeleteFolder(graphene.Mutation):
         :param kwargs:
         :return:
         """
-        has_perms(info, ['folders.delete_folder', 'folders.delete_foldertype'])
 
         try:
             methods.delete_folder(id)

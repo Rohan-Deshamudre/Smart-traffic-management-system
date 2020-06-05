@@ -102,7 +102,7 @@ let displaySimulationSceneEvent = event => (
             <div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()} className="log-info-message">
                 <h3>{event.roadSegment.name}</h3>
                 {/* <Button onClick={() => highlighRoad(event)}>Highlight Road</Button> */}
-                {JSON.parse(event.response_plan).map(displayResponsePlan)}
+                {JSON.parse(event.responsePlan).map(displayResponsePlan)}
             </div>
         </div>
     </section>

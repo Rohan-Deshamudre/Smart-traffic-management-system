@@ -6,8 +6,8 @@ import * as axios from 'axios';
 	Show its time stamp and level
  */
 function drawConditionHover(g: any, d: any, i: number) {
-	console.log(d.data.operator);
-	if (d.data.__typename === 'RoadConditionObjectType' || d.data.operator === 'NONE') {
+
+	if (d.data.__typename === 'RoadConditionObjectType' || d.data.road_condition) {
 		let name = select(g).append('g').attr('class', 'road-condition-hover').attr('id', 'road-condition-hover-' + i);
 
 		const firstColumnXY = 5;
@@ -32,6 +32,12 @@ function drawConditionHover(g: any, d: any, i: number) {
 			name.append('text').attr('class', 'road-condition-hover-text').text('Level:').attr('transform', 'translate(' + firstColumnXY + ',' + thirdRowY + ')');
 			name.append('text').attr('class', 'road-condition-hover-value').text(d.data.value).attr('transform', 'translate(' + secondColumnX + ',' + thirdRowY + ')');
 		}
+
+		if (d.data.road_condition && d.data.road_condition.roadConditionType && d.data.road_condition.roadConditionType.id === 7) {
+			name.append('rect').attr('class', 'road-condition-hover-time-box level-box').attr('transform', 'translate(' + (secondColumnX - 3) + ',' + (thirdRowY - 3) + ')').attr('rx', 3);
+			name.append('text').attr('class', 'road-condition-hover-text').text('Level:').attr('transform', 'translate(' + firstColumnXY + ',' + thirdRowY + ')');
+			name.append('text').attr('class', 'road-condition-hover-value').text(d.data.road_condition.value).attr('transform', 'translate(' + secondColumnX + ',' + thirdRowY + ')');
+		}
 	}
 }
 
@@ -42,6 +48,8 @@ function drawIcon(node: any) {
 	node.append('image')
 		.attr('xlink:href', function (d: any) {
 
+			console.log(d);
+
 			switch (d.data.__typename) {
 				case 'ScenarioObjectType':
 					return '../../assets/tree_icons/scenario.svg';
@@ -51,9 +59,11 @@ function drawIcon(node: any) {
 					} else if (d.data.operator === 'AND') {
 						return '../../assets/tree_icons/scenario.svg';
 					} else {
-						// TODO check road condition.
-						return '../../assets/tree_icons/scenario.svg';
+						if (d.data.road_condition && d.data.road_condition.roadConditionType) {
+							return d.data.road_condition.roadConditionType.img ? '../../assets/tree_icons/road_condition/' + d.data.road_condition.roadConditionType.img + '.svg' : '';
+						}
 					}
+					break;
 				case 'RoadSegmentObjectType':
 					return d.data.roadSegmentType.img ? '../../assets/tree_icons/road_segment/' + d.data.roadSegmentType.img + '.svg' : '';
 				case 'RoadConditionObjectType':
@@ -81,6 +91,9 @@ function drawNodes(nodeContent: any) {
 		else if (d.data.actionName) {
 			return d.data.actionName.substr(0, 13)
 		} else if (d.data.operator) {
+			if (d.data.road_condition) {
+				return d.data.road_condition.name.substr(0, 13)
+			}
 			// TODO check road conditions
 			return d.data.operator.substr(0, 13)
 		}
@@ -301,6 +314,10 @@ function drawConstraint(nodeContent: any) {
  */
 function drawButtons(g: any, d: any, i: number, that: any) {
 
+	if (d.data.responsePlan) {
+		return;
+	}
+
 	let buttons = select(g).filter((d: any) => d.data.__typename !== 'RoadConditionActionObjectType').append('g').attr('id', 'buttons-' + i);
 
 	// -- Add button
@@ -325,7 +342,7 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 		hideButton.append('rect').attr('class', 'button-rect');
 		hideButton.append('text').attr('class', 'button-text')
 			.text(function (d: any, i) {
-				if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
+				if (d.data.hasOwnProperty('children')) {
 					return '+';
 				} else {
 					return '-'
@@ -335,60 +352,43 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 
 
 	// -- Response plan button
-	let responsePlanButtonRoadSegment = buttons.filter((d: any) => {
-		return d.data.__typename === 'RoadSegmentObjectType';
+	let responsePlanButton = buttons.filter((d: any) => {
+		return d.data.__typename === 'RoadSegmentObjectType' || d.data.__typename === 'ScenarioObjectType';
 	}).append('g')
 		.on('click', function (d: any, i) {
-			that.openModalWithRoadSegment(d.data.id);
-		})
-		.attr('class', 'button response-plan-button');
-
-
-	// TODO replace with d.data.id.
-	hasResponsePlan(4).then(
-		(result) => {
-			if (result) {
-				responsePlanButtonRoadSegment.append('rect').attr('class', 'button-rect');
-				responsePlanButtonRoadSegment.append('text').attr('class', 'button-text')
-					.text(function (d: any, i) {
-						if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
-							return 'RP+';
-						} else {
-							return 'RP-'
-						}
-					});
+			if (d.data.__typename === 'ScenarioObjectType') {
+				that.openModalWithScenario(d);
+			} else if (d.data.__typename === 'RoadSegmentObjectType') {
+				that.openModalWithRoadSegment(d);
 			}
-		}
-	);
-
-	let responsePlanButtonScenario = buttons.filter((d: any) => d.data.__typename === 'ScenarioObjectType').append('g')
-		.on('click', function (d: any, i) {
-			that.openModalWithScenario(d.data.id);
 		})
 		.attr('class', 'button response-plan-button');
 
-	// TODO replace with d.data.id.
-	hasResponsePlan(7).then(
+	hasResponsePlan(d.data.id).then(
 		(result) => {
 			if (result) {
-				responsePlanButtonScenario.append('rect').attr('class', 'button-rect');
-				responsePlanButtonScenario.append('text').attr('class', 'button-text')
-					.text(function (d: any, i) {
-						if (d.data.hasOwnProperty('children') && d.data.children.length == 0) {
-							return 'RP+';
-						} else {
-							return 'RP-'
-						}
-					})
+				responsePlanButton.append('rect').attr('class', 'button-rect');
+				responsePlanButton.append('text').attr('class', 'button-text')
+					.text('RP')
 			}
 		}
 	);
 }
 
 function hasResponsePlan(id: number): Promise<boolean> {
-	// TODO change id to scenario_id and road_segment_id and make dynamic function.
-	return axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: id })
-		.then((res) => res.data.children && res.data.children.length > 0)
+	return axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { road_segment_id: id })
+		.then((res) => {
+			if (res.data && res.data.length && res.data.length > 0) {
+				return true;
+			}
+			return axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { scenario_id: id })
+				.then((res1) => {
+					if (res1.data && res1.data.length && res1.data.length > 0) {
+						return true;
+					}
+				})
+				.catch(() => false);
+		})
 		.catch(() => false);
 }
 

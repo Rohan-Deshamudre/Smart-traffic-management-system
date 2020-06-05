@@ -13,8 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 import sys
 
-from datetime import timedelta
-from datetime import datetime
+from datetime import timedelta, datetime, timezone
 
 from django.core import serializers
 
@@ -198,9 +197,17 @@ def jwt_payload(user, context=None):
     if hasattr(username, "pk"):
         username = username.pk
 
+    origIat = int(datetime.now(tz=timezone.utc).timestamp())
+    exp = int(
+        (
+            datetime.now(tz=timezone.utc) + GRAPHQL_JWT["JWT_EXPIRATION_DELTA"]
+        ).timestamp()
+    )
+
     payload = {
         user.USERNAME_FIELD: username,
-        "exp": datetime.utcnow() + timedelta(minutes=15),
+        "origIat": origIat,
+        "exp": exp,
         "groups": list(groups),
     }
 
@@ -235,10 +242,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
 SMARTROADS_API = {
-    'SPEED_FLOW_API': 'https://analytics.smartroads.nl/point-cloud',
-    'TRAVEL_TIME_API': 'https://analytics.smartroads.nl/routes/measurements',
-    'headers': { 'Authorization': 'Basic c2Nlbndpc2U6NlJ6YkMzVEY=' }
+    "SPEED_FLOW_API": "https://analytics.smartroads.nl/point-cloud",
+    "TRAVEL_TIME_API": "https://analytics.smartroads.nl/routes/measurements",
+    "headers": {"Authorization": "Basic c2Nlbndpc2U6NlJ6YkMzVEY="},
 }
