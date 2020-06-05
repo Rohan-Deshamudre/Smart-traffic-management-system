@@ -74,6 +74,7 @@ const asWorkspace = <P extends InjectedPWorkspace>(WrappedComponent: React.Compo
             let instrumentActionRoutes;
             let selectedInstrumentActionRoutes;
             let selectedRoute;
+            let alternativeRoute;
             let treeLevel;
             let swapped;
 
@@ -97,6 +98,7 @@ const asWorkspace = <P extends InjectedPWorkspace>(WrappedComponent: React.Compo
                     id = data.currentTreeId;
                     treeIsUpToDate = data.treeIsUpToDate;
                     selectedRoute = data.selectedRoute;
+                    alternativeRoute = data.alternativeRoute;
                     mapLocation = data.mapLocation;
                     treeLevel = data.treeLevel;
                     selectedInstrumentActionRoutes = data.selectedInstrumentActionRoutes;
@@ -138,6 +140,7 @@ const asWorkspace = <P extends InjectedPWorkspace>(WrappedComponent: React.Compo
                                             instrumentActionRoutes={instrumentActionRoutes}
                                             selectedInstrumentActionRoutes={selectedInstrumentActionRoutes}
                                             selectedRoute={selectedRoute}
+                                            alternativeRoute={alternativeRoute}
                                             visibleInstruments={visibleInstruments}
                                             client={client}
                                             mapLocation={mapLocation}
@@ -178,6 +181,7 @@ const asWorkspace = <P extends InjectedPWorkspace>(WrappedComponent: React.Compo
                                                         instrumentActionRoutes={instrumentActionRoutes}
                                                         selectedInstrumentActionRoutes={selectedInstrumentActionRoutes}
                                                         selectedRoute={selectedRoute}
+                                                        alternativeRoute={alternativeRoute}
                                                         visibleInstruments={visibleInstruments}
                                                         client={client}
                                                         mapLocation={mapLocation}
