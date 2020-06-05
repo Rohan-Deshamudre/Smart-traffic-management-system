@@ -23,7 +23,7 @@ function getDeactivatedResponsePlan(client = null) {
             JSON.parse(event.responsePlan)
                 .flatMap(getResponsePlanStatuses)
                 .forEach(status => {
-                    nodes[status.id] = status.id > 5;
+                    nodes[status.id] = status.active;
                 });
         });
     }

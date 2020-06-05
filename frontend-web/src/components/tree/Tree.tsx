@@ -548,7 +548,6 @@ class Tree extends React.Component<Props, State> {
                 tree.responsePlan = true;
                 tree.children = [...res.data];
                 this.responsePlan = tree;
-                console.log(tree)
                 this.setState({ open: true });
                 this.createResponsePlanTree(this.responsePlan);
             });
