@@ -23,21 +23,21 @@ function displayLargeInstruments(map: mb.Map, visibleInstruments: [string, [numb
     } else {
 
         let visibleInstrumentsData: any =
-        {
-            "type": 'FeatureCollection',
-            "features": visibleInstruments.map((instrument) => {
-                return {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": instrument[1]
-                    },
-                    "properties": {
-                        "text": instrument[0]
+            {
+                "type": 'FeatureCollection',
+                "features": visibleInstruments.map((instrument) => {
+                    return {
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": instrument[1]
+                        },
+                        "properties": {
+                            "text": instrument[0]
+                        }
                     }
-                }
-            })
-        };
+                })
+            };
 
         map.setLayoutProperty('largeInstrumentsLayer', 'visibility', 'visible');
         (map.getSource('largeInstrumentsSource') as GeoJSONSource).setData(visibleInstrumentsData);
@@ -62,13 +62,6 @@ function displayOneMarker(directions: any, client: any) {
             });
         }
     });
-}
-
-function display(routes: any, sourceId: string, map: mb.Map) {
-    displayRoutes(routes, sourceId, map);
-    displayConditionIcon(routes, sourceId, map);
-    displayDestination(routes, sourceId, map);
-    displayAlternate(routes, sourceId, map);
 }
 
 function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
@@ -100,7 +93,6 @@ function displayRoutes(routes: any, sourceId: string, map: mb.Map) {
     }
 }
 
-
 function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
     if (routes != undefined) {
         Promise.all(routes).then((result: any) => {
@@ -111,9 +103,6 @@ function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
                 return {
                     'type': 'Feature',
                     'properties': {
-                        'description':
-                            '<strong>Congestion</strong>' +
-                            '<p>This road has congestion!</p>',
                         'icon': 'car'
                     },
                     'geometry': {
@@ -130,44 +119,20 @@ function displayConditionIcon(routes: any, sourceId: string, map: mb.Map) {
                 });
 
                 var name = sourceId.slice(0, sourceId.length - 6);
-                var mapLayer = map.getLayer(name + 'popup');
+                var mapLayer = map.getLayer(name + 'icon');
                 if (typeof mapLayer !== 'undefined') {
-                    map.removeLayer(name + 'popup');
+                    map.removeLayer(name + 'icon');
                 }
 
                 // Add a layer showing the popup.
                 map.addLayer({
-                    'id': name + 'popup',
+                    'id': name + 'icon',
                     'type': 'symbol',
                     'source': sourceId,
                     'layout': {
                         'icon-image': '{icon}-15',
                         'icon-allow-overlap': true
                     }
-                });
-
-                var popup = new mb.Popup({
-                    closeButton: false,
-                    closeOnClick: false
-                });
-
-                map.on('mouseenter', name + 'popup', function (e) {
-                    // Change the cursor style as a UI indicator.
-                    map.getCanvas().style.cursor = 'pointer';
-
-                    //@ts-ignore
-                    var coordinates = e.features[0].geometry.coordinates;
-                    var description = e.features[0].properties.description;
-
-                    popup
-                        .setLngLat(coordinates)
-                        .setHTML(description)
-                        .addTo(map);
-                });
-
-                map.on('mouseleave', name + 'popup', function () {
-                    map.getCanvas().style.cursor = '';
-                    popup.remove();
                 });
             });
         });
@@ -198,41 +163,11 @@ function displayDestination(routes: any, sourceId: string, map: mb.Map) {
     }
 }
 
-function displayAlternate(routes: any, sourceId: string, map: mb.Map) {
-    if (routes != undefined) {
-        Promise.all(routes).then((result: any) => {
-            const geoJson: any = result.map((route) => {
-                return {
-                    'type': 'Feature',
-                    'properties': {},
-                    'geometry': {
-                        'type': 'LineString',
-                        'coordinates': route.data.routes.length > 1 ? route.data.routes[1].geometry.coordinates : []
-                    }
-                }
-            });
-
-            map.on("idle", function () {
-                (map.getSource(sourceId) as GeoJSONSource).setData({
-                    "type": 'FeatureCollection',
-                    "features": geoJson
-                });
-            });
-        });
-    } else {
-        map.on("idle", function () {
-            (map.getSource(sourceId) as GeoJSONSource).setData(null);
-        });
-    }
-}
-
 export const mapDisplay = {
     displayInstruments: displayInstruments,
     displayLargeInstruments: displayLargeInstruments,
     displayOneMarker: displayOneMarker,
-    display: display,
     displayRoutes: displayRoutes,
-    displayAlternate: displayAlternate,
     displayDestination: displayDestination,
     displayConditionIcon: displayConditionIcon
 };
