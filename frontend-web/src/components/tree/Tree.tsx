@@ -333,6 +333,20 @@ class Tree extends React.Component<Props, State> {
 	 */
 	addButtonFunctionality(item: any, that: Tree, d: any) {
 		let options = [];
+
+		if (d.data.road_condition) {
+			if (d.depth < 6) { // HARDCODED LIMIT TO DEPTH OF TREE
+				options = [
+					{text: 'Add Action', __typename: 'RoadConditionActionObjectType'}
+				];
+				if (!this.hasChild(d, 'RoadConditionObjectType')) {
+					options.push({text: 'Add Condition', __typename: 'RoadConditionObjectType'});
+				}
+			} else if (d.depth >= 6) {
+				options = [{text: 'Add Action', __typename: 'RoadConditionActionObjectType'}];
+			}
+		}
+
 		switch (d.data.__typename) {
 			case 'ScenarioObjectType':
 				options = [{text: 'Add Segment', __typename: 'RoadSegmentObjectType'}];
@@ -513,19 +527,26 @@ class Tree extends React.Component<Props, State> {
 		});
 	}
 
-	openModalWithRoadSegment(id: number) {
-		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: 1 })
+	openModalWithRoadSegment(d: any) {
+		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { road_segment_id: d.data.id })
 			.then((res) => {
-				this.responsePlan = res.data;
+				const tree = { ...d.data };
+				tree.responsePlan = true;
+				tree.children = [...res.data];
+				this.responsePlan = tree;
+				console.log(tree)
 				this.setState({ open: true });
 				this.createResponsePlanTree(this.responsePlan);
 			});
 	}
 
-	openModalWithScenario(id: number) {
-		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { id: 1 })
+	openModalWithScenario(d: any) {
+		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { scenario_id: d.data.id })
 			.then((res) => {
-				this.responsePlan = res.data;
+				const tree = { ...d.data };
+				tree.responsePlan = true;
+				tree.children = [...res.data];
+				this.responsePlan = tree;
 				this.setState({ open: true });
 				this.createResponsePlanTree(this.responsePlan);
 			});
