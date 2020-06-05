@@ -208,7 +208,7 @@ function setupRoutes(map: mb.Map) {
                 },
                 'paint': {
                     'line-opacity': 0.4,
-                    'line-color': '#00FF00', //(isRoadSegment ? randomColors.roadSegment[index] : randomColors.instrumentAction[index]),
+                    'line-color': '#00FF00',
                     'line-width': 4
                 }
             });

@@ -3,7 +3,7 @@ import * as React from 'react';
 import '../styles/leftPane.scss';
 import '../styles/rightPane.scss';
 import asInsightsPane from "../../../components/InsightsPane";
-import InsightsLog from "../components/InsightsLog";
+import { InsightsLog } from "../components/InsightsLog";
 
 
 type Props = {

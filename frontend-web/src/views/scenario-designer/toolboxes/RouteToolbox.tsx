@@ -1,6 +1,5 @@
 import * as React from 'react';
 import LocationSelector from "../../../components/map/LocationSelector";
-import Button from "react-bootstrap/Button";
 import '../styles/toolbox.scss';
 import * as _ from 'lodash';
 
@@ -12,6 +11,7 @@ type Props = {
 }
 
 type State = {
+	alt: boolean,
 	addNewSegmentToggle: boolean
 }
 
@@ -24,16 +24,22 @@ class RouteToolbox extends React.Component<Props, State> {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
+			alt: false,
 			addNewSegmentToggle: false
 		};
 		this.handleLocation = this.handleLocation.bind(this);
+		this.chooseType = this.chooseType.bind(this);
 		this.deleteSegment = this.deleteSegment.bind(this);
 	}
 
 	componentDidMount() {
 		let routeToBeDrawn: any = [];
+
 		if (this.props.client) {
-			routeToBeDrawn = this.props.route.map((routeSegment) => [routeSegment.lng, routeSegment.lat]);
+			routeToBeDrawn = this.props.route.map(
+				(routeSegment) => [routeSegment.lng, routeSegment.lat]
+			);
+
 			this.props.client.writeData({
 				data: {
 					selectedRoute: routeToBeDrawn
@@ -41,7 +47,6 @@ class RouteToolbox extends React.Component<Props, State> {
 			});
 		}
 	}
-
 
 	handleLocation(newLocation: [number, number]) {
 		let newRoute = [...this.props.route, {
@@ -51,8 +56,8 @@ class RouteToolbox extends React.Component<Props, State> {
 		this.setState({
 			addNewSegmentToggle: false
 		});
-		this.props.handleRoute(newRoute);
 
+		this.props.handleRoute(newRoute);
 	}
 
 	deleteSegment(segmentId: number) {
@@ -66,6 +71,12 @@ class RouteToolbox extends React.Component<Props, State> {
 		});
 
 		this.props.handleRoute(newRoute);
+	}
+
+	chooseType() {
+		this.setState({
+			alt: true
+		});
 	}
 
 	componentDidUpdate(prevProps) {
@@ -89,23 +100,34 @@ class RouteToolbox extends React.Component<Props, State> {
 					<div className="text">Lat:</div>
 					<div className="number">{routeSegment.lat}</div>
 				</div>
-				{!this.props.disabled ? <div onClick={() => this.deleteSegment(routeSegment.id)} className="close-button">x</div> : null }
+				{!this.props.disabled ? (
+					<div onClick={
+						() => this.deleteSegment(routeSegment.id)
+					} className="close-button">
+						x
+					</div>
+				) : null}
 			</div>
 		);
 
 		return (
 			<div className="toolbox">
+				<input type="checkbox" name="alt_route" id="alt_route_check"
+					onClick={
+						this.chooseType
+					}
+				/>
 				{currentRoutes}
 				{!this.props.disabled ? (
 					this.state.addNewSegmentToggle ? (
-							<LocationSelector handleLocation={this.handleLocation}/>
-						) : (
-							<div className="add-new">
-								<div onClick={() => this.setState({addNewSegmentToggle: true})}>
-									Voeg nieuw segment toe
-								</div>
+						<LocationSelector handleLocation={this.handleLocation}/>
+					) : (
+						<div className="add-new">
+							<div onClick={() => this.setState({addNewSegmentToggle: true})}>
+								Voeg nieuw segment toe
 							</div>
-						)
+						</div>
+					)
 				) : null}
 			</div>
 		);

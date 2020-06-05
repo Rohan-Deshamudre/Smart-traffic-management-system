@@ -17,7 +17,8 @@ def create_simulation_scene_events(scenes: List[SimulationScene],
         event = SimulationSceneEvent(simulation_scene=scenes[x],
                                      road_segment=segments[x],
                                      road_condition_type=condition_types[x],
-                                     value=10)
+                                     value=10,
+                                     response_plan="[]")
         event.save()
         events.append(event)
     return events

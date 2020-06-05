@@ -49,7 +49,6 @@ export module Auth {
 
         if (getToken() && getToken().length > 0) {
             const decoded = jwt(getToken());
-            console.log(decoded)
             const expiryDate = toDateTime(decoded.exp);
             return expiryDate > new Date();
         } else {

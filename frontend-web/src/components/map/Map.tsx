@@ -33,6 +33,7 @@ type Props = {
     instrumentActionRoutes: [number, number][][],
     selectedInstrumentActionRoutes: [number, number][][],
     selectedRoute: [number, number][],
+    alternativeRoute: [number, number][],
     visibleInstruments: any[]
 }
 
@@ -56,9 +57,11 @@ class Map extends React.PureComponent<Props, State> {
         this.setupMap = this.setupMap.bind(this);
         this.setupDirections = this.setupDirections.bind(this);
         this.getRoadSegmentWayPoints = this.getRoadSegmentWayPoints.bind(this);
+        this.getAltSegmentWayPoints = this.getAltSegmentWayPoints.bind(this);
         this.getRoutes = this.getRoutes.bind(this);
         this.reloadMap = this.reloadMap.bind(this);
         this.configureSelectedRoute = this.configureSelectedRoute.bind(this);
+        this.configureAltRoute = this.configureAltRoute.bind(this)
         this.configureInstrumentActionRoutes = this.configureInstrumentActionRoutes.bind(this);
         this.configureRoadSegment = this.configureRoadSegment.bind(this);
         this.updateMapStatus = this.updateMapStatus.bind(this);
@@ -80,6 +83,7 @@ class Map extends React.PureComponent<Props, State> {
         mapSetup.setupLargeInstruments(this.map);
         mapSetup.setupInstruments(this.map, this.props.client);
         mapSetup.setupSelectedRoutes(this.map);
+
         this.setupDirections(mbReq.accessToken);
         mapSetup.setupRoutes(this.map);
 
@@ -132,10 +136,13 @@ class Map extends React.PureComponent<Props, State> {
     configureSelectedRoute() {
         const selectedRoute = this.getRoutes([this.props.selectedRoute]);
         mapDisplay.displayRoutes(selectedRoute, 'selectedRouteSource', this.map);
-        mapDisplay.displayAlternate(selectedRoute, 'alternativeRouteSource', this.map);
         mapDisplay.displayDestination(selectedRoute, 'destinationIconSource', this.map);
         mapDisplay.displayConditionIcon(selectedRoute, 'conditionIconSource', this.map);
-        // mapDisplay.displayRoutes(selectedRoute, 'selectedRouteSource', this.map);
+    }
+
+    configureAltRoute() {
+        const alternativeRoute = this.getRoutes([this.props.alternativeRoute])
+        mapDisplay.displayRoutes(alternativeRoute, 'alternativeRouteSource', this.map);
     }
 
     /*
@@ -164,8 +171,8 @@ class Map extends React.PureComponent<Props, State> {
     configureRoadSegment() {
         const roadSegmentWayPoints = this.getRoadSegmentWayPoints(this.props.scenario, true);
         const roadSegmentRoutes = this.getRoutes(roadSegmentWayPoints);
-        mapDisplay.display(roadSegmentRoutes, 'roadSegmentRoutesSource', this.map);
-        // mapDisplay.displayRoutes(roadSegmentRoutes, 'roadSegmentRoutesSource', this.map);
+        mapDisplay.displayRoutes(roadSegmentRoutes, 'selectedRouteSource', this.map);
+        //mapDisplay.displayRoutes(roadSegmentRoutes, 'selectedRouteSource', this.map);
     }
 
     /*
@@ -179,6 +186,19 @@ class Map extends React.PureComponent<Props, State> {
                         this.map.flyTo({ center: child.route.routePoints[0] });
                     }
                     return child.route.routePoints.map((routePoint) => [routePoint.lng, routePoint.lat]);
+                }
+            })
+        }
+    }
+
+    getAltSegmentWayPoints(scenario: any, flyTo: boolean) {
+        if (scenario !== undefined && scenario.children !== undefined) {
+            return scenario.children.map((child) => {
+                if (child.alternativeRoute && child.alternativeRoute.routePoints && child.alternativeRoute.routePoints[0]) {
+                    if (flyTo) {
+                        this.map.flyTo({ center: child.alternativeRoute.routePoints[0] });
+                    }
+                    return child.alternativeRoute.routePoints.map((routePoint) => [routePoint.lng, routePoint.lat]);
                 }
             })
         }
@@ -244,6 +264,7 @@ class Map extends React.PureComponent<Props, State> {
                 this.props.client.writeData({ data: { mapLocation: '' } });
 
             }
+
             // Adjust the stores longitude and latitude to be corresponding with the map
             if (this.directions.getOrigin().geometry !== undefined) {
                 this.props.client.writeData({
@@ -262,11 +283,18 @@ class Map extends React.PureComponent<Props, State> {
         if (!_.isEqual(currentRoadSegmentWayPoints, this.getRoadSegmentWayPoints(prevProps.scenario, false))) {
             const currentRoadSegmentRoutes = this.getRoutes(currentRoadSegmentWayPoints);
             mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
-            mapDisplay.displayAlternate(currentRoadSegmentRoutes, 'alternativeRouteSource', this.map);
+            mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'alternativeRouteSource', this.map);
             mapDisplay.displayDestination(currentRoadSegmentRoutes, 'destinationIconSource', this.map);
             mapDisplay.displayConditionIcon(currentRoadSegmentRoutes, 'conditionIconSource', this.map);
+        }
+    }
 
-            // mapDisplay.displayRoutes(currentRoadSegmentRoutes, 'selectedRouteSource', this.map);
+
+    updateAltSegments(prevProps: any) {
+        const currentAltSegmentWayPoints = this.getAltSegmentWayPoints(this.props.scenario, false)
+        if(!_.isEqual(currentAltSegmentWayPoints, this.getAltSegmentWayPoints(prevProps.scenario, false))) {
+            const currentAltSegmentRoutes = this.getRoutes(currentAltSegmentWayPoints)
+            mapDisplay.displayRoutes(currentAltSegmentRoutes, 'alternativeRouteSource', this.map)
         }
     }
 
@@ -289,6 +317,7 @@ class Map extends React.PureComponent<Props, State> {
     componentDidUpdate(prevProps) {
         this.updateDirections();
         this.updateRoadSegments(prevProps);
+        this.updateAltSegments(prevProps)
         this.updateInstrumentActionRoutes(prevProps);
         this.updateInstrument(prevProps);
 
@@ -296,6 +325,9 @@ class Map extends React.PureComponent<Props, State> {
             this.configureSelectedRoute();
         }
 
+        if(!_.isEqual(this.props.alternativeRoute, prevProps.alternativeRoute)) {
+            this.configureAltRoute();
+        }
 
         if (!_.isEqual(this.props.selectedInstrumentActionRoutes, prevProps.selectedInstrumentActionRoutes)) {
             this.configureSelectedInstrumentActionRoutes();
@@ -327,10 +359,8 @@ const
     );
 
 export default {
-    Small
-    ,
+    Small,
     Large
 };
-
 
 

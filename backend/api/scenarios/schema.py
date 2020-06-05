@@ -10,7 +10,8 @@ from api.scenarios.methods.delete import delete_scenario
 from api.scenarios.methods.update import update_scenario
 from .models import *
 
-from utils.auth import has_perms
+from utils.auth import engineer_required, operator_required
+
 
 class ScenarioObjectType(DjangoObjectType):
     class Meta:
@@ -18,17 +19,28 @@ class ScenarioObjectType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    scenarios = graphene.List(ScenarioObjectType,
-                              scenario_id=graphene.Int(),
-                              name=graphene.String(),
-                              desc=graphene.String(),
-                              folder_id=graphene.Int(),
-                              road_segment_id=graphene.Int(),
-                              label_name=graphene.String())
+    scenarios = graphene.List(
+        ScenarioObjectType,
+        scenario_id=graphene.Int(),
+        name=graphene.String(),
+        desc=graphene.String(),
+        folder_id=graphene.Int(),
+        road_segment_id=graphene.Int(),
+        label_name=graphene.String(),
+    )
 
-    def resolve_scenarios(self, info, scenario_id=None, name=None, desc=None,
-                          folder_id=None, road_segment_id=None,
-                          label_name=None, **kwargs):
+    @operator_required
+    def resolve_scenarios(
+        self,
+        info,
+        scenario_id=None,
+        name=None,
+        desc=None,
+        folder_id=None,
+        road_segment_id=None,
+        label_name=None,
+        **kwargs
+    ):
         """
         Queries scenarios from the database
         :param info:
@@ -40,7 +52,6 @@ class Query(graphene.ObjectType):
         :param kwargs:
         :return: All (filtered) scenarios
         """
-        has_perms(info, ['scenarios.view_scenario'])
         res = Scenario.objects.all()
         if scenario_id:
             res = res.filter(Q(id__exact=scenario_id))
@@ -53,8 +64,7 @@ class Query(graphene.ObjectType):
         if road_segment_id:
             res = res.filter(Q(road_segments__id__exact=road_segment_id))
         if label_name:
-            res = res.filter(
-                Q(labels__unique_label__icontains=label_name.lower()))
+            res = res.filter(Q(labels__unique_label__icontains=label_name.lower()))
 
         return res
 
@@ -71,17 +81,16 @@ class CreateScenario(graphene.Mutation):
         folder_id = graphene.Int()
         labels = LabelArrayInputObject
 
+    @engineer_required
     def mutate(self, info, name, description="", folder_id=None, labels=None):
-        has_perms(info, ['scenarios.add_scenario'])
         try:
-            scenario = create_scenario(name, folder_id, description, False,
-                                       labels)
+            scenario = create_scenario(name, folder_id, description, False, labels)
 
             return CreateScenario(
                 id=scenario.id,
                 name=scenario.name,
                 description=scenario.description,
-                folder_id=scenario.folder_id
+                folder_id=scenario.folder_id,
             )
         except ApiException as exc:
             raise GraphQLError(str(exc))
@@ -100,17 +109,17 @@ class UpdateScenario(graphene.Mutation):
         folder_id = graphene.Int()
         labels = LabelArrayInputObject
 
-    def mutate(self, info, id, name=None, description=None, folder_id=None,
-               labels=None):
-        has_perms(info, ['scenarios.change_scenario'])
+    @engineer_required
+    def mutate(
+        self, info, id, name=None, description=None, folder_id=None, labels=None
+    ):
         try:
-            scenario = update_scenario(id, name, folder_id, description,
-                                       labels)
+            scenario = update_scenario(id, name, folder_id, description, labels)
             return UpdateScenario(
                 id=scenario.id,
                 name=scenario.name,
                 description=scenario.description,
-                folder_id=scenario.folder_id
+                folder_id=scenario.folder_id,
             )
         except ApiException as exc:
             raise GraphQLError(str(exc))
@@ -122,6 +131,7 @@ class DeleteScenario(graphene.Mutation):
     class Arguments:
         id = graphene.Int(required=True)
 
+    @engineer_required
     def mutate(self, info, id):
         """
         Deletes the scenario
@@ -129,7 +139,6 @@ class DeleteScenario(graphene.Mutation):
         :param id: The ID of the scenario
         :return:
         """
-        has_perms(info, ['scenarios.delete_scenario'])
         try:
             delete_scenario(id)
         except ApiException as exc:

@@ -12,13 +12,53 @@ def to_json_response_plan_by_id(response_plan_id: int):
         return {"msg": str(exc)}
 
 
+def to_json_response_plan_by_scenario(scenario_id: int):
+    response_plans = ResponsePlan.objects.filter(
+        scenario_id=scenario_id
+    ).filter(
+        parent_id=None
+    ).all()
+    response = []
+    for resp in response_plans:
+        response.append(to_json_response_plan(resp))
+    return response
+
+
+def to_json_response_plan_by_road_segment(road_segment_id: int):
+    response_plans = ResponsePlan.objects.filter(
+        road_segment_id=road_segment_id
+    ).filter(
+        parent_id=None
+    ).all()
+    response = []
+    for resp in response_plans:
+        response.append(to_json_response_plan(resp))
+    return response
+
+
 def to_json_response_plan(response_plan: ResponsePlan):
     response_obj = {}
+    response_obj['id'] = response_plan.id
+    response_obj['__typename'] = 'ResponsePlan'
     response_obj['operator'] = response_plan.operator
     response_obj['children'] = []
 
     if response_plan.road_condition:
-        response_obj['road_condition_id'] = response_plan.road_condition.id
+        condition = response_plan.road_condition
+        response_obj['road_condition_id'] = condition.id
+        response_obj['road_condition'] = {
+            '__typename': 'RoadCondition',
+            'id': condition.id,
+            'name': condition.name,
+            'value': condition.value,
+            'roadConditionType': {
+                '__typename': 'RoadConditionType',
+                'id': condition.road_condition_type.id,
+                'name': condition.road_condition_type.name,
+                'img': condition.road_condition_type.img,
+                'description': condition.road_condition_type.description,
+            }
+        }
 
     if response_plan.scenario:
         response_obj['scenario_id'] = response_plan.scenario.id
