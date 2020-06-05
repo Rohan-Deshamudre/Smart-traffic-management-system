@@ -99,7 +99,6 @@ const asWorkspace = <P extends InjectedPWorkspace>(WrappedComponent: React.Compo
 					treeIsUpToDate = data.treeIsUpToDate;
 					selectedRoute = data.selectedRoute;
 					alternativeRoute = data.alternativeRoute;
-					console.log(alternativeRoute)
 					mapLocation = data.mapLocation;
 					treeLevel = data.treeLevel;
 					selectedInstrumentActionRoutes = data.selectedInstrumentActionRoutes;

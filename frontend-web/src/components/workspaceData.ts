@@ -10,7 +10,7 @@ export const GET_WORKSPACE_DATA = gql`
         treeIsUpToDate @client
         instrumentActionRoutes @client
         selectedRoute @client
-#        alternativeRoute @client
+        alternativeRoute @client
         visibleInstruments @client
         selectedInstrumentActionRoutes @client
         curNodeType @client
