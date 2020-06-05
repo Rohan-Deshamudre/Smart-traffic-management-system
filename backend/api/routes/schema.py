@@ -24,3 +24,7 @@ class Query(graphene.ObjectType):
     @operator_required
     def resolve_routes(self, info, **kwargs):
         return Route.objects.all()
+
+
+class Mutation(graphene.ObjectType):
+    pass

@@ -20,6 +20,7 @@ export const GET_SIMULATION_SCENE = gql`
                 roadSegmentId
                 roadConditionTypeId
                 value
+                responsePlan
             }
         }
     }

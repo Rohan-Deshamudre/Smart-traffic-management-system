@@ -32,7 +32,7 @@ class AlternateRouteToolbox extends React.Component<Props, State>{
             routeToBeDrawn = this.props.alternativeRoute.map((routeSegment) => [routeSegment.lng, routeSegment.lat]);
             this.props.client.writeData({
                 data: {
-                    selectedRoute: routeToBeDrawn
+                    alternativeRoute: routeToBeDrawn
                 }
             });
         }
@@ -69,7 +69,7 @@ class AlternateRouteToolbox extends React.Component<Props, State>{
             routeToBeDrawn = this.props.alternativeRoute.map((routeSegment) => [routeSegment.lng, routeSegment.lat]);
             this.props.client.writeData({
                 data: {
-                    selectedRoute: routeToBeDrawn
+                    alternativeRoute: routeToBeDrawn
                 }
             });
         }

@@ -51,7 +51,7 @@ class RoadSegmentToolbox extends React.Component<Props, State> {
 				...this.state,
 				name: data.roadSegments[0].name,
 				route: data.roadSegments[0].route.routePoints,
-				alternativeRoute: data.roadSegments[0].alternativeRoute.routePoints,
+				alternativeRoute: data.roadSegments[0].alternativeRoute ? data.roadSegments[0].alternativeRoute.routePoints : [],
 				roadSegmentTypeId: data.roadSegments[0].roadSegmentType.id
 			}
 		}
