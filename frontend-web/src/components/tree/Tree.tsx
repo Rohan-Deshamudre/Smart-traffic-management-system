@@ -571,6 +571,7 @@ class Tree extends React.Component<Props, State> {
     }
 
     createResponsePlanTree(responsePlan) {
+        select('svg').remove();
         this.createTree(this.getVisibleTree(responsePlan), this.props.treeTransform, '.responsePlanTreeLayout');
     }
 
