@@ -48,6 +48,8 @@ function drawIcon(node: any) {
 	node.append('image')
 		.attr('xlink:href', function (d: any) {
 
+			console.log(d);
+
 			switch (d.data.__typename) {
 				case 'ScenarioObjectType':
 					return '../../assets/tree_icons/scenario.svg';
@@ -311,6 +313,10 @@ function drawConstraint(nodeContent: any) {
 	When the user hovers on a node, display the three buttons: to delete, add or hide a node.
  */
 function drawButtons(g: any, d: any, i: number, that: any) {
+
+	if (d.data.responsePlan) {
+		return;
+	}
 
 	let buttons = select(g).filter((d: any) => d.data.__typename !== 'RoadConditionActionObjectType').append('g').attr('id', 'buttons-' + i);
 

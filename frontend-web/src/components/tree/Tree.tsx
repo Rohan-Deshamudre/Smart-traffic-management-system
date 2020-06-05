@@ -530,7 +530,8 @@ class Tree extends React.Component<Props, State> {
 	openModalWithRoadSegment(d: any) {
 		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { road_segment_id: d.data.id })
 			.then((res) => {
-				const tree = { ...d };
+				const tree = { ...d.data };
+				tree.responsePlan = true;
 				tree.children = [...res.data];
 				this.responsePlan = tree;
 				console.log(tree)
@@ -542,10 +543,10 @@ class Tree extends React.Component<Props, State> {
 	openModalWithScenario(d: any) {
 		axios.default.post(process.env.RESPONSE_PLAN_EXPORT, { scenario_id: d.data.id })
 			.then((res) => {
-				const tree = { ...d };
+				const tree = { ...d.data };
+				tree.responsePlan = true;
 				tree.children = [...res.data];
 				this.responsePlan = tree;
-				console.log(tree)
 				this.setState({ open: true });
 				this.createResponsePlanTree(this.responsePlan);
 			});
