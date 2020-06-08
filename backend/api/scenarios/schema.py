@@ -27,6 +27,7 @@ class Query(graphene.ObjectType):
         folder_id=graphene.Int(),
         road_segment_id=graphene.Int(),
         label_name=graphene.String(),
+        response_plan_active=graphene.Boolean(),
     )
 
     @operator_required
@@ -39,6 +40,7 @@ class Query(graphene.ObjectType):
         folder_id=None,
         road_segment_id=None,
         label_name=None,
+        response_plan_active=None,
         **kwargs
     ):
         """
