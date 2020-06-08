@@ -1,11 +1,7 @@
 import * as React from "react";
-import {Subtract} from "utility-types";
+import { Subtract } from "utility-types";
 // @ts-ignore
 import closeIcon from "../assets/left-collapse.svg";
-
-export interface InjectedDesignerPane {
-    
-}
 
 interface PDesignerPane {
     active: boolean;
@@ -14,45 +10,25 @@ interface PDesignerPane {
     icon: string
 }
 
-interface SDesignerPane {
-    // Add state here
-}
+export default function asDesignerPane(WrappedComponent) {
+    return function (props) {
+        const { active } = props as PDesignerPane;
 
-const asDesignerPane = <P extends InjectedDesignerPane>(
-    WrappedComponent: React.ComponentType<P>
-) => {
-
-    return class AsDesignerPane extends React.Component<
-        Subtract<P, InjectedDesignerPane> & PDesignerPane, // Substract so the wrappedcomponent cannot be initialized
-        SDesignerPane
-        > {
-
-        constructor(props) {
-            super(props);
-        }
-
-        render() {
-            const { active } = this.props as PDesignerPane;
-
-            return (
-                <div>
-                    { !active ? (
-                        <div className="open-pane-button des" onClick={this.props.toggle}>
-                            <div className="description">{this.props.paneName}</div>
-                            <img src={this.props.icon} alt={""} />
-                        </div>
-                    ) : null }
-                    <div className={(active ? "active-left-pane " : "inactive-left-pane ") + "leftpane-container pane-container"}>
-                        <div className="close-pane-button des" onClick={this.props.toggle}>
-                            <img src={closeIcon} alt="x" />
-                        </div>
-                        <WrappedComponent {...this.props as P} />
+        return (
+            <div>
+                {!active ? (
+                    <div className="open-pane-button des" onClick={props.toggle}>
+                        <div className="description">{props.paneName}</div>
+                        <img src={props.icon} alt={""} />
                     </div>
+                ) : null}
+                <div className={(active ? "active-left-pane " : "inactive-left-pane ") + "leftpane-container pane-container"}>
+                    <div className="close-pane-button des" onClick={props.toggle}>
+                        <img src={closeIcon} alt="x" />
+                    </div>
+                    <WrappedComponent {...props} />
                 </div>
-            );
-
-        }
+            </div>
+        );
     }
-};
-
-export default asDesignerPane;
+}

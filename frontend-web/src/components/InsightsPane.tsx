@@ -7,9 +7,6 @@ import scenarioIcon from "../assets/node_icons/scenario.svg";
 // @ts-ignore
 import closeIcon from "../assets/left-collapse.svg";
 
-export interface InjectedInsPane {
-}
-
 interface InsPane {
     active: boolean;
     toggle: () => void;
@@ -17,49 +14,26 @@ interface InsPane {
     icon: string
 }
 
-interface InsPane {
-    // Add state here
-}
+export default function asInsightsPane(WrappedComponent) {
+    return function (props) {
+        const { active } = props as InsPane;
 
-const asInsightsPane = <P extends InjectedInsPane>(
-    WrappedComponent: React.ComponentType<P>
-) => {
-
-    return class asInsightsPane extends React.Component<
-        Subtract<P, InjectedInsPane> & InsPane, // Substract so the wrappedcomponent cannot be initialized
-        InsPane
-        > {
-
-        constructor(props) {
-            super(props);
-
-
-        }
-
-        render() {
-            const { active } = this.props as InsPane;
-
-            return (
-                <div>
-                    {!active ? (
-                        <div className="open-pane-button insights" onClick={this.props.toggle}>
-                            <div className="description">{this.props.paneName}</div>
-                            <img src={this.props.icon} alt={""} />
-                        </div>
-                    ) : null}
-                    <div className={(active ? "active-insights-pane " : "inactive-insights-pane ") + " insightspane-container"}>
-                        <div className="close-pane-button insights" onClick={this.props.toggle}>
-                            <img src={closeIcon} alt="x" />
-                        </div>
-                        <WrappedComponent {...this.props as P} />
+        return (
+            <div>
+                {!active ? (
+                    <div className="open-pane-button insights" onClick={props.toggle}>
+                        <div className="description">{props.paneName}</div>
+                        <img src={props.icon} alt={""} />
                     </div>
+                ) : null}
+                <div className={(active ? "active-insights-pane " : "inactive-insights-pane ") + " insightspane-container"}>
+                    <div className="close-pane-button insights" onClick={props.toggle}>
+                        <img src={closeIcon} alt="x" />
+                    </div>
+                    <WrappedComponent {...props} />
                 </div>
-            );
-
-        }
+            </div>
+        );
     }
-};
-
-
-export default asInsightsPane;
+}
 
