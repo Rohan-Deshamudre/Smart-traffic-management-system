@@ -46,9 +46,11 @@ export const GET_TREE = gql`
             name
             startLat
             startLng
+            responsePlanActive
             roadSegments {
                 id
                 name
+                responsePlanActive
                 route {
                     id
                     routePoints {
