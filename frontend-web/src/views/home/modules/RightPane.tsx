@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 // @ts-ignore
 import geoFilterIcon from "./../../../assets/geoFilterIcon.svg"
 
-import asRightPane, { InjectedPRightPane } from "../../../components/RightPane";
+import asRightPane from "../../../components/RightPane";
 import Search from "../../../components/other/Search";
 import Instrument from "../components/rightPaneComponents/Instrument";
 import CreateInstrument from "../components/rightPaneComponents/CreateInstrument";
@@ -20,7 +20,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { Auth } from "../../../helper/auth";
 
-interface PRightPane extends InjectedPRightPane {
+interface PRightPane {
     instruments: any,
     instrumentTypes: any,
     currDrip?: number,
