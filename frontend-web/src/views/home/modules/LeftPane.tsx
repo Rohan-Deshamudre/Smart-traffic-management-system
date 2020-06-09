@@ -15,7 +15,7 @@ import sortNewAscIcon from "./../../../assets/sortNewAsc.svg"
 // @ts-ignore
 import geoFilterIcon from "./../../../assets/geoFilterIcon.svg"
 
-import asLeftPane, { InjectedPLeftPane } from "../../../components/LeftPane";
+import asLeftPane from "../../../components/LeftPane";
 import { default as Folder } from '../components/Folder';
 import AddFolder from '../components/AddFolder';
 import Search from "../../../components/other/Search";
@@ -33,7 +33,7 @@ import { Auth } from "../../../helper/auth";
 type List = { id: number, name: string, folderType: { id: number }, items: { id: number, name: string }[] }[];
 type AbstractItemList = { id: number, name: string, labels: any[] }[]
 
-interface PLeftPane extends InjectedPLeftPane {
+interface PLeftPane {
     folders: List,
     scenarios: AbstractItemList,
     boundingBox: [[number, number], [number, number]]
