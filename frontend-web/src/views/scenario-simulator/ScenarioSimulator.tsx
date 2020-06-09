@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import NavBar from "./modules/NavBar";
 import Workspace from "./modules/Workspace";
@@ -68,6 +68,10 @@ export default function ScenarioSimulator(props: Props) {
     };
 
     ws.onclose = () => setSimulationLog([...simulationLog, { time: 'Systeem', text: "Connectie verbroken" }]);
+
+    useEffect(() => {
+        return () => ws.close();
+    }, []);
 
     /** This is similar to ScenarioDesigner but takes the simulation status, log into account */
     return (
