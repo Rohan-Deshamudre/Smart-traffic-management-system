@@ -39,6 +39,27 @@ function getResponsePlanStatuses(responsePlan) {
     return statuses;
 }
 
+function getActiveRoadSegments(simulationScene) {
+    let active_segments = {};
+
+    simulationScene.simulationSceneEvents.forEach(event => {
+        JSON.parse(event.responsePlan)
+            .forEach(responsePlan => {
+                active_segments[responsePlan.road_segment_id] = responsePlan.active;
+            });
+
+        if (!(event.roadSegmentId in active_segments)) {
+            active_segments[event.roadSegmentId] = event.roadSegment.responsePlanActive
+        }
+    });
+
+    return active_segments;
+}
+
+function isRoadSegmentActive(segments, id) {
+    return id in segments ? segments[id] : false;
+}
+
 /**
  * Transform the data of a scenario so it can be displayed in a tree form.
  * @param scenario
@@ -59,14 +80,15 @@ function transformData(scenario: any, client = null) {
         let simulationScene = data.simulationScene;
         let eventsPerRoadSegment = squashSegmentEvents(simulationScene);
         let segments = Object.entries(eventsPerRoadSegment);
-        for (const [segmentId, conditions] of segments) {
+        let activeRoadSegments = getActiveRoadSegments(simulationScene);
+        for (const [segmentId, _] of segments) {
             // Loop through roadsegments in order to find the corresponding segment
             for (let j = 0; j < updatedScenario.children.length; j++) {
                 if (updatedScenario.children[j].id === segmentId) {
                     let newlyDeactivatedNodes = [];
                     [updatedScenario.children[j], newlyDeactivatedNodes] = applyRestrictions(
                         updatedScenario.children[j],
-                        conditions,
+                        isRoadSegmentActive(activeRoadSegments, segmentId),
                         deactivatedNodes
                     );
                     deactivatedNodes = [...deactivatedNodes, ...newlyDeactivatedNodes];
@@ -135,10 +157,10 @@ function squashSegmentEvents(simulationScene) {
 /**
  * Loops over tree to apply restriction to condition nodes recursively
  * @param branch
- * @param conditions
+ * @param active
  * @param deactivatedNodes
  */
-function applyRestrictions(branch, conditions, deactivatedNodes) {
+function applyRestrictions(branch, active, deactivatedNodes) {
     if (branch.children === undefined) return [branch, deactivatedNodes];
 
     let updatedBranch = branch;
@@ -146,11 +168,11 @@ function applyRestrictions(branch, conditions, deactivatedNodes) {
 
     for (let i = 0; i < branch.children.length; i++) {
         if (branch.children[i].__typename == "RoadConditionObjectType") {
-            if (isActiveUnderConditions(branch.children[i], conditions)) {
+            if (active) {
                 // If the condition is active, return the node with children, and check the children for following conditions
                 let newlyUpdatedChildren = [];
                 let newlyDeactivatedNodes = [];
-                [newlyUpdatedChildren, newlyDeactivatedNodes] = applyRestrictions(branch.children[i], conditions, deactivatedNodes);
+                [newlyUpdatedChildren, newlyDeactivatedNodes] = applyRestrictions(branch.children[i], active, deactivatedNodes);
                 deactivatedNodes = [...deactivatedNodes, ...newlyDeactivatedNodes];
                 updatedChildren = [...updatedChildren, newlyUpdatedChildren];
             } else {
