@@ -18,6 +18,9 @@ export const GET_SIMULATION_SCENE = gql`
             simulationSceneEvents {
                 id
                 roadSegmentId
+                roadSegment {
+                    responsePlanActive
+                }
                 roadConditionTypeId
                 value
                 responsePlan
