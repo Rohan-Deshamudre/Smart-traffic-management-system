@@ -118,7 +118,7 @@ let displaySimulationLog = (log, index) => (
     </div>
 );
 
-export function InsightsLog(props) {
+export default function InsightsLog(props) {
     return (
         <div>{props.simulationLog.map(displaySimulationLog)}</div>
     );
