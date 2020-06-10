@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 
 import NavBar from "./modules/NavBar";
 import Workspace from "./modules/Workspace";
@@ -18,12 +19,6 @@ import { Auth } from '../../helper/auth';
 // @ts-ignore
 import scenarioIcon from "../../assets/node_icons/scenario.svg";
 
-interface State {
-	leftPaneActive: boolean;
-	rightPaneActive: boolean;
-	scenarioPaneActive: boolean;
-}
-
 interface Props {
 
 }
@@ -37,116 +32,96 @@ export const GET_DESIGNER_DATA = gql`
     }
 `;
 
-class ScenarioDesigner extends React.Component<Props, State> {
-	constructor(props: Props) {
-		super(props);
-		this.state = {
-			leftPaneActive: false,
-			rightPaneActive: false,
-			scenarioPaneActive: false
-		};
+export default function ScenarioDesigner(props: Props) {
+    const [leftPaneActive, setLeftPaneActive] = useState(false);
+    const [rightPaneActive, setRightPaneActive] = useState(false);
+    const [scenarioPaneActive, setScenarioPaneActive] = useState(false);
 
-		this.toggleLeftPane = this.toggleLeftPane.bind(this);
-		this.toggleRightPane = this.toggleRightPane.bind(this);
-		this.toggleScenarioPane = this.toggleScenarioPane.bind(this);
+    function toggleLeftPane() {
+        setLeftPaneActive(!leftPaneActive);
+    }
 
-	}
+    function toggleRightPane() {
+        setRightPaneActive(!rightPaneActive);
+    }
 
-	toggleLeftPane() {
-		this.setState({
-			leftPaneActive: !this.state.leftPaneActive
-		})
-	}
+    function toggleScenarioPane() {
+        setScenarioPaneActive(!scenarioPaneActive);
+    }
 
-	toggleRightPane() {
-		this.setState({
-			rightPaneActive: !this.state.rightPaneActive
-		})
-	}
+    if (!Auth.isEngineer()) {
+        return <Redirect to="/" />
+    }
+    return (
+        <div className="view scenario-designer-view">
+            <NavBar mode="ScenarioDesigner" />
 
-	toggleScenarioPane() {
-		this.setState({
-			scenarioPaneActive: !this.state.scenarioPaneActive
-		})
-	}
+            <Workspace
+                smallWorkspaceDeactivated={false}
+                rightPaneActive={rightPaneActive}
+            />
+            <div className="home-container structure-container">
+                <Query query={GET_DESIGNER_DATA}>
+                    {
+                        /** Illustrate the data, such as road segment type, on
+                         *  the designer pane
+                         */
+                        ({ data }) => (
+                            <LeftPane paneName="Designer"
+                                readOnly={false}
+                                icon={editorIcon}
+                                toggle={toggleLeftPane}
+                                data={data}
+                                active={leftPaneActive}
+                            />
+                        )
+                    }
+                </Query>
 
-	render() {
-		if (!Auth.isEngineer()) {
-			return <Redirect to="/" />
-		}
-		return (
-			<div className="view scenario-designer-view">
-				<NavBar mode="ScenarioDesigner" />
+                <Query query={READ_FOLDERS}>
+                    {
+                        ({ loading, error, data }) => {
+                            if (loading) return <div className="container-center"><div className="loader"></div></div>;
+                            if (error) {
+                                console.log(error)
+                                return <div>Error</div>;
+                            }
 
-				<Workspace
-					smallWorkspaceDeactivated={false}
-					rightPaneActive={this.state.rightPaneActive}
-				/>
-				<div className="home-container structure-container">
-					<Query query={GET_DESIGNER_DATA}>
-						{
-							/** Illustrate the data, such as road segment type, on
-							 *  the designer pane
-							 */
-							({ data }) => (
-								<LeftPane paneName="Designer"
-									readOnly={false}
-									icon={editorIcon}
-									toggle={this.toggleLeftPane}
-									data={data}
-									active={this.state.leftPaneActive}
-								/>
-							)
-						}
-					</Query>
+                            /** Obtain the scenarios and folders */
+                            const scenarioFolders = data.folders
+                                .filter((folder: any) => folder.folderType.id === '1');
+                            const scenariosWithoutFolders = data.scenarios
+                                .filter((scenario: any) => scenario.folder === null);
 
-					<Query query={READ_FOLDERS}>
-						{
-							({ loading, error, data }) => {
-								if (loading) return <div className="container-center"><div className="loader"></div></div>;
-								if (error) {
-									console.log(error)
-									return <div>Error</div>;
-								}
+                            /** The instruments menu stays the same */
+                            return (
+                                <div className="home-container structure-container">
+                                    <ScenarioPane
+                                        paneName="Scenario's"
+                                        icon={scenarioIcon}
+                                        toggle={toggleScenarioPane}
+                                        active={scenarioPaneActive}
+                                        folders={scenarioFolders}
+                                        scenarios={scenariosWithoutFolders}
+                                        boundingBox={data.boundingBox}
+                                    />
 
-								/** Obtain the scenarios and folders */
-								const scenarioFolders = data.folders
-									.filter((folder: any) => folder.folderType.id === '1');
-								const scenariosWithoutFolders = data.scenarios
-									.filter((scenario: any) => scenario.folder === null);
+                                    <RightPane
+                                        paneName="Instrumenten" icon={instrumentsIcon}
+                                        toggle={toggleRightPane}
+                                        active={rightPaneActive}
+                                        instruments={data.instruments}
+                                        instrumentTypes={data.instrumentTypes}
+                                        currDrip={data.currDripId}
+                                        boundingBox={data.boundingBox}
+                                    />
 
-								/** The instruments menu stays the same */
-								return (
-									<div className="home-container structure-container">
-									<ScenarioPane
-										paneName="Scenario's"
-										icon={scenarioIcon}
-										toggle={this.toggleScenarioPane}
-										active={this.state.scenarioPaneActive}
-										folders={scenarioFolders}
-										scenarios={scenariosWithoutFolders}
-										boundingBox={data.boundingBox}
-									/>
-
-									<RightPane
-										paneName="Instrumenten" icon={instrumentsIcon}
-										toggle={this.toggleRightPane}
-										active={this.state.rightPaneActive}
-										instruments={data.instruments}
-										instrumentTypes={data.instrumentTypes}
-										currDrip={data.currDripId}
-										boundingBox={data.boundingBox}
-									/>
-
-									</div>
-								);
-							}
-						}
-					</Query>
-				</div>
-			</div>
-		);
-	}
+                                </div>
+                            );
+                        }
+                    }
+                </Query>
+            </div>
+        </div>
+    );
 }
-
-export default ScenarioDesigner;
