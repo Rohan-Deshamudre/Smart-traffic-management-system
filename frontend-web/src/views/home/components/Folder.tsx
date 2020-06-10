@@ -49,7 +49,7 @@ export default function Folder(props: FolderProps) {
         })
         .map((item) => <div className="d-flex justify-content-end" key={item.id}>
             <Item name={item.name} id={item.id} description={item.description} folderId={props.folder.id}
-                folders={props.folders} labels={item.labels}
+                folders={props.folders} labels={item.labels} responsePlanActive={item.responsePlanActive}
                 className="item" />
         </div>
         );
