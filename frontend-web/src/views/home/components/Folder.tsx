@@ -5,6 +5,8 @@ import '../styles/folder.scss';
 // @ts-ignore
 import rightArrowIcon from "./../../../assets/right-arrow.svg";
 // @ts-ignore
+import alertIcon from "./../../../assets/alert.svg";
+// @ts-ignore
 import folderIcon from "./../../../assets/folder.svg";
 // @ts-ignore
 import editIcon from "./../../../assets/edit.svg";
@@ -37,6 +39,7 @@ export default function Folder(props: FolderProps) {
         setShowItems(!showItems);
     }
 
+    let hasOneActiveResponsePlan = false;
     const list = props.folder.scenarios
         .filter((item) => {
             if (props.geoFilter) {
@@ -47,6 +50,7 @@ export default function Folder(props: FolderProps) {
                 return item
             }
         })
+        .map((item) => { hasOneActiveResponsePlan = hasOneActiveResponsePlan || item.responsePlanActive; return item; })
         .map((item) => <div className="d-flex justify-content-end" key={item.id}>
             <Item name={item.name} id={item.id} description={item.description} folderId={props.folder.id}
                 folders={props.folders} labels={item.labels} responsePlanActive={item.responsePlanActive}
@@ -59,7 +63,7 @@ export default function Folder(props: FolderProps) {
             <div className="pl-3 pr-3 w-25 d-flex justify-content-between align-items-center">
                 <img src={rightArrowIcon} alt="Right Arrow Icon"
                     className={'mr-2 ' + (list.length > 0 ? '' : 'hidden ') + (showItems ? 'open ' : '')} />
-                <img src={folderIcon} alt="Folder Icon" />
+                <img src={hasOneActiveResponsePlan ? alertIcon : folderIcon} alt="Folder Icon" />
             </div>
             {editMode ?
                 <Mutation mutation={UPDATE_FOLDERS}>
