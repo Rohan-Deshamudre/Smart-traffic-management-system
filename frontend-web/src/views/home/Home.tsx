@@ -5,7 +5,6 @@ import NavBar from "./modules/NavBar";
 import Workspace from "./modules/Workspace";
 import LeftPane from "./modules/LeftPane";
 import RightPane from "./modules/RightPane";
-import RoutePane from "./modules/RoutePane";
 
 import "./../../components/styles/structure.scss"
 import { Query } from 'react-apollo';
@@ -18,16 +17,12 @@ import instrumentsIcon from "../../assets/node_icons/instruments.svg";
 import { Auth } from '../../helper/auth';
 import { Redirect } from 'react-router-dom';
 
-// @ts-ignore
-import destinationIcon from "../../assets/node_icons/destination.svg"
-
 interface Props {
 }
 
 export default function Home(props: Props) {
-    const [leftPaneActive, setLeftPaneActive] = useState(false);
+    const [leftPaneActive, setLeftPaneActive] = useState(true);
     const [rightPaneActive, setRightPaneActive] = useState(true);
-    const [routePaneActive, setRoutePaneActive] = useState(false);
 
     function toggleLeftPane() {
         setLeftPaneActive(!leftPaneActive);
@@ -35,10 +30,6 @@ export default function Home(props: Props) {
 
     function toggleRightPane() {
         setRightPaneActive(!rightPaneActive);
-    }
-
-    function toggleRoutePane() {
-        setRoutePaneActive(!routePaneActive);
     }
 
     if (!Auth.getToken()) {
@@ -84,12 +75,6 @@ export default function Home(props: Props) {
                                     folders={scenarioFolders}
                                     scenarios={scenariosWithoutFolders}
                                     boundingBox={data.boundingBox}
-                                />
-
-                                <RoutePane icon={destinationIcon}
-                                    paneName="Routes"
-                                    toggle={toggleRoutePane}
-                                    active={routePaneActive}
                                 />
 
                                 <Workspace
