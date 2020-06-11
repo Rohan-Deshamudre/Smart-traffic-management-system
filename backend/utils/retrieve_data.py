@@ -16,7 +16,7 @@ def get_traffic_speed(site_id, start_date=datetime.utcnow()):
 
 def get_speed_flow(site_id,
                    start_date=datetime.utcnow(),
-                   delta=1,
+                   delta=4,
                    max_retry=4):
     """
     The api may not have data ready by the minute so we retry with exponentially
@@ -42,7 +42,7 @@ def get_speed_flow(site_id,
 
 def get_travel_time(coords,
                     start_date=datetime.utcnow(),
-                    delta=1,
+                    delta=4,
                     max_retry=4):
     """
     The api may not have data ready by the minute so we retry with exponentially
