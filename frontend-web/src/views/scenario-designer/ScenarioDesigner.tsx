@@ -35,9 +35,10 @@ export const GET_DESIGNER_DATA = gql`
 export default function ScenarioDesigner(props: Props) {
     const [leftPaneActive, setLeftPaneActive] = useState(false);
     const [rightPaneActive, setRightPaneActive] = useState(false);
-    const [scenarioPaneActive, setScenarioPaneActive] = useState(false);
+    const [scenarioPaneActive, setScenarioPaneActive] = useState(true);
 
     function toggleLeftPane() {
+        setScenarioPaneActive(false);
         setLeftPaneActive(!leftPaneActive);
     }
 
@@ -46,6 +47,7 @@ export default function ScenarioDesigner(props: Props) {
     }
 
     function toggleScenarioPane() {
+        setLeftPaneActive(false);
         setScenarioPaneActive(!scenarioPaneActive);
     }
 
