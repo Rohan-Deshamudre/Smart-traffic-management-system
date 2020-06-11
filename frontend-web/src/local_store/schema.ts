@@ -48,6 +48,7 @@ export const schema = gql`
         id: ID!
         name: String!
         roadSegmentType: RoadSegmentType
+        responsePlanActive: Boolean
     }
 
     type RoadSegmentType {

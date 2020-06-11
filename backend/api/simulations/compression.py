@@ -19,8 +19,10 @@ def simulation_id_to_json(simulation_scene_id):
             simulation_scene.simulation_scene_events.all():
         road_segment_type = simulation_scene_event.road_segment.road_segment_type
         road_segment = \
-            {'id': simulation_scene_event.road_segment.id,
+            {'__typename': 'RoadSegment',
+             'id': simulation_scene_event.road_segment.id,
              'name': simulation_scene_event.road_segment.name,
+             'responsePlanActive': simulation_scene_event.road_segment.response_plan_active,
              'roadSegmentType': {
                  '__typename': 'RoadSegmentType',
                  'id': road_segment_type.id,
