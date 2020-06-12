@@ -48,16 +48,14 @@ function drawIcon(node: any) {
 	node.append('image')
 		.attr('xlink:href', function (d: any) {
 
-			console.log(d);
-
 			switch (d.data.__typename) {
 				case 'ScenarioObjectType':
 					return '../../assets/tree_icons/scenario.svg';
 				case 'ResponsePlan':
 					if (d.data.operator === 'OR') {
-						return '../../assets/tree_icons/constraint.svg';
+						return '../../assets/tree_icons/or.svg';
 					} else if (d.data.operator === 'AND') {
-						return '../../assets/tree_icons/scenario.svg';
+						return '../../assets/tree_icons/and.svg';
 					} else {
 						if (d.data.road_condition && d.data.road_condition.roadConditionType) {
 							return d.data.road_condition.roadConditionType.img ? '../../assets/tree_icons/road_condition/' + d.data.road_condition.roadConditionType.img + '.svg' : '';
