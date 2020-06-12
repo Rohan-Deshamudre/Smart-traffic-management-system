@@ -4,6 +4,7 @@ import App from './App.js';
 
 import { ApolloProvider } from 'react-apollo'
 import { ApolloClient } from 'apollo-client'
+import { onError } from 'apollo-link-error'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
@@ -29,6 +30,16 @@ const REFRESH = gql`
 const httpLink = createHttpLink({
     uri: process.env.API_URL,
 });
+
+const errorLink = onError(({ gql, net }) => {
+    if (gql) {
+        gql.forEach(({ message, locations, path }) =>
+            console.log(`[GQL ERROR]: ${message}, ${locations}, ${path}`))
+    }
+    if (net) {
+        console.log(`[Network]: ${net}`)
+    }
+})
 
 let isRefreshing = false;
 
@@ -71,6 +82,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 });
 
 const link = ApolloLink.from([
+    errorLink,
     authMiddleware,
     httpLink
 ]);
