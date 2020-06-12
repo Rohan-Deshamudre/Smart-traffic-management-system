@@ -33,7 +33,7 @@ export default function ScenarioSimulator(props: Props) {
     const [ws, _] = useState(new WebSocket(process.env.SIMULATION_URL));
     const [leftPaneActive, setLeftPaneActive] = useState(false);
     const [rightPaneActive, setRightPaneActive] = useState(true);
-    const [scenarioPaneActive, setScenarioPaneActive] = useState(false);
+    const [scenarioPaneActive, setScenarioPaneActive] = useState(true);
     const [insightsPaneActive, setInsightsPaneActive] = useState(false);
     const [simulationStatus, setSimulationStatus] = useState({});
     const [simulationLog, setSimulationLog] = useState([]);
@@ -70,7 +70,6 @@ export default function ScenarioSimulator(props: Props) {
     ws.onopen = () => setSimulationLog([{ time: 'Systeem', text: "Connectie gemaakt" }]);
 
     ws.onmessage = evt => {
-        console.log(evt.data);
         const message = JSON.parse(evt.data);
         if (!message['text']) {
             setSimulationStatus(message.id == -1 ? replaceLiveId(message) : message);
@@ -92,12 +91,12 @@ export default function ScenarioSimulator(props: Props) {
             <NavBar mode="ScenarioSimulator" />
 
             <ApolloConsumer>
-                    {client =>
-                        <Workspace rightPaneActive={rightPaneActive}
-                            simulationStatus={simulationStatus}
-                            client={client}
-                        />
-                    }
+                {client =>
+                    <Workspace rightPaneActive={rightPaneActive}
+                        simulationStatus={simulationStatus}
+                        client={client}
+                    />
+                }
             </ApolloConsumer>
 
             <div className="home-container structure-container">
@@ -130,15 +129,15 @@ export default function ScenarioSimulator(props: Props) {
                             const scenariosWithoutFolders = data.scenarios
                                 .filter((scenario: any) => scenario.folder === null);
 
-                            return(
+                            return (
                                 <ScenarioPane
-                                            paneName="Scenario's"
-                                            icon={scenarioIcon}
-                                            toggle={toggleScenarioPane}
-                                            active={scenarioPaneActive}
-                                            folders={scenarioFolders}
-                                            scenarios={scenariosWithoutFolders}
-                                            boundingBox={data.boundingBox}
+                                    paneName="Scenario's"
+                                    icon={scenarioIcon}
+                                    toggle={toggleScenarioPane}
+                                    active={scenarioPaneActive}
+                                    folders={scenarioFolders}
+                                    scenarios={scenariosWithoutFolders}
+                                    boundingBox={data.boundingBox}
                                 />
                             );
                         }
@@ -155,22 +154,22 @@ export default function ScenarioSimulator(props: Props) {
                             return (
                                 <div className="home-container structure-container">
                                     <InsightsPane paneName="Insights"
-                                            icon={insightsIcon}
-                                            toggle={toggleInsightsPane}
-                                            active={insightsPaneActive}
-                                            simulationLog={simulationLog}
-                                            messageSocket={sendMessage}
-                                            boundingBox={data.boundingBox}
+                                        icon={insightsIcon}
+                                        toggle={toggleInsightsPane}
+                                        active={insightsPaneActive}
+                                        simulationLog={simulationLog}
+                                        messageSocket={sendMessage}
+                                        boundingBox={data.boundingBox}
                                     />
 
                                     <RightPane paneName="Simulaties"
-                                            icon={simulationIcon}
-                                            toggle={toggleRightPane}
-                                            active={rightPaneActive}
-                                            simulationLog={simulationLog}
-                                            messageSocket={sendMessage}
-                                            scenarioId={id}
-                                            boundingBox={data.boundingBox}
+                                        icon={simulationIcon}
+                                        toggle={toggleRightPane}
+                                        active={rightPaneActive}
+                                        simulationLog={simulationLog}
+                                        messageSocket={sendMessage}
+                                        scenarioId={id}
+                                        boundingBox={data.boundingBox}
                                     />
                                 </div>
                             );

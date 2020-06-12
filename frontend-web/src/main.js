@@ -7,6 +7,7 @@ import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
+import { onError } from "apollo-link-error";
 // Imports for local store
 import { resolvers } from './local_store/resolvers';
 import { schema } from './local_store/schema';
@@ -28,6 +29,18 @@ const REFRESH = gql`
 // Add the correct link
 const httpLink = createHttpLink({
     uri: process.env.API_URL,
+});
+
+
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors)
+        graphQLErrors.map(({ message, locations, path }) =>
+            console.log(
+                `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+            ),
+        );
+
+    if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
 let isRefreshing = false;
@@ -71,6 +84,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 });
 
 const link = ApolloLink.from([
+    errorLink,
     authMiddleware,
     httpLink
 ]);

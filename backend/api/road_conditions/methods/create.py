@@ -10,7 +10,7 @@ from api.road_conditions.models import RoadCondition, RoadConditionDate
 
 
 def create_road_condition(name: str, date: RoadConditionDateInputObject,
-                          value: int, road_condition_type_id: int,
+                          value: str, road_condition_type_id: int,
                           road_condition_action_ids: graphene.List(
                               graphene.Int),
                           parent_rc: int, parent_rs: int) -> RoadCondition:
