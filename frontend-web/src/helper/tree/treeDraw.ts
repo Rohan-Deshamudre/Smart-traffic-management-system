@@ -350,12 +350,10 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 
 	// -- Response plan button
 	let responsePlanButton = buttons.filter((d: any) => {
-		return d.data.__typename === 'RoadSegmentObjectType' || d.data.__typename === 'ScenarioObjectType';
+		return d.data.__typename === 'RoadSegmentObjectType';
 	}).append('g')
 		.on('click', function (d: any, i) {
-			if (d.data.__typename === 'ScenarioObjectType') {
-				that.openModalWithScenario(d);
-			} else if (d.data.__typename === 'RoadSegmentObjectType') {
+			if (d.data.__typename === 'RoadSegmentObjectType') {
 				that.openModalWithRoadSegment(d);
 			}
 		})
@@ -366,7 +364,7 @@ function drawButtons(g: any, d: any, i: number, that: any) {
 			if (result) {
 				responsePlanButton.append('rect').attr('class', 'button-rect');
 				responsePlanButton.append('text').attr('class', 'button-text')
-					.text('RP')
+					.text('IV')
 			}
 		}
 	);
