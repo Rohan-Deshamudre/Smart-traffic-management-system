@@ -70,7 +70,6 @@ export default function ScenarioSimulator(props: Props) {
     ws.onopen = () => setSimulationLog([{ time: 'Systeem', text: "Connectie gemaakt" }]);
 
     ws.onmessage = evt => {
-        console.log(evt.data);
         const message = JSON.parse(evt.data);
         if (!message['text']) {
             setSimulationStatus(message.id == -1 ? replaceLiveId(message) : message);

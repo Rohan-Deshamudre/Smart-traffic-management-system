@@ -79,7 +79,9 @@ function drawIcon(node: any) {
  */
 function drawNodes(nodeContent: any) {
 	nodeContent.append('rect').attr('class', 'rect');
+}
 
+function drawNames(nodeContent: any) {
 	let name = nodeContent.append('g');
 	name.append('rect').attr('class', 'rect name-rect');
 	name.append('text').attr('class', 'name-text').text((d: any) => {
@@ -92,12 +94,9 @@ function drawNodes(nodeContent: any) {
 			if (d.data.road_condition) {
 				return d.data.road_condition.name.substr(0, 13)
 			}
-			// TODO check road conditions
-			return d.data.operator.substr(0, 13)
 		}
 		else return '';
 	});
-
 }
 
 /*
@@ -396,5 +395,6 @@ export const treeDraw = {
 	drawIcon: drawIcon,
 	drawNodes: drawNodes,
 	drawRoadConditionActions: drawRoadConditionActions,
-	drawButtons: drawButtons
+	drawButtons: drawButtons,
+	drawNames: drawNames
 };
