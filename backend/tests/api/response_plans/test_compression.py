@@ -132,18 +132,76 @@ class ResponsePlanCompressionTest(TestCase):
         self.assertEqual(result.operator, operator)
         self.assertEqual(result.road_segment, self.segments[0])
 
-    def test_import_multi_children(self):
+    def test_import_custom_road_condition(self):
         operator = 'OR'
+        condition_name = 'condition 1'
+        condition_value = 'i | > | 2800'
         response = import_response_plan({
             'operator': operator,
             'road_segment_id': self.segments[0].id,
-            'scenario_id': self.scenarios[0].id,
-            'road_condition_id': self.conditions[0].id,
+            'road_condition': {
+                'name': condition_name,
+                'value': condition_value,
+                'road_condition_type_id': self.condition_types[0].id
+            },
+            'children': []
+        })
+        self.assertTrue(response['id'] > 0)
+        result = ResponsePlan.objects.filter(id=response['id']).first()
+        self.assertEqual(result.operator, operator)
+        self.assertEqual(result.road_segment, self.segments[0])
+        self.assertEqual(result.road_condition.name, condition_name)
+        self.assertEqual(result.road_condition.value, condition_value)
+        self.assertEqual(result.road_condition.road_condition_type.id,
+                         self.condition_types[0].id)
+
+    def test_import_custom_road_condition_exported(self):
+        operator = 'OR'
+        condition_name = 'condition 1'
+        condition_value = 'i | > | 2800'
+        response = import_response_plan({
+            'operator': operator,
+            'road_segment_id': self.segments[0].id,
+            'road_condition': {
+                'name': condition_name,
+                'value': condition_value,
+                'roadConditionType': {
+                    'id': self.condition_types[0].id
+                }
+            },
+            'children': []
+        })
+        self.assertTrue(response['id'] > 0)
+        result = ResponsePlan.objects.filter(id=response['id']).first()
+        self.assertEqual(result.operator, operator)
+        self.assertEqual(result.road_segment, self.segments[0])
+        self.assertEqual(result.road_condition.name, condition_name)
+        self.assertEqual(result.road_condition.value, condition_value)
+        self.assertEqual(result.road_condition.road_condition_type.id,
+                         self.condition_types[0].id)
+
+
+    def test_import_multi_children(self):
+        operator = 'OR'
+        segment_id = self.segments[0].id
+        condition_id = self.conditions[0].id
+        scenario_id = self.conditions[0].id
+        response = import_response_plan({
+            'operator': operator,
+            'road_segment_id': segment_id,
+            'scenario_id': scenario_id,
+            'road_condition_id': condition_id,
             'children': [{
                 'operator': operator,
+                'road_segment_id': segment_id,
+                'scenario_id': scenario_id,
+                'road_condition_id': condition_id,
                 'children': [{
                     'operator': operator,
-                    'road_condition_id': self.conditions[0].id
+                    'road_segment_id': segment_id,
+                    'scenario_id': scenario_id,
+                    'road_condition_id': condition_id,
+                    'children': []
                 }]
             }]
         })
@@ -181,5 +239,42 @@ class ResponsePlanCompressionTest(TestCase):
             'operator': operator,
             'road_segment_id': self.segments[0].id,
             'children': [{}]
+        })
+        self.assertEqual(response['msg'], "Invalid input!")
+
+    def test_import_missing_name_condition(self):
+        operator = 'OR'
+        response = import_response_plan({
+            'operator': operator,
+            'road_segment_id': self.segments[0].id,
+            'road_condition': {
+
+            },
+            'children': []
+        })
+        self.assertEqual(response['msg'], "Invalid input!")
+
+    def test_import_missing_value_condition(self):
+        operator = 'OR'
+        response = import_response_plan({
+            'operator': operator,
+            'road_segment_id': self.segments[0].id,
+            'road_condition': {
+                'name': 'condition 1'
+            },
+            'children': []
+        })
+        self.assertEqual(response['msg'], "Invalid input!")
+
+    def test_import_missing_type_condition(self):
+        operator = 'OR'
+        response = import_response_plan({
+            'operator': operator,
+            'road_segment_id': self.segments[0].id,
+            'road_condition': {
+                'name': 'condition 1',
+                'value': 'i | > | 2800'
+            },
+            'children': []
         })
         self.assertEqual(response['msg'], "Invalid input!")

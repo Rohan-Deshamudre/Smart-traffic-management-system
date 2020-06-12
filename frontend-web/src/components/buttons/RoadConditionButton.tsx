@@ -46,7 +46,6 @@ export default function RoadConditionButton(props: Props) {
             newLevel += `>< | ${lessValue} | ${greaterValue}`
         }
 
-        console.log(newLevel);
         return newLevel;
     }
 

@@ -290,11 +290,34 @@ class Tree extends React.Component<Props, State> {
             });
 
         let nodesExceptRoadConditionAction = nodeContent.filter(d => d.data.__typename !== 'RoadConditionActionObjectType');
+        let nodesExceptRoadConditionActionAndOperators = nodeContent.filter(d => d.data.__typename !== 'RoadConditionActionObjectType' && d.data.operator !== 'OR' && d.data.operator !== 'AND');
 
         treeDraw.drawNodes(nodesExceptRoadConditionAction);
         treeDraw.drawIcon(nodesExceptRoadConditionAction);
+        treeDraw.drawNames(nodesExceptRoadConditionActionAndOperators);
 
-        treeDraw.drawRoadConditionActions(nodeContent.filter(d => d.data.__typename === 'RoadConditionActionObjectType'))
+        // Actions are shown only if the response plan is active
+        let actions_status = {};
+        nodeContent.filter(d => {
+            if (d.data.__typename === 'RoadSegmentObjectType' && 'children' in d.data) {
+                d.data.children.forEach(road_condition => {
+                    if ('children' in road_condition) {
+                        road_condition.children.forEach(child => {
+                            actions_status[child.id] = d.data.responsePlanActive;
+                        });
+                    }
+                });
+            }
+            return true;
+        });
+
+        treeDraw.drawRoadConditionActions(nodeContent.filter(d => {
+            if (d.data.__typename === 'RoadConditionActionObjectType' && d.data.id in actions_status && !actions_status[d.data.id]) {
+                return false;
+            }
+
+            return d.data.__typename === 'RoadConditionActionObjectType';
+        }));
     }
 
     /**
@@ -592,7 +615,7 @@ class Tree extends React.Component<Props, State> {
                         <a className="close" onClick={this.closeModal}>
                             &times;
 						</a>
-                        <div className="header"> Response Plan </div>
+                        <div className="header"> Inschakel voorwaarden </div>
                         <div className="tree">
                             <div className="responsePlanTreeLayout">
                             </div>

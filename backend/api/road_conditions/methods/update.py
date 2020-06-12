@@ -69,7 +69,7 @@ def update_road_condition_date(road_condition: RoadCondition,
 
 
 def update_road_condition(road_condition_id: int, name: str,
-                          date: RoadConditionDateInputObject, value: float,
+                          date: RoadConditionDateInputObject, value: str,
                           road_condition_type_id: int, parent_rs: int,
                           parent_rc: int,
                           road_condition_action_ids: graphene.List(

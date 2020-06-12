@@ -17,14 +17,14 @@ def check_road_segments():
             is_one_active = False
             for response_plan in response_plans:
                 if response_plan['active']:
-                    # TODO: Fire conditions
+                    # Conditions are active
                     print("Response plan with id = %s is active" %
                           response_plan['response_plan_id'])
                     scenario_active = True
                     road_segment_active = True
                     is_one_active = True
             if not is_one_active:
-                # TODO: Freeflow activated
+                # Freeflow activated
                 pass
 
             road_segment.response_plan_active = road_segment_active
@@ -48,7 +48,8 @@ def get_active_response_plans(road_segment_id: int):
         try:
             result.append(is_response_plan_active(parent))
         except Exception as ex:
-            print("Invalid Response Plan with id = %s " % parent.id)
+            print("Invalid Response Plan with id = %s , Error = %s " %
+                  (parent.id, ex))
     return result
 
 
