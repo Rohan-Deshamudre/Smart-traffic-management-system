@@ -290,9 +290,11 @@ class Tree extends React.Component<Props, State> {
             });
 
         let nodesExceptRoadConditionAction = nodeContent.filter(d => d.data.__typename !== 'RoadConditionActionObjectType');
+        let nodesExceptRoadConditionActionAndOperators = nodeContent.filter(d => d.data.__typename !== 'RoadConditionActionObjectType' && d.data.operator !== 'OR' && d.data.operator !== 'AND');
 
         treeDraw.drawNodes(nodesExceptRoadConditionAction);
         treeDraw.drawIcon(nodesExceptRoadConditionAction);
+        treeDraw.drawNames(nodesExceptRoadConditionActionAndOperators);
 
         // Actions are shown only if the response plan is active
         let actions_status = {};
