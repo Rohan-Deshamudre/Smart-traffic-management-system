@@ -41,7 +41,7 @@ export const GET_ROAD_CONDITION_INFO = gql`
 `;
 
 export const UPDATE_ROAD_CONDITION = gql`
-    mutation updateRoadCondition($id: Int!, $name: String, $startCron: String!, $endCron: String!, $startDate: Date!, $endDate: Date!, $endRepeatDate: String!, $value: String, $roadConditionTypeId: Int) {
+    mutation updateRoadCondition($id: Int!, $name: String, $startCron: String!, $endCron: String!, $startDate: Date!, $endDate: Date!, $endRepeatDate: String!, $value: String!, $roadConditionTypeId: Int) {
         updateRoadCondition(id: $id, name: $name, date: {startCron: $startCron, endCron: $endCron, startDate: $startDate, endDate: $endDate, endRepeatDate: $endRepeatDate}, value: $value, roadConditionTypeId: $roadConditionTypeId) {
             id
             value
