@@ -78,7 +78,7 @@ def is_road_condition_active(road_condition: RoadCondition,
     if con_type == wkd_typ:
         value = datetime.datetime.today().weekday()
     elif con_type == tim_typ:
-        value = int(time.time())
+        value = datetime.datetime.today().hour
     elif con_type == int_typ:
         value = get_traffic_flow_from(road_segment)
     elif con_type == spd_typ:
@@ -137,7 +137,7 @@ def get_description(typ, result, value, symbol, target1, target2):
         "" if result else "not",
         symbolTypes[symbol],
         target1,
-        targets if target2 else ""
+        target2 if target2 else ""
     )
 
     return description
