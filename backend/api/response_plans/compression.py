@@ -1,6 +1,7 @@
 from api.exception.api_exception import ApiException, InvalidInputException
 from api.response_plans.methods import get_response_plan_with_id, \
     create_response_plan, delete_response_plan_cascade
+from api.road_conditions.methods.create import create_road_condition
 from api.response_plans.models import ResponsePlan
 
 
@@ -72,7 +73,7 @@ def to_json_response_plan(response_plan: ResponsePlan):
     return response_obj
 
 
-def import_response_plan(obj):
+def import_response_plan(obj, parent_id=None):
     id = -1
     try:
         if 'operator' not in obj or 'children' not in obj:
@@ -86,37 +87,46 @@ def import_response_plan(obj):
             scenario_id = obj['scenario_id']
         if 'road_segment_id' in obj:
             road_segment_id = obj['road_segment_id']
-        if 'road_condition_id' in obj:
-            road_condition_id = obj['road_condition_id']
 
         if scenario_id is None and road_segment_id is None:
             raise InvalidInputException()
 
+        if 'road_condition' in obj:
+            road_condition = obj['road_condition']
+            if 'name' not in road_condition or 'value' not in road_condition:
+                raise InvalidInputException()
+
+            type_id = -1
+            if 'road_condition_type_id' in road_condition:
+                type_id = road_condition['road_condition_type_id']
+            elif 'roadConditionType' in road_condition and 'id' in road_condition['roadConditionType']:
+                type_id = road_condition['roadConditionType']['id']
+            else:
+                raise InvalidInputException()
+
+            condition = create_road_condition(
+                road_condition['name'],
+                None,
+                road_condition['value'],
+                type_id,
+                [], None, road_segment_id)
+            road_condition_id = condition.id
+        elif 'road_condition_id' in obj:
+            road_condition_id = obj['road_condition_id']
+
         response_plan = create_response_plan(road_segment_id,
                                              obj['operator'],
                                              road_condition_id,
-                                             scenario_id, None)
+                                             scenario_id,
+                                             parent_id)
         id = response_plan.id
         for child in obj['children']:
-            import_child_response_plan(child, id, road_segment_id, scenario_id)
+            import_response_plan(child, id)
     except ApiException as exc:
         if id != -1:
             delete_response_plan_cascade(id)
-        return {"msg": str(exc)}
+        if parent_id is None:
+            return {"msg": str(exc)}
+        else:
+            raise InvalidInputException()
     return {"id": id}
-
-
-def import_child_response_plan(child, parent_id, road_segment_id, scenario_id):
-    if 'operator' in child:
-        road_condition_id = child['road_condition_id'] if 'road_condition_id' in child else None
-        response_plan = create_response_plan(road_segment_id,
-                                             child['operator'],
-                                             road_condition_id,
-                                             scenario_id,
-                                             parent_id)
-        if 'children' in child:
-            for c in child['children']:
-                import_child_response_plan(
-                    c, response_plan.id, road_segment_id, scenario_id)
-    else:
-        raise InvalidInputException()
