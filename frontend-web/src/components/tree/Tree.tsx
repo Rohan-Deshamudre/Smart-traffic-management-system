@@ -615,7 +615,7 @@ class Tree extends React.Component<Props, State> {
                         <a className="close" onClick={this.closeModal}>
                             &times;
 						</a>
-                        <div className="header"> Response Plan </div>
+                        <div className="header"> Inschakel voorwaarden </div>
                         <div className="tree">
                             <div className="responsePlanTreeLayout">
                             </div>
