@@ -96,17 +96,22 @@ let displayResponsePlan = (responsePlan, index) => (
     </div>
 );
 
-let displaySimulationSceneEvent = event => (
-    <section className="stats">
-        <div className="box">
-            <div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()} className="log-info-message">
-                <h3>{event.roadSegment.name}</h3>
-                {/* <Button onClick={() => highlighRoad(event)}>Highlight Road</Button> */}
-                {JSON.parse(event.responsePlan).map(displayResponsePlan)}
-            </div>
-        </div>
-    </section>
-);
+let displaySimulationSceneEvent = event => {
+    const insightText = JSON.parse(event.responsePlan).map(displayResponsePlan);
+    return (
+        insightText.length > 0
+            ? <section className="stats">
+                <div className="box">
+                    <div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()} className="log-info-message">
+                        <h3>{event.roadSegment.name}</h3>
+                        {/* <Button onClick={() => highlighRoad(event)}>Highlight Road</Button> */}
+                        {insightText}
+                    </div>
+                </div>
+            </section>
+            : null
+    );
+};
 
 let displaySimulationLog = (log, index) => (
     <div key={index} className="log-item">
