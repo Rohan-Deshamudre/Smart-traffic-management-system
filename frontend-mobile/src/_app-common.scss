@@ -1,5 +1,4 @@
 @import "~@nativescript/theme/core";
-@import "~@nativescript/theme/blue";
 
 // Place any CSS rules you want to apply on both iOS and Android here.
 // This is where the vast majority of your CSS code goes.
@@ -21,12 +20,6 @@
 }
 
 // Custom tabstrip item class
-.navigation__item {
-    &:active,
-    &:active Label {
-        @include colorize($contrasted-color: complementary background 20% 0%);
-    }
-}
 
 // Common page class
 .page__content {
@@ -43,4 +36,20 @@
         vertical-align: top;
         margin-top: 20%;
     }
+}
+
+.card {
+    background-color: whitesmoke;
+    border-bottom-color: gray;
+    border-bottom-width: 2;
+}
+
+.card-content {
+    padding: 15 7.5%;
+    border-bottom-color: #e9ecef;
+    border-bottom-width: 1;
+}
+
+TabStrip {
+    selected-item-color: #0077b6;
 }

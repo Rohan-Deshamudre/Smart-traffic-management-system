@@ -1,13 +1,42 @@
-<ActionBar>
-    <Label text="Home"></Label>
+<ActionBar flat="true" backgroundColor="#03045e">
+    <Label text="Home" color="white"></Label>
 </ActionBar>
 
 <GridLayout>
-    <ListView [items]="items">
-        <ng-template let-item="item">
-            <StackLayout>
-                <Label [nsRouterLink]="['../item', item.id]" [text]="item.name"></Label>
-            </StackLayout>
-        </ng-template>
-    </ListView>
+
+    <GridLayout id="placeholderLayout" visibility="{{ items.length !== 0 ? 'collapse' : 'visible' }}">
+
+        <StackLayout horizontalAlignment="center" verticalAlignment="center" width="70%">
+
+            <Label class="fas" text="&#xf5b8;" fontSize="100" textAlignment="center"></Label>
+            <Label text="No notifications" textWrap="true" textAlignment="center" margin="20" fontSize="20"></Label>
+
+        </StackLayout>
+
+    </GridLayout>
+
+    <GridLayout *ngIf="items.length > 0">
+
+        <RadListView [items]="items"
+                     class="list-group"
+                     pullToRefresh="true"
+                     (pullToRefreshInitiated)="refreshList($event)"
+                     height="100%">
+
+            <!-- Invoice -->
+            <ng-template let-item="item">
+
+                <StackLayout class="card-content" [nsRouterLink]="['../item', item.id]">
+
+                    <Label [text]="item.name" fontSize="20" color="#a9a9a9"></Label>
+
+                </StackLayout>
+
+            </ng-template>
+
+        </RadListView>
+
+    </GridLayout>
+
+
 </GridLayout>
