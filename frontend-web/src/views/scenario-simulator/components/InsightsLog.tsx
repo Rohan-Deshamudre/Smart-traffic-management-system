@@ -72,22 +72,6 @@ let getRoadConditionDescriptions = responsePlan => (
     </div>
 );
 
-/*
-let getCondition = (log) => (
-    <strong>
-        {
-            !log.text ? (
-                log.simulationSceneEvents.map(event => (
-                    <div>
-                        {event.roadConditionType.name}
-                    </div>
-                ))
-            ) : null
-        }
-    </strong>
-);
-*/
-
 let displayResponsePlan = (responsePlan, index) => (
     <div>
         <p>Response Plan #{index + 1} {responsePlan.active ? <span>Active</span> : <span>Not Active</span>}</p>
@@ -128,9 +112,3 @@ export default function InsightsLog(props) {
         <div>{props.simulationLog.map(displaySimulationLog)}</div>
     );
 }
-
-/*
-export const InsightsLog = {
-    getCondition: getCondition
-}
-*/
