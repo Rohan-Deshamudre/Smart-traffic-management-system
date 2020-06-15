@@ -54,8 +54,8 @@ class InsightsPane extends React.Component<Props, {}, any> {
                 <div className="mid">
                     <p>
                         The insights provide a visual overview of the simulation process and generates
-                        numerical data on the active response plans. As such, we provide insights on conditions
-                        such as traffic speeds, intensity and provide a description of the plan triggers.
+                        numerical data on the active response plans. As such, we provide insights on condition
+                        values such as traffic intensity and speed.
                     </p>
                     <p>
                         Knowing the effect of the conditions will assist the driver in taking the alternative
