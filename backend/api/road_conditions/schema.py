@@ -90,13 +90,13 @@ class Query(actions_schema.Query, graphene.ObjectType):
 class CreateRoadCondition(graphene.Mutation):
     id = graphene.Int()
     name = graphene.String()
-    value = graphene.Int()
+    value = graphene.String()
     road_condition_type_id = graphene.Int()
 
     class Arguments:
         name = graphene.String(required=True)
         date = RoadConditionDateInputObject(required=True)
-        value = graphene.Int(required=True)
+        value = graphene.String(required=True)
         road_condition_type_id = graphene.Int(required=True)
         road_condition_actions = graphene.List(graphene.Int)
         parent_rc = graphene.Int()
@@ -138,14 +138,14 @@ class CreateRoadCondition(graphene.Mutation):
 class UpdateRoadCondition(graphene.Mutation):
     id = graphene.Int()
     name = graphene.String()
-    value = graphene.Int()
+    value = graphene.String()
     road_condition_type_id = graphene.Int()
 
     class Arguments:
         id = graphene.Int(required=True)
         name = graphene.String()
         date = RoadConditionDateInputObject()
-        value = graphene.Int()
+        value = graphene.String()
         road_condition_type_id = graphene.Int()
         road_condition_actions = graphene.List(graphene.Int)
         parent_rc = graphene.Int()

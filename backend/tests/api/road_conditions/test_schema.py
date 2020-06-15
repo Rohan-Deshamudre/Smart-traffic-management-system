@@ -64,7 +64,7 @@ class RoadConditionSchemaTest(TestCase):
                                         createRoadCondition
                                         (
                                             name: "%s"
-                                            value: 10
+                                            value: "10"
                                             roadConditionTypeId: %s
                                             parentRc: %s
                                             date: {startCron: "test", endCron: "test", startDate:"2020-11-11", endDate: "2020-11-11", endRepeatDate: "2020-11-11"}
