@@ -54,11 +54,11 @@ class InsightsPane extends React.Component<Props, {}, any> {
                 <div className="mid">
                     <p>
                         The insights provide a visual overview of the simulation process and generates
-                        numerical data on the condition of the road. As such, we provide insights on whether
-                        an accident has occurred, broken down cars, congestion, roadworks etc.
+                        numerical data on the active response plans. As such, we provide insights on condition
+                        values such as traffic intensity and speed.
                     </p>
                     <p>
-                        Knowing the severity of such road conditions will assist the driver in taking the alternative
+                        Knowing the effect of the conditions will assist the driver in taking the alternative
                         advised to them, which will ensure they reach their destination via a different route.
                     </p>
                 </div>
