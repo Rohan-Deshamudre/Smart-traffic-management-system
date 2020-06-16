@@ -42,6 +42,14 @@ $open-button-width: 200px;
     color: #CCC;
   }
 
+  .activeCondition {
+    color: #0ebe00;
+  }
+
+  .inactiveCondition {
+    color: red;
+  }
+
   .stats .box {
     background-color: #313348;
     padding: 15px;

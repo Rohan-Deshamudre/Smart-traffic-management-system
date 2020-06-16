@@ -63,10 +63,12 @@ let conditionString = (id) => (
 );
 
 let getRoadConditionDescriptions = responsePlan => (
-    <div>
+    <div >
         {
             responsePlan.description
-                ? <p>{responsePlan.description}</p>
+                ? responsePlan.active
+                        ? <p className="activeCondition">{responsePlan.description}</p>
+                        : <p className="inactiveCondition">{responsePlan.description}</p>
                 : responsePlan.children.map(getRoadConditionDescriptions)
         }
     </div>
@@ -82,6 +84,7 @@ let displayResponsePlan = (responsePlan, index) => (
 
 let displaySimulationSceneEvent = event => {
     const insightText = JSON.parse(event.responsePlan).map(displayResponsePlan);
+    console.log(event.responsePlan)
     return (
         insightText.length > 0
             ? <section className="stats">
