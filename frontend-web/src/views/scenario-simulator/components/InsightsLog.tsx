@@ -78,6 +78,7 @@ let displayResponsePlan = (responsePlan, index) => (
     <div>
         <p>Response Plan #{index + 1} {responsePlan.active ? <span>Active</span> : <span>Not Active</span>}</p>
         {getRoadConditionDescriptions(responsePlan)}
+        <p>Operator: {responsePlan.operator}</p>
         <hr />
     </div>
 );
