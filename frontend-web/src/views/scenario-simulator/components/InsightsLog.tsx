@@ -63,50 +63,43 @@ let conditionString = (id) => (
 );
 
 let getRoadConditionDescriptions = responsePlan => (
-    <div>
+    <div >
         {
             responsePlan.description
-                ? <p>{responsePlan.description}</p>
+                ? responsePlan.active
+                        ? <p className="activeCondition">{responsePlan.description}</p>
+                        : <p className="inactiveCondition">{responsePlan.description}</p>
                 : responsePlan.children.map(getRoadConditionDescriptions)
         }
     </div>
 );
 
-/*
-let getCondition = (log) => (
-    <strong>
-        {
-            !log.text ? (
-                log.simulationSceneEvents.map(event => (
-                    <div>
-                        {event.roadConditionType.name}
-                    </div>
-                ))
-            ) : null
-        }
-    </strong>
-);
-*/
-
 let displayResponsePlan = (responsePlan, index) => (
     <div>
         <p>Response Plan #{index + 1} {responsePlan.active ? <span>Active</span> : <span>Not Active</span>}</p>
         {getRoadConditionDescriptions(responsePlan)}
+        <p>Operator: {responsePlan.operator}</p>
         <hr />
     </div>
 );
 
-let displaySimulationSceneEvent = event => (
-    <section className="stats">
-        <div className="box">
-            <div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()} className="log-info-message">
-                <h3>{event.roadSegment.name}</h3>
-                {/* <Button onClick={() => highlighRoad(event)}>Highlight Road</Button> */}
-                {JSON.parse(event.responsePlan).map(displayResponsePlan)}
-            </div>
-        </div>
-    </section>
-);
+let displaySimulationSceneEvent = event => {
+    const insightText = JSON.parse(event.responsePlan).map(displayResponsePlan);
+    console.log(event.responsePlan)
+    return (
+        insightText.length > 0
+            ? <section className="stats">
+                <div className="box">
+                    <div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()} className="log-info-message">
+                        <h3>{event.roadSegment.name}</h3>
+                        {/* <Button onClick={() => highlighRoad(event)}>Highlight Road</Button> */}
+                        {insightText}
+                    </div>
+                </div>
+            </section>
+            : null
+    );
+};
 
 let displaySimulationLog = (log, index) => (
     <div key={index} className="log-item">
@@ -123,9 +116,3 @@ export default function InsightsLog(props) {
         <div>{props.simulationLog.map(displaySimulationLog)}</div>
     );
 }
-
-/*
-export const InsightsLog = {
-    getCondition: getCondition
-}
-*/

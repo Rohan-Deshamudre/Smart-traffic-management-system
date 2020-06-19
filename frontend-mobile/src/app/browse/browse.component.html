@@ -1,0 +1,20 @@
+<ActionBar flat="true" backgroundColor="#03045e">
+    <Label text="Map" color="white"></Label>
+</ActionBar>
+
+<ContentView height="100%" width="100%">
+    <Mapbox
+            accessToken="pk.eyJ1IjoiYWduaXZjIiwiYSI6ImNrYWt5NTgzNjA0d2cycXF3ZjRneno0ZWIifQ.H_wVlOqQkVF4yJfYuOTiAw"
+            mapStyle="light"
+            latitude="51.9244201"
+            longitude="4.4777325"
+            hideCompass="true"
+            zoomLevel="10"
+            showUserLocation="true"
+            disableZoom="false"
+            disableRotation="false"
+            disableScroll="false"
+            disableTilt="false"
+            (mapReady)="onMapReady($event)">
+    </Mapbox>
+</ContentView>

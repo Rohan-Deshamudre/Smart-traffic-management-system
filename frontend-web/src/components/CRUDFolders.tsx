@@ -72,6 +72,7 @@ export const READ_FOLDERS = gql`
                 endLng
                 description
                 responsePlanActive
+                insights
                 labels {
                     id
                     label
@@ -92,6 +93,7 @@ export const READ_FOLDERS = gql`
             }
             description
             responsePlanActive
+            insights
             labels {
                 id
                 label

@@ -47,7 +47,8 @@ type Props = {
     folderId: number,
     labels: any[],
     description: string,
-    responsePlanActive: boolean
+    responsePlanActive: boolean,
+    insights: string
 }
 
 export default function Item(props: Props) {
@@ -112,7 +113,7 @@ export default function Item(props: Props) {
 
                         {Auth.isEngineer() ?
                             <Link className="d-flex w-75" onClick={() => {
-                                client.writeData({ data: { currentTreeId: props.id } })
+                                client.writeData({ data: { currentTreeId: props.id, currentInsights: props.insights } })
                             }} to='/designer'>
 
                                 <div className="w-25 d-flex justify-content-end">

@@ -1,0 +1,8 @@
+<ActionBar flat="true" backgroundColor="#03045e">
+    <NavigationButton (tap)="onBackTap()" android.systemIcon="ic_menu_back" color="white"></NavigationButton>
+    <Label [text]="item.title" color="white"></Label>
+</ActionBar>
+
+<GridLayout>
+    <Label class="m-10 h3 rb-bold rb-bold" verticalAlignment="top" [text]="item.description"></Label>
+</GridLayout>
