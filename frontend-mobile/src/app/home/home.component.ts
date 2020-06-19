@@ -13,13 +13,21 @@ export class HomeComponent implements OnInit {
     loading = false;
 
     constructor(private data: DataService) {
-
+        this.data.getItems().subscribe(
+            (notifications) => this.items = [...notifications]);
     }
 
     ngOnInit(): void {
-        this.data.getItems().subscribe(
-            (notifications) => {
-                this.items = [...notifications];
-            });
+        this.data.addItem(new Notification(
+            this.data.getNextId(),
+            'A10 - Rotterdam',
+            'Baan afgesloten door werkzaamheden en ongeluk'
+        ));
+    
+        this.data.addItem(new Notification(
+            this.data.getNextId(),
+            'A4 - Amsterdam',
+            'Spitsstrook open'
+        ));
     }
 }
