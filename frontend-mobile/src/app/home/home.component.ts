@@ -7,7 +7,8 @@ import { Notification } from "~/app/shared/notification.object";
     templateUrl: "./home.component.html"
 })
 export class HomeComponent implements OnInit {
-    items: Array<Notification>;
+
+    items: Array<Notification> = [];
 
     loading = true;
 
