@@ -6,3 +6,5 @@
 ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 
 DEVELOPMENT_TEAM = 5X95DTBS35
+
+CODE_SIGN_ENTITLEMENTS = frontendmobile/frontendmobile.entitlements
