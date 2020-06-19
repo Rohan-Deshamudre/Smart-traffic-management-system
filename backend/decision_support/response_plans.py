@@ -5,6 +5,7 @@ from api.road_segments.models import RoadSegment
 from api.scenarios.models import Scenario
 from decision_support.exceptions import InvalidResponsePlanException
 from decision_support.road_conditions import is_road_condition_active
+from notifications.push_notifications import push_notification
 
 
 def check_road_segments():
@@ -23,8 +24,11 @@ def check_road_segments():
                     scenario_active = True
                     road_segment_active = True
                     is_one_active = True
+                    push_notification(road_segment.name,
+                                      response_plan['response_plan_id'])
             if not is_one_active:
                 # Freeflow activated
+                push_notification(road_segment.name, 'Free flow')
                 pass
 
             road_segment.response_plan_active = road_segment_active
