@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Message } from "nativescript-plugin-firebase";
+import { DataService } from "~/app/shared/data.service";
+import { Notification } from "~/app/shared/notification.object";
 
 const firebase = require("nativescript-plugin-firebase");
 
@@ -9,7 +11,7 @@ const firebase = require("nativescript-plugin-firebase");
 })
 export class AppComponent implements OnInit {
 
-    constructor() {
+    constructor(private data: DataService) {
         // Use the component constructor to inject providers.
     }
 
@@ -22,6 +24,12 @@ export class AppComponent implements OnInit {
             onMessageReceivedCallback: (message: Message) => {
                 console.log(`Title: ${message.title}`);
                 console.log(`Body: ${message.body}`);
+
+                this.data.addItem(new Notification(
+                    this.data.getNextId(),
+                    message.title,
+                    message.body
+                ));
 
                 // TODO save notifications to display in dashboard.
 

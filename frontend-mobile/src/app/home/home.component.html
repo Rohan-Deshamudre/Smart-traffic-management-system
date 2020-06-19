@@ -19,8 +19,6 @@
 
         <RadListView [items]="items"
                      class="list-group"
-                     pullToRefresh="true"
-                     (pullToRefreshInitiated)="refreshList($event)"
                      height="100%">
 
             <!-- Invoice -->
@@ -28,7 +26,8 @@
 
                 <StackLayout class="card-content" [nsRouterLink]="['../item', item.id]">
 
-                    <Label [text]="item.name" fontSize="20" color="#a9a9a9"></Label>
+                    <Label [text]="item.title" fontSize="20" color="#a9a9a9"></Label>
+                    <Label [text]="item.description" fontSize="20" color="#a9a9a9"></Label>
 
                 </StackLayout>
 
