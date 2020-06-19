@@ -10,7 +10,7 @@ export class HomeComponent implements OnInit {
 
     items: Array<Notification> = [];
 
-    loading = true;
+    loading = false;
 
     constructor(private data: DataService) {
 
@@ -19,14 +19,7 @@ export class HomeComponent implements OnInit {
     ngOnInit(): void {
         this.data.getItems().subscribe(
             (notifications) => {
-                this.loading = true;
-                setTimeout(
-                    () => {
-                        this.items = [...notifications];
-                        this.loading = false;
-                    },
-                    500
-                );
+                this.items = [...notifications];
             });
     }
 }

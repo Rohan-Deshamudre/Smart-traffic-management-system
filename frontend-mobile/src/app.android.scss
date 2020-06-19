@@ -2,3 +2,8 @@
 @import "app-common";
 
 // Place any CSS rules you want to apply only on Android here
+
+TabStrip {
+    selected-item-color: #0077b6;
+    un-selected-item-color: #d9d9d9;
+}

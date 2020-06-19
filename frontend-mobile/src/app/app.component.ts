@@ -20,6 +20,16 @@ export class AppComponent implements OnInit {
             // Optionally pass in properties for database, authentication and cloud messaging,
             // see their respective docs.
 
+            showNotifications: true,
+            showNotificationsWhenInForeground: true,
+
+
+            // This is when we actually do notifications per user, filtered by locations.
+            onPushTokenReceivedCallback: (token) => {
+                // TODO save notifications to display in dashboard.
+                console.log("Firebase push token: " + token);
+            },
+
             // This is for general notifications.
             onMessageReceivedCallback: (message: Message) => {
                 console.log(`Title: ${message.title}`);
@@ -36,12 +46,6 @@ export class AppComponent implements OnInit {
                 // if your server passed a custom property called 'foo', then do this:
                 // console.log(`Value of 'foo': ${message.data.foo}`);
             },
-
-            // This is when we actually do notifications per user, filtered by locations.
-            onPushTokenReceivedCallback: (token) => {
-                // TODO save notifications to display in dashboard.
-                console.log("Firebase push token: " + token);
-            }
 
         }).then(
             () => {
