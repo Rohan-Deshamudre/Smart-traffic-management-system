@@ -1,0 +1,57 @@
+<ActionBar flat="true" backgroundColor="#03045e">
+    <Label text="Home" color="white"></Label>
+</ActionBar>
+
+<GridLayout backgroundColor="#d9d9d9">
+
+    <GridLayout id="placeholderLayout" visibility="{{ items?.length !== 0 || loading ? 'collapse' : 'visible' }}">
+
+        <StackLayout horizontalAlignment="center" verticalAlignment="center" width="70%">
+
+            <Label class="fas" text="&#xf5b8;" fontSize="100" textAlignment="center" color="#00b4d8"></Label>
+            <Label text="No notifications" textWrap="true" textAlignment="center" margin="20" fontSize="20" color="#a9a9a9"></Label>
+
+        </StackLayout>
+
+    </GridLayout>
+
+    <GridLayout id="placeholderLayout" visibility="{{ !loading ? 'collapse' : 'visible' }}">
+
+        <StackLayout horizontalAlignment="center" verticalAlignment="center" width="70%">
+
+            <Label class="fas" text="&#xf5b8;" fontSize="100" textAlignment="center" color="#00b4d8"></Label>
+            <Label text="Loading" textWrap="true" textAlignment="center" margin="20" fontSize="20" color="#a9a9a9"></Label>
+
+        </StackLayout>
+
+    </GridLayout>
+
+    <GridLayout *ngIf="items?.length > 0 && !loading" backgroundColor="#d9d9d9" height="100%">
+
+        <ListView [items]="items"
+                     class="list-group list"
+                     height="100%">
+
+            <!-- Invoice -->
+            <ng-template let-item="item">
+
+                <StackLayout class="card-content" [nsRouterLink]="['../item', item.id]">
+
+                    <StackLayout horizontalAlignment="center" class="notification-title-container">
+                        <Label class="notification-title" [text]="item.title"></Label>
+                    </StackLayout>
+
+                    <StackLayout class="notification-description-container">
+                        <Label [text]="item.description" class="notification-description" textWrap="true"></Label>
+                    </StackLayout>
+
+                </StackLayout>
+
+            </ng-template>
+
+        </ListView>
+
+    </GridLayout>
+
+
+</GridLayout>
