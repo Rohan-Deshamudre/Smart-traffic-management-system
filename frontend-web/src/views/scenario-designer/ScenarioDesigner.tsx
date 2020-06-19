@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { useQuery } from '@apollo/react-hooks';
 
 import NavBar from "./modules/NavBar";
 import Workspace from "./modules/Workspace";
@@ -35,17 +36,29 @@ export const GET_DESIGNER_DATA = gql`
     }
 `;
 
+export const GET_INSIGHTS_DATA = gql`
+    {
+        currentInsights @client
+    }
+`;
+
 export default function ScenarioDesigner(props: Props) {
     const [leftPaneActive, setLeftPaneActive] = useState(false);
     const [rightPaneActive, setRightPaneActive] = useState(false);
     const [insightsPaneActive, setInsightsPaneActive] = useState(false);
     const [scenarioPaneActive, setScenarioPaneActive] = useState(true);
 
-    const insightsLog = [
-        {
-            'simulationSceneEvents': []
-        }
-    ];
+    const designerData = (() => {
+        const { data } = useQuery(GET_DESIGNER_DATA);
+        return data;
+    })();
+
+    const insightsLog = (() => {
+        const { data } = useQuery(GET_INSIGHTS_DATA);
+        let events = [];
+        try { events = JSON.parse(data.currentInsights); } catch (_) { }
+        return [{ 'simulationSceneEvents': events }];
+    })();
 
     function toggleLeftPane() {
         setScenarioPaneActive(false);
@@ -77,22 +90,13 @@ export default function ScenarioDesigner(props: Props) {
                 rightPaneActive={rightPaneActive}
             />
             <div className="home-container structure-container">
-                <Query query={GET_DESIGNER_DATA}>
-                    {
-                        /** Illustrate the data, such as road segment type, on
-                         *  the designer pane
-                         */
-                        ({ data }) => (
-                            <LeftPane paneName="Designer"
-                                readOnly={false}
-                                icon={editorIcon}
-                                toggle={toggleLeftPane}
-                                data={data}
-                                active={leftPaneActive}
-                            />
-                        )
-                    }
-                </Query>
+                <LeftPane paneName="Designer"
+                    readOnly={false}
+                    icon={editorIcon}
+                    toggle={toggleLeftPane}
+                    data={designerData}
+                    active={leftPaneActive}
+                />
 
                 <Query query={READ_FOLDERS}>
                     {

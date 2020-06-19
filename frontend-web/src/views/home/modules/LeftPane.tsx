@@ -175,7 +175,7 @@ class LeftPane extends React.Component<PLeftPane, State> {
             .map((scenario: any) => {
                 return <Item name={scenario.name} id={scenario.id} folderId={scenario.folderId} key={scenario.id}
                     folders={this.props.folders} labels={scenario.labels} description={scenario.description}
-                    responsePlanActive={scenario.responsePlanActive} insights={JSON.parse(scenario.insights)}
+                    responsePlanActive={scenario.responsePlanActive} insights={scenario.insights}
                     className="folder" />
 
             });
