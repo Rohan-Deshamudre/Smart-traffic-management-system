@@ -15,6 +15,16 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.data.addItem(new Notification(
+            this.data.getNextId(),
+            'A10 - Rotterdam',
+            'Baan afgesloten door werkzaamheden en ongeluk'
+        ));
 
+        this.data.addItem(new Notification(
+            this.data.getNextId(),
+            'A4 - Amsterdam',
+            'Spitsstrook open'
+        ));
     }
 }

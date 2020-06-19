@@ -45,6 +45,7 @@
 }
 
 .card-content {
+    background-color: #ffffff;
     padding: 15 7.5%;
     border-bottom-color: #e9ecef;
     border-bottom-width: 1;
@@ -52,4 +53,32 @@
 
 TabStrip {
     selected-item-color: #0077b6;
+}
+
+.notification-title {
+    font-size: 16;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+.notification-title-container {
+    background-color: #fcbf49;
+    border-radius: 5;
+}
+
+.notification-description {
+    font-size: 19;
+    color: #7d8597;
+    text-align: center;
+}
+
+.notification-description-container {
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.list {
+
 }

@@ -8,17 +8,17 @@
 
         <StackLayout horizontalAlignment="center" verticalAlignment="center" width="70%">
 
-            <Label class="fas" text="&#xf5b8;" fontSize="100" textAlignment="center"></Label>
-            <Label text="No notifications" textWrap="true" textAlignment="center" margin="20" fontSize="20"></Label>
+            <Label class="fas" text="&#xf5b8;" fontSize="100" textAlignment="center" color="#00b4d8"></Label>
+            <Label text="No notifications" textWrap="true" textAlignment="center" margin="20" fontSize="20" color="#a9a9a9"></Label>
 
         </StackLayout>
 
     </GridLayout>
 
-    <GridLayout *ngIf="items.length > 0">
+    <GridLayout *ngIf="items.length > 0" backgroundColor="#d9d9d9">
 
         <RadListView [items]="items"
-                     class="list-group"
+                     class="list-group list"
                      height="100%">
 
             <!-- Invoice -->
@@ -26,8 +26,13 @@
 
                 <StackLayout class="card-content" [nsRouterLink]="['../item', item.id]">
 
-                    <Label [text]="item.title" fontSize="20" color="#a9a9a9"></Label>
-                    <Label [text]="item.description" fontSize="20" color="#a9a9a9"></Label>
+                    <StackLayout horizontalAlignment="center" class="notification-title-container">
+                        <Label class="notification-title" [text]="item.title"></Label>
+                    </StackLayout>
+
+                    <StackLayout class="notification-description-container">
+                        <Label [text]="item.description" class="notification-description" textWrap="true"></Label>
+                    </StackLayout>
 
                 </StackLayout>
 
