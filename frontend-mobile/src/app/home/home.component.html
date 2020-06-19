@@ -4,7 +4,7 @@
 
 <GridLayout>
 
-    <GridLayout id="placeholderLayout" visibility="{{ items.length !== 0 ? 'collapse' : 'visible' }}">
+    <GridLayout id="placeholderLayout" visibility="{{ items.length !== 0 || loading ? 'collapse' : 'visible' }}">
 
         <StackLayout horizontalAlignment="center" verticalAlignment="center" width="70%">
 
@@ -15,7 +15,18 @@
 
     </GridLayout>
 
-    <GridLayout *ngIf="items.length > 0" backgroundColor="#d9d9d9">
+    <GridLayout id="placeholderLayout" visibility="{{ !loading ? 'collapse' : 'visible' }}">
+
+        <StackLayout horizontalAlignment="center" verticalAlignment="center" width="70%">
+
+            <Label class="fas" text="&#xf5b8;" fontSize="100" textAlignment="center" color="#00b4d8"></Label>
+            <Label text="Loading" textWrap="true" textAlignment="center" margin="20" fontSize="20" color="#a9a9a9"></Label>
+
+        </StackLayout>
+
+    </GridLayout>
+
+    <GridLayout *ngIf="items.length > 0 && !loading" backgroundColor="#d9d9d9">
 
         <RadListView [items]="items"
                      class="list-group list"
