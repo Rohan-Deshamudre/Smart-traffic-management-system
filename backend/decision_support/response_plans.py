@@ -24,11 +24,12 @@ def check_road_segments():
                     scenario_active = True
                     road_segment_active = True
                     is_one_active = True
-                    push_notification(road_segment.name,
-                                      response_plan['response_plan_id'])
             if not is_one_active:
                 # Freeflow activated
                 pass
+
+            if road_segment_active:
+                send_notification(road_segment)
 
             road_segment.response_plan_active = road_segment_active
             road_segment.save()
@@ -37,6 +38,15 @@ def check_road_segments():
         scenario.response_plan_active = scenario_active
         scenario.save()
         scenario_active = False
+
+
+def send_notification(road_segment: RoadSegment):
+    body_notification = "Congestion"
+    for condition in road_segment.road_conditions.all():
+        if condition.road_condition_actions.count() > 0:
+            body_notification = condition.name
+
+    push_notification(road_segment.name, body_notification)
 
 
 def get_active_response_plans(road_segment_id: int):
