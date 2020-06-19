@@ -9,12 +9,23 @@ import { Notification } from "~/app/shared/notification.object";
 export class HomeComponent implements OnInit {
     items: Array<Notification>;
 
+    loading = true;
+
     constructor(private data: DataService) {
-        this.data.getItems().subscribe(
-            (notifications) => this.items = [...notifications]);
+
     }
 
     ngOnInit(): void {
-
+        this.data.getItems().subscribe(
+            (notifications) => {
+                this.loading = true;
+                setTimeout(
+                    () => {
+                        this.items = [...notifications];
+                        this.loading = false;
+                    },
+                    500
+                );
+            });
     }
 }
