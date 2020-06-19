@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "976207499361",
+    "firebase_url": "https://stm-system-cdca1.firebaseio.com",
+    "project_id": "stm-system-cdca1",
+    "storage_bucket": "stm-system-cdca1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976207499361:android:18ad72a2e7ea7c8bf71a20",
+        "android_client_info": {
+          "package_name": "nl.scenwise.stm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "976207499361-46fhtlur6s36qjl6ljb9a3ipc58ase7d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3VCG8Dt3uv-TGVPGgDqApiFl-DcRg8N0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "976207499361-46fhtlur6s36qjl6ljb9a3ipc58ase7d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "976207499361-6ab4d3itclpbhjb5pk8in5q8m4d2edl5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "nl.scenwise.stm"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import NavBar from "./modules/NavBar";
 import Workspace from "./modules/Workspace";
+import InsightsPane from "../scenario-simulator/modules/InsightsPane"
 import LeftPane from "./modules/LeftPane";
 import RightPane from "./../home/modules/RightPane";
 import ScenarioPane from "./../home/modules/LeftPane";
@@ -14,6 +15,8 @@ import gql from "graphql-tag";
 import instrumentsIcon from "./../../assets/node_icons/instruments.svg";
 // @ts-ignore
 import editorIcon from "./../../assets/node_icons/designer.svg";
+// @ts-ignore
+import insightsIcon from '../../assets/insights.svg';
 import { Redirect } from 'react-router-dom';
 import { Auth } from '../../helper/auth';
 // @ts-ignore
@@ -35,7 +38,14 @@ export const GET_DESIGNER_DATA = gql`
 export default function ScenarioDesigner(props: Props) {
     const [leftPaneActive, setLeftPaneActive] = useState(false);
     const [rightPaneActive, setRightPaneActive] = useState(false);
+    const [insightsPaneActive, setInsightsPaneActive] = useState(false);
     const [scenarioPaneActive, setScenarioPaneActive] = useState(true);
+
+    const insightsLog = [
+        {
+            'simulationSceneEvents': []
+        }
+    ];
 
     function toggleLeftPane() {
         setScenarioPaneActive(false);
@@ -44,6 +54,10 @@ export default function ScenarioDesigner(props: Props) {
 
     function toggleRightPane() {
         setRightPaneActive(!rightPaneActive);
+    }
+
+    function toggleInsightsPane() {
+        setInsightsPaneActive(!insightsPaneActive);
     }
 
     function toggleScenarioPane() {
@@ -107,6 +121,16 @@ export default function ScenarioDesigner(props: Props) {
                                         scenarios={scenariosWithoutFolders}
                                         boundingBox={data.boundingBox}
                                     />
+
+                                    <InsightsPane paneName="Insights"
+                                        icon={insightsIcon}
+                                        toggle={toggleInsightsPane}
+                                        active={insightsPaneActive}
+                                        simulationLog={insightsLog}
+                                        messageSocket={null}
+                                        boundingBox={data.boundingBox}
+                                    />
+
 
                                     <RightPane
                                         paneName="Instrumenten" icon={instrumentsIcon}

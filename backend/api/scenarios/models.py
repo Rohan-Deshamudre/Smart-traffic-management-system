@@ -15,6 +15,7 @@ class Scenario(AbstractModel):
     end_lat = models.DecimalField(max_digits=11, decimal_places=8)
     end_lng = models.DecimalField(max_digits=11, decimal_places=8)
     response_plan_active = models.BooleanField(null=True, default=False)
+    insights = models.TextField(blank=True, null=True)
     labels = models.ManyToManyField(Label, related_name='scenario_labels',
                                     through='ScenarioToLabel')
     folder = models.ForeignKey(Folder, db_column="folder_id",

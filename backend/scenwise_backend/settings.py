@@ -249,3 +249,9 @@ SMARTROADS_API = {
     "TRAVEL_TIME_API": "https://analytics.smartroads.nl/routes/measurements",
     "headers": {"Authorization": "Basic c2Nlbndpc2U6NlJ6YkMzVEY="},
 }
+
+FIREBASE_API = {
+    "url": "https://fcm.googleapis.com/fcm/send",
+    "headers": {"Authorization": "key=AAAA40qAUGE:APA91bEqQRFoUWEOrGC0WjWFRaZfRBNfwVevX8isIdgnchS4Gqx1x1y7FhUifDMAmk2X3ClRGC0w4fx0zM7HiKXIYCS7T-hr-oo1zGdSMv1XgWgy64qzTY2hdPTqFLG_QtoEQK870pr3"},
+    "token": "/topics/response-plans",
+}
