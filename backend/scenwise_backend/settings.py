@@ -253,5 +253,5 @@ SMARTROADS_API = {
 FIREBASE_API = {
     "url": "https://fcm.googleapis.com/fcm/send",
     "headers": {"Authorization": "key=AAAA40qAUGE:APA91bEqQRFoUWEOrGC0WjWFRaZfRBNfwVevX8isIdgnchS4Gqx1x1y7FhUifDMAmk2X3ClRGC0w4fx0zM7HiKXIYCS7T-hr-oo1zGdSMv1XgWgy64qzTY2hdPTqFLG_QtoEQK870pr3"},
-    "token": "dYhJHskVMcA:APA91bEoaVprxgYIxwaXWjawLvvyLSLkPe__ATPx66miA32_a3mOCbS8M8BBtucUSXjtgX5DBjJ5mHj5OWPA-MmjnZa-mDDFNjUaUG9Y5mCw7h8eO1aVX2uLHKYxBcWrktEK1DKBogB8",
+    "token": "/topics/response-plans",
 }

@@ -28,7 +28,6 @@ def check_road_segments():
                                       response_plan['response_plan_id'])
             if not is_one_active:
                 # Freeflow activated
-                push_notification(road_segment.name, 'Free flow')
                 pass
 
             road_segment.response_plan_active = road_segment_active
