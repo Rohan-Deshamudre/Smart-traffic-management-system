@@ -9,7 +9,8 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 //
 type Props = {
-	responsePlanId: number
+    scenarioId: number;
+	responsePlan: string;
 }
 
 class ExportTree extends React.Component<Props, {}> {
@@ -20,18 +21,20 @@ class ExportTree extends React.Component<Props, {}> {
     }
 
     handleSubmit = () => {
-        if (this.props.responsePlanId !== null) {
-            axios.get(process.env.TREE_EXPORT + '?=' + this.props.responsePlanId)
+        if (this.props.scenarioId !== null) {
+            axios.get(process.env.TREE_EXPORT + '?=' + this.props.scenarioId)
                 .then(res => {
-                    const blob = new Blob([JSON.stringify(res.data)], {type: "text/json;charset=utf-8"});
+                    console.log(res.data);
+
+                    const blob = new Blob([JSON.stringify(this.props.responsePlan)], {type: "text/json;charset=utf-8"});
                     const url = URL.createObjectURL(blob);
                     const link = document.createElement('a');
-                    link.download = 'scenario ' + this.props.responsePlanId + '.json';
+                    link.download = 'insights ' + this.props.scenarioId + '.json';
                     link.href = url;
 					link.click();
                 })
                 .catch(error => {
-                    alert('Incorrect ID')
+                    alert('Incorrect ID');
                 });
         } else {
             alert('Geen response plan selecteerd');
