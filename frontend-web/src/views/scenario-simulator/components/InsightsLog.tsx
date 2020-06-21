@@ -2,6 +2,7 @@ import * as React from 'react';
 import Button from "react-bootstrap/Button";
 import { Query } from "react-apollo";
 import { GET_ROAD_CONDITION_TYPES } from "../../scenario-designer/toolboxes/road-condition/RoadConditionToolboxQueries";
+import PaneBottomButtons from './PaneBottomButtons';
 
 function highlighRoad(event) {
 
@@ -83,17 +84,19 @@ let displayResponsePlan = (responsePlan, index) => (
     </div>
 );
 
-let displaySimulationSceneEvent = event => {
+let displaySimulationSceneEvent = (event) => {
+    console.log(event.responsePlan);
     const insightText = JSON.parse(event.responsePlan).map(displayResponsePlan);
-    console.log(event.responsePlan)
+    
     return (
-        insightText.length > 0
-            ? <section className="stats">
+        insightText.length > 0 ? 
+            <section className="stats">
                 <div className="box">
                     <div key={event.roadSegmentId.toString() + event.roadConditionTypeId.toString()} className="log-info-message">
                         <h3>{event.roadSegment.name}</h3>
                         {/* <Button onClick={() => highlighRoad(event)}>Highlight Road</Button> */}
                         {insightText}
+                        <PaneBottomButtons id={event.responsePlan} />
                     </div>
                 </div>
             </section>
@@ -113,6 +116,8 @@ let displaySimulationLog = (log, index) => (
 
 export default function InsightsLog(props) {
     return (
-        <div>{props.simulationLog.map(displaySimulationLog)}</div>
+        <div>
+            {props.simulationLog.map(displaySimulationLog)}
+        </div>
     );
 }
