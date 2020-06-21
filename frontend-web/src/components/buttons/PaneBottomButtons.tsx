@@ -33,24 +33,30 @@ class PaneBottomButtons extends React.Component<LPBBProps, {}> {
 				<div>
 					<Query query={gql`{currentTreeId @client}`}>
 						{({data}) => {
-							return (<ExportTree scenarioId={data.currentTreeId}/>);
+							return (
+								<ExportTree scenarioId={data.currentTreeId}/>
+							);
 						}}
 					</Query>
 				</div>
 
 				<div>
 					<Link to={"/" + string}>
-						<OverlayTrigger key='top' overlay={<Tooltip id='tooltip-top'>Simuleer
-							scenario</Tooltip>}>
+						<OverlayTrigger key='top' overlay={
+							<Tooltip id='tooltip-top'>Simuleer scenario</Tooltip>
+						}>
 							<Button className="remove-borders">{middle}</Button>
-						</OverlayTrigger></Link>
+						</OverlayTrigger>
+					</Link>
 				</div>
 
 				<div>
 					<Link to="/">
 						<ApolloConsumer>
 							{client => (
-								<OverlayTrigger key='top' overlay={<Tooltip id='tooltip-top'>Terug</Tooltip>}>
+								<OverlayTrigger key='top' overlay={
+									<Tooltip id='tooltip-top'>Terug</Tooltip>
+								}>
 									<Button onClick={() =>
 										client.writeData({
 											data: {
@@ -58,7 +64,10 @@ class PaneBottomButtons extends React.Component<LPBBProps, {}> {
 												curNodeId: -1,
 												curNodeType: null,
 											}
-										})}><img src={undoIcon} alt="Terug"/></Button>
+										})}
+									>
+										<img src={undoIcon} alt="Terug"/>
+									</Button>
 								</OverlayTrigger>
 							)}
 						</ApolloConsumer>
