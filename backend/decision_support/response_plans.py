@@ -1,15 +1,18 @@
 from typing import Callable
 
+import json
 from api.response_plans.models import ResponsePlan
 from api.road_segments.models import RoadSegment
 from api.scenarios.models import Scenario
 from decision_support.exceptions import InvalidResponsePlanException
 from decision_support.road_conditions import is_road_condition_active
+from notifications.push_notifications import push_notification
 
 
 def check_road_segments():
     scenario_active = False
     for scenario in Scenario.objects.all():
+        scenario_insights = []
         road_segment_active = False
         road_segments = RoadSegment.objects.filter(scenario=scenario).all()
         for road_segment in road_segments:
@@ -27,13 +30,34 @@ def check_road_segments():
                 # Freeflow activated
                 pass
 
+            if road_segment_active:
+                send_notification(road_segment)
+
+            insight = {
+                'roadSegmentId': road_segment.id,
+                'roadConditionTypeId': 0,
+                'roadSegment': { 'name': road_segment.name },
+                'responsePlan': json.dumps(response_plans)
+            }
+            scenario_insights.append(insight)
             road_segment.response_plan_active = road_segment_active
+            road_segment.insights = json.dumps([insight])
             road_segment.save()
             road_segment_active = False
 
         scenario.response_plan_active = scenario_active
+        scenario.insights = json.dumps(scenario_insights)
         scenario.save()
         scenario_active = False
+
+
+def send_notification(road_segment: RoadSegment):
+    body_notification = "Congestion"
+    for condition in road_segment.road_conditions.all():
+        if condition.road_condition_actions.count() > 0:
+            body_notification = condition.name
+
+    push_notification(road_segment.name, body_notification)
 
 
 def get_active_response_plans(road_segment_id: int):
