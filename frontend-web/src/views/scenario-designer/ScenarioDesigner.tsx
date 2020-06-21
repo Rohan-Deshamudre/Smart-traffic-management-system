@@ -137,7 +137,8 @@ export default function ScenarioDesigner(props: Props) {
 
 
                                     <RightPane
-                                        paneName="Instrumenten" icon={instrumentsIcon}
+                                        paneName="Instrumenten" 
+                                        icon={instrumentsIcon}
                                         toggle={toggleRightPane}
                                         active={rightPaneActive}
                                         instruments={data.instruments}
