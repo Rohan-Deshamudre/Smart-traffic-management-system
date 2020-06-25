@@ -85,7 +85,6 @@ let displayResponsePlan = (responsePlan, index) => (
 );
 
 let displaySimulationSceneEvent = (event) => {
-    console.log(event.responsePlan);
     const insightText = JSON.parse(event.responsePlan).map(displayResponsePlan);
     
     return (

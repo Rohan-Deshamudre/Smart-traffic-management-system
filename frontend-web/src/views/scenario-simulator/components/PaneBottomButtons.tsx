@@ -19,8 +19,6 @@ class PaneBottomButtons extends React.Component<{}, {}> {
 				<div>
 					<Query query={gql`{currentTreeId @client}`}>
 						{({data}) => {
-                            console.log(data);
-                            
                             return (
                                 <ExportTree scenarioId={data.currentTreeId} />
 							);
