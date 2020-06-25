@@ -10,7 +10,6 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 //
 type Props = {
     scenarioId: number;
-    responsePlan: string;
 }
 
 export default function ExportTree(props: Props) {
