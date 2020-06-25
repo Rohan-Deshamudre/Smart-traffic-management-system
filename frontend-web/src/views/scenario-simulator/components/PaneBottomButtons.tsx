@@ -10,11 +10,8 @@ import undoIcon from "./../../../assets/undo.svg"
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
-type Props = {
-    id: string
-}
 
-class PaneBottomButtons extends React.Component<Props, {}> {
+class PaneBottomButtons extends React.Component<{}, {}> {
 
 	render() {
 		return (
@@ -23,12 +20,9 @@ class PaneBottomButtons extends React.Component<Props, {}> {
 					<Query query={gql`{currentTreeId @client}`}>
 						{({data}) => {
                             console.log(data);
-                            console.log(this.props.id);
                             
                             return (
-                                <ExportTree 
-                                    scenarioId={data.currentTreeId} 
-                                    responsePlan={this.props.id} />
+                                <ExportTree scenarioId={data.currentTreeId} />
 							);
 						}}
 					</Query>

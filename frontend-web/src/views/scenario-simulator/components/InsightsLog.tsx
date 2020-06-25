@@ -96,7 +96,6 @@ let displaySimulationSceneEvent = (event) => {
                         <h3>{event.roadSegment.name}</h3>
                         {/* <Button onClick={() => highlighRoad(event)}>Highlight Road</Button> */}
                         {insightText}
-                        <PaneBottomButtons id={event.responsePlan} />
                     </div>
                 </div>
             </section>
