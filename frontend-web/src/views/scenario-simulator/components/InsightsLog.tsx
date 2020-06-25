@@ -85,7 +85,6 @@ let displayResponsePlan = (responsePlan, index) => (
 );
 
 let displaySimulationSceneEvent = (event) => {
-    console.log(event.responsePlan);
     const insightText = JSON.parse(event.responsePlan).map(displayResponsePlan);
     
     return (
@@ -96,7 +95,6 @@ let displaySimulationSceneEvent = (event) => {
                         <h3>{event.roadSegment.name}</h3>
                         {/* <Button onClick={() => highlighRoad(event)}>Highlight Road</Button> */}
                         {insightText}
-                        <PaneBottomButtons id={event.responsePlan} />
                     </div>
                 </div>
             </section>
